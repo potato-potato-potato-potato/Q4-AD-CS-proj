@@ -18,7 +18,7 @@ public class ManagerThread implements Runnable {
     @SuppressWarnings("unchecked")
     public void run() {
         while (running){
-            
+            for()
             try {
                 Thread.sleep(15);
             }
