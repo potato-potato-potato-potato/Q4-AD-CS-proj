@@ -151,28 +151,35 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    public void mouseClicked(MouseEvent e) {
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent arg0) {
+        if (!isGameStarted) {
 
+        }
     }
 
-    public void mouseEntered(MouseEvent e) {
-
+    @Override
+    public void mouseEntered(java.awt.event.MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
     }
 
-    public void mouseExited(MouseEvent e) {
-
+    @Override
+    public void mouseExited(java.awt.event.MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 
-    public void mousePressed(MouseEvent e) {
-
+    @Override
+    public void mousePressed(java.awt.event.MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
     }
 
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    public void mouseDragged(MouseEvent e) {
-
+    @Override
+    public void mouseReleased(java.awt.event.MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
     }
 
 }
