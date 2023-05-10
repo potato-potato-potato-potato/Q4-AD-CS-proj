@@ -1,5 +1,6 @@
 import javax.swing.JPanel;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -43,7 +44,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private Pair<String, Object> input;
 
-    private BufferedImage startScreen;
+    private PhysicsObjects startScreen;
+    private BufferedImage startImg;
 
     private boolean isGameStarted = false;
 
@@ -52,10 +54,15 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         UsernameInputsetUp();
         try {
-            startScreen = ImageIO.read(new File("/assets/dcfldvz-dd1793cb-dde2-447f-803d-5341f2d8cbf3.jpg"));
+            startImg = ImageIO.read(new File("assets/dcfldvz-dd1793cb-dde2-447f-803d-5341f2d8cbf3.jpg"));
+            startScreen = new PhysicsObjects<BufferedImage>(startImg);
+            startScreen.setPosition(new Point(300, 200));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        this.addMouseListener(this);
 
         this.setFocusable(true);
 
@@ -80,6 +87,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        startScreen.draw(g);
 
     }
 
@@ -152,34 +160,48 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     @Override
-    public void mouseClicked(java.awt.event.MouseEvent arg0) {
+    public void mousePressed(java.awt.event.MouseEvent e) {
+
         if (!isGameStarted) {
+            isGameStarted = true;
+            System.out.println("Game Started");
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        while (true) {
+                            Vector v = new Vector(0, 0);
+                            v = Vector.addVectors(startScreen.getVector(), new Vector(0, -0.1));
+                            startScreen.setVector(v);
+                            startScreen.update();
+                            repaint();
+                            Thread.sleep(4);
+                        }
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+            t.start();
 
         }
     }
 
     @Override
-    public void mouseEntered(java.awt.event.MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+    public void mouseReleased(java.awt.event.MouseEvent e) {
     }
 
     @Override
-    public void mouseExited(java.awt.event.MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+    public void mouseEntered(java.awt.event.MouseEvent e) {
     }
 
     @Override
-    public void mousePressed(java.awt.event.MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    public void mouseExited(java.awt.event.MouseEvent e) {
     }
 
     @Override
-    public void mouseReleased(java.awt.event.MouseEvent arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+    public void mouseClicked(java.awt.event.MouseEvent e) {
     }
 
 }
