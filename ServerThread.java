@@ -10,6 +10,7 @@ public class ServerThread implements Runnable {
     private boolean close;
     private String name;
     private Pair<String, Object> input;
+    private Map map;
 
     public ServerThread(Socket clientSocket, Manager manager) {
         this.clientSocket = clientSocket;
@@ -40,6 +41,7 @@ public class ServerThread implements Runnable {
                     manager.broadcast(input, Thread.currentThread());
                 } else if (input.getKey().equals("start")) {
                     manager.broadcast(input, Thread.currentThread());
+                    manager.start();
                 }
 
                 if (close) {
@@ -62,6 +64,10 @@ public class ServerThread implements Runnable {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void send(Pair s) {
         try {
             out.writeObject(s);
@@ -69,6 +75,10 @@ public class ServerThread implements Runnable {
             System.out.println("Error listening for a connection");
             System.out.println(e.getMessage());
         }
+    }
+
+    public Map getMap() {
+        return map;
     }
 
     public void broadcast(Pair s) {

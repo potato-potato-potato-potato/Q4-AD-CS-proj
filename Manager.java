@@ -4,7 +4,7 @@ public class Manager {
 
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean start;
-
+    private ManagerThread threadManager;
     public Manager() {
         start = false;
         threadList = new MyHashMap<Thread, ServerThread>();
@@ -26,8 +26,13 @@ public class Manager {
         }
     }
 
-    public void start() {
-
+    public void start() {//start running the game
+        Thread mThread = new Thread(new ManagerThread(this));
+        mThread.start();
+        threadManager.setThreads(threadList);
     }
 
+    public Map getMap() {
+        return null;
+    }
 }
