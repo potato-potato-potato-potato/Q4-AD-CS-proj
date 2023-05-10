@@ -1,7 +1,11 @@
+import HashMap.*;
+
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 
 public class Player {
 
@@ -10,6 +14,8 @@ public class Player {
     public String name;
     public boolean isTouchingGround;
     public boolean isTouchingWall;
+
+    private MyHashMap<Integer, BufferedImage> playerSprites;
 
     public Rectangle HITBOX = new Rectangle(0, 0, 32, 32);
     // means player get 2 jumps
@@ -20,6 +26,10 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
+    }
+
+    public void playerSpritesSetUp() {
+
     }
 
     public void update() {

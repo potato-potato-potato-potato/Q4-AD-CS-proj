@@ -1,8 +1,9 @@
 package HashMap;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
-public class MyHashSet<E> implements Iterable<E> {
+public class MyHashSet<E> implements Iterable<E>, Serializable {
     private int size = 0;
     private Object[] hashTable;
 

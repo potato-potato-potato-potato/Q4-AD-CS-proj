@@ -1,6 +1,8 @@
 package HashMap;
 
-public class MyHashMap<K, V> {
+import java.io.Serializable;
+
+public class MyHashMap<K, V> implements Serializable {
     private Object[] hashArray;
     private int size;
     private MyHashSet<K> keySet;

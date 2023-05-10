@@ -2,6 +2,8 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Dimension;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import myArrayList.*;
@@ -11,10 +13,19 @@ import java.net.*;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-public class ClientScreen extends JPanel implements ActionListener {
+import org.w3c.dom.events.MouseEvent;
+
+import java.io.File;
+import java.io.IOException;
+
+import java.awt.event.MouseListener;
+
+public class ClientScreen extends JPanel implements ActionListener, MouseListener {
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -32,10 +43,19 @@ public class ClientScreen extends JPanel implements ActionListener {
 
     private Pair<String, Object> input;
 
+    private BufferedImage startScreen;
+
+    private boolean isGameStarted = false;
+
     public ClientScreen() {
         this.setLayout(null);
 
         UsernameInputsetUp();
+        try {
+            startScreen = ImageIO.read(new File("/assets/dcfldvz-dd1793cb-dde2-447f-803d-5341f2d8cbf3.jpg"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         this.setFocusable(true);
 
@@ -70,7 +90,7 @@ public class ClientScreen extends JPanel implements ActionListener {
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(800, 600);
+        return new Dimension(1920, 1080);
     }
 
     @SuppressWarnings("unchecked")
@@ -130,4 +150,29 @@ public class ClientScreen extends JPanel implements ActionListener {
         }
 
     }
+
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
 }
