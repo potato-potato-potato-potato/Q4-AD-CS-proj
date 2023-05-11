@@ -35,4 +35,11 @@ public class Manager {
     public Map getMap() {
         return null;
     }
+
+    public void threadQuit(Boolean isHost, Thread sender){//remove a thread if client disconnects, reassign host if nessescary
+        threadList.remove(sender);
+        if(isHost){
+            threadList.get(threadList.keySet().toArray()[0]).setHost();
+        }
+    }
 }
