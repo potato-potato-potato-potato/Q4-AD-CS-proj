@@ -28,11 +28,6 @@ public class MyHashMap<K, V> implements Serializable {
 
     }
 
-    public K get(int hashCode) {
-        int location = hashCode % hashArray.length;
-        return keySet.get(location);
-    }
-
     public MyHashSet<K> keySet() {
         return keySet;
     }

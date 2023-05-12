@@ -61,10 +61,30 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         } catch (Exception e) {
             e.printStackTrace();
         }
+        drawThread();
 
         this.addMouseListener(this);
 
         this.setFocusable(true);
+
+    }
+
+    public void drawThread() {
+        Thread t2 = new Thread(new Runnable() {
+            public void run() {
+
+                try {
+                    while (true) {
+                        repaint();
+                        Thread.sleep(1);
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+            }
+        });
+        t2.start();
 
     }
 
@@ -196,12 +216,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     try {
                         while (startScreen.getPosition().getY() > -700) {
                             Vector v = new Vector(0, 0);
-                            v = Vector.addVectors(startScreen.getVector(), new Vector(0, -1));
+                            v = Vector.addVectors(startScreen.getVector(), new Vector(0, -2));
                             startScreen.setVector(v);
                             startScreen.update();
                             Thread.sleep(16);
                         }
-                        System.out.println("thread ended");
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -210,23 +229,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             });
             t.start();
-
-            Thread t2 = new Thread(new Runnable() {
-                public void run() {
-
-                    try {
-                        while (true) {
-                            repaint();
-                            Thread.sleep(1);
-                        }
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
-
-                }
-            });
-            t2.start();
-
         }
     }
 
