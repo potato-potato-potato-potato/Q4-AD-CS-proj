@@ -21,7 +21,7 @@ public class ManagerThread implements Runnable {
             for(String each: clients.keySet()){
                 Pair<Vector, Integer[]> pair = clients.get(each);
                 Vector v = pair.getKey();
-                v.setYDirection(v.getYDirection()-.1);
+                v.setYDirection(v.getYDirection()+.1);
                 System.out.println("Gravitating " + each + " " + v.getYDirection());
             }
             //send out all information
