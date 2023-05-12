@@ -173,7 +173,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                             v = Vector.addVectors(startScreen.getVector(), new Vector(0, -0.1));
                             startScreen.setVector(v);
                             startScreen.update();
-                            repaint();
+
                             Thread.sleep(4);
                         }
                     } catch (InterruptedException e) {
@@ -184,6 +184,22 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             });
             t.start();
+
+            Thread t2 = new Thread(new Runnable() {
+                public void run() {
+
+                    try {
+                        while (true) {
+                            repaint();
+                            Thread.sleep(1);
+                        }
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+
+                }
+            });
+            t2.start();
 
         }
     }
