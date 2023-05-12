@@ -25,8 +25,9 @@ import java.io.File;
 import java.io.IOException;
 
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class ClientScreen extends JPanel implements ActionListener, MouseListener {
+public class ClientScreen extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -47,9 +48,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private PhysicsObjects startScreen;
     private BufferedImage startImg;
 
-    private boolean isGameStarted = false;
+    private boolean startScreenAnimation = false;
 
     private Map map;
+
+    private int up, down, left, right, dash, mouseState, mouseX, mouseY;
+
+    private Pair<String, int[]> outPut;
 
     public ClientScreen() {
         this.setLayout(null);
@@ -71,6 +76,22 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
+    public void outputSetup() {
+        up = 0;
+        down = 0;
+        left = 0;
+        right = 0;
+        dash = 0;
+        mouseState = 0;
+        mouseX = 0;
+        mouseY = 0;
+
+        outPut = new Pair<String, int[]>("clientoutput",
+                new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
+        // [Name], [up, down, left, right, fire, mouseState,mouseX, mouseY]
+
+    }
+
     public void drawThread() {
         Thread t2 = new Thread(new Runnable() {
             public void run() {
@@ -88,6 +109,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         });
         t2.start();
 
+    }
+
+    public void output() {
+        try {
+            out.writeObject(outPut);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void UsernameInputsetUp() {
@@ -157,7 +186,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     PlayerList.add(new Player((String) input.getValue()));
                 }
                 if (input.getKey().equals("Start Game")) {
-                    
+
                 }
             }
         } catch (UnknownHostException e) {
@@ -216,8 +245,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
 
-        if (!isGameStarted) {
-            isGameStarted = true;
+        if (!startScreenAnimation) {
+            startScreenAnimation = true;
             System.out.println("Game Started");
             Thread t = new Thread(new Runnable() {
                 public void run() {
@@ -237,10 +266,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             });
             t.start();
         }
+        mouseX = e.getX();
+        mouseY = e.getY();
+        mouseState = 1;
     }
 
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+        mouseState = 0;
     }
 
     @Override
@@ -253,6 +288,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     @Override
     public void mouseClicked(java.awt.event.MouseEvent e) {
+    }
+
+    @Override
+    public void mouseDragged(java.awt.event.MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+    @Override
+    public void mouseMoved(java.awt.event.MouseEvent e) {
+
     }
 
 }
