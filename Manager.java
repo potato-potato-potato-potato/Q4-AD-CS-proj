@@ -42,4 +42,8 @@ public class Manager {
             threadList.get(threadList.keySet().toArray()[0]).setHost();
         }
     }
+
+    public void updateThread(int[] keys, Thread sender){
+        threadManager.updateThread(keys, sender);
+    }
 }
