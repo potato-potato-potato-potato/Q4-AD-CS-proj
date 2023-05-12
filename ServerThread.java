@@ -48,7 +48,7 @@ public class ServerThread implements Runnable {
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-
+                
                 if (close) {
                     break;
                 }
