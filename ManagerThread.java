@@ -33,7 +33,14 @@ public class ManagerThread implements Runnable {
                 for (Rectangle r : walls) {
                     // if touching side, xDirection = 0, x pos subtract or add
                     int pX = nums[0];
-                    
+                    int pY = nums[1];
+                    int wX = (int)r.getX();
+                    int wY = (int)r.getY();
+                    int wW = (int)r.getWidth();
+                    int wH = (int)r.getHeight();
+                    if(pY<wY && pY+pHeight>wY+wH && wX>pX && wX<pX+pWidth){
+                        //touching left edge
+                    }
                 }
 
                 v.setYDirection(v.getYDirection() + .1);
@@ -60,5 +67,10 @@ public class ManagerThread implements Runnable {
         for(int i=0; i<keys.length; i++){
             clients.get(thread.getName()).getValue()[i+2] = keys[i];
         }
+        //test
+        for(String each: clients.keySet()){
+            sendData.put(each, new Integer[]{clients.get(each).getValue()[0], clients.get(each).getValue()[1]});
+        }
+        manager.broadcast(new Pair<String, Object>("Test", sendData), Thread.currentThread());
     }
 }
