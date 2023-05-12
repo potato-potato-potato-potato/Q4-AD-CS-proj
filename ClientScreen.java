@@ -200,7 +200,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                             startScreen.setVector(v);
                             startScreen.update();
                             repaint();
-                            Thread.sleep(4);
+                            Thread.sleep(16);
                         }
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
