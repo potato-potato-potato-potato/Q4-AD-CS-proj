@@ -156,13 +156,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == usernameButton) {
-            if(usernameButton.getText().equals("Enter")){
+            if (usernameButton.getText().equals("Enter")) {
                 username = usernameField.getText();
                 usernameField.setVisible(false);
                 usernameButton.setText("Start Game");
                 try {
                     out.writeObject(new Pair<String, Object>("threadname", username));
-                    if(isHost){
+                    if (isHost) {
                         usernameButton.setText("Start Game");
                     }
                 } catch (IOException e1) {
@@ -170,7 +170,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     e1.printStackTrace();
                 }
             }
-            if(usernameButton.getText().equals("Enter")){
+            if (usernameButton.getText().equals("Enter")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                 } catch (IOException e1) {
@@ -187,7 +187,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 e1.printStackTrace();
             }
         }
-        
+
     }
 
     @Override
@@ -199,14 +199,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             Thread t = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        while (true) {
+                        while (startScreen.getPosition().getY() > -700) {
                             Vector v = new Vector(0, 0);
-                            v = Vector.addVectors(startScreen.getVector(), new Vector(0, -0.1));
+                            v = Vector.addVectors(startScreen.getVector(), new Vector(0, -1));
                             startScreen.setVector(v);
                             startScreen.update();
-                            repaint();
                             Thread.sleep(16);
                         }
+                        System.out.println("thread ended");
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -214,6 +214,22 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             });
             t.start();
+
+            Thread t2 = new Thread(new Runnable() {
+                public void run() {
+
+                    try {
+                        while (true) {
+                            repaint();
+                            Thread.sleep(1);
+                        }
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+
+                }
+            });
+            t2.start();
 
         }
     }
