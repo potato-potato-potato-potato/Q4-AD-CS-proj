@@ -32,7 +32,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private ObjectInputStream in;
 
     private JTextField usernameField;
-    private JButton usernameButton;
+    private JButton usernameButton, quit;
 
     private boolean isHost;
 
@@ -56,7 +56,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         try {
             startImg = ImageIO.read(new File("assets/dcfldvz-dd1793cb-dde2-447f-803d-5341f2d8cbf3.jpg"));
             startScreen = new PhysicsObjects<BufferedImage>(startImg);
-            startScreen.setPosition(new Point(300, 200));
+            startScreen.setPosition(new Point(0, 0));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,14 +70,20 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void UsernameInputsetUp() {
         usernameField = new JTextField();
-        usernameField.setBounds(300, 300, 200, 50);
+        usernameField.setBounds(10, 10, 200, 50);
         usernameField.addActionListener(this);
+        usernameField.setText("Username");
         this.add(usernameField);
 
         usernameButton = new JButton("Enter");
-        usernameButton.setBounds(300, 400, 200, 50);
+        usernameButton.setBounds(10, 70, 200, 50);
         usernameButton.addActionListener(this);
         this.add(usernameButton);
+
+        quit = new JButton("Quit");
+        quit.setBounds(1100, 10, 200, 50);
+        quit.addActionListener(this);
+        this.add(quit);
 
     }
 
@@ -98,7 +104,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(1920, 1080);
+        return new Dimension(1200, 700);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,13 +126,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 input = (Pair<String, Object>) in.readObject();
                 if (input.getKey().equals("isHost")) {
                     isHost = (boolean) input.getValue();
-                    System.out.println("isHost: " + isHost);
+                    System.out.println(username + "isHost: " + isHost);
                 }
                 if (input.getKey().equals("username")) {
                     PlayerList.add(new Player((String) input.getValue()));
-
                 }
-
             }
         } catch (UnknownHostException e) {
             System.err.println("Host unkown: " + hostName);
@@ -147,16 +151,38 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == usernameButton) {
-            username = usernameField.getText();
+            if(usernameButton.getText().equals("Enter")){
+                username = usernameField.getText();
+                usernameField.setVisible(false);
+                usernameButton.setText("Start Game");
+                try {
+                    out.writeObject(new Pair<String, Object>("threadname", username));
+                    if(isHost){
+                        usernameButton.setText("Start Game");
+                    }
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+            if(usernameButton.getText().equals("Enter")){
+                try {
+                    out.writeObject(new Pair<String, Object>("StartGame", username));
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        }
+        if (e.getSource() == quit) {
             try {
-                out.writeObject(new Pair<String, Object>("threadname", username));
+                out.writeObject(new Pair<String, Object>("Quit", username));
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-
         }
-
+        
     }
 
     @Override

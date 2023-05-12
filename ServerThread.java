@@ -7,7 +7,7 @@ public class ServerThread implements Runnable {
     private Manager manager;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private boolean close;
+    private boolean close, isHost;
     private String name;
     private Pair<String, Object> input;
     private Map map;
@@ -33,15 +33,20 @@ public class ServerThread implements Runnable {
                     name = (String) input.getValue();
                     if (Thread.currentThread().getName().equals("Thread-0")) {
                         out.writeObject(new Pair<String, Boolean>("isHost", true));
+                        isHost = true;
                     } else {
                         out.writeObject(new Pair<String, Boolean>("isHost", false));
+                        isHost = false;
                     }
                     broadcast(new Pair<String, Object>("username", input.getValue()));
                 } else if (input.getKey().equals("game")) {
                     manager.broadcast(input, Thread.currentThread());
-                } else if (input.getKey().equals("start")) {
+                } else if (input.getKey().equals("StartGame")) {
                     manager.broadcast(input, Thread.currentThread());
                     manager.start();
+                }else if (input.getKey().equals("Quit")) {//remove this thread if client disconnects, reassign host if nessescary
+                    close = true;
+                    manager.threadQuit(isHost, Thread.currentThread());
                 }
 
                 if (close) {
@@ -86,5 +91,12 @@ public class ServerThread implements Runnable {
         manager.broadcast(s, Thread.currentThread());
     }
 
-
+    public void setHost(){
+        isHost = true;
+        try {
+        out.writeObject(new Pair<String, Boolean>("isHost", true));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 }
