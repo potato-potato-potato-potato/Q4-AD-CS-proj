@@ -12,6 +12,19 @@ public class Map implements Serializable {
     }
 
     public void drawMe(Graphics g) {
+        
+        for(Rectangle r : walls){
+            //hitBoxes
+            g.setColor(Color.BLACK);
+            g.fillRect((int)r.getX(), (int)r.getY(), (int)r.getWidth(), (int)r.getHeight());
+            //images
+            
+        }
 
+
+    }
+
+    public Rectangle[] getWalls(){
+        return walls;
     }
 }

@@ -49,6 +49,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private boolean isGameStarted = false;
 
+    private Map map;
+
     public ClientScreen() {
         this.setLayout(null);
 
@@ -105,6 +107,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         quit.addActionListener(this);
         this.add(quit);
 
+        map = new Map();
+
     }
 
     public void physicsUpdateTick() {
@@ -114,6 +118,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         startScreen.draw(g);
+        map.drawMe(g);
 
     }
 
@@ -151,6 +156,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if (input.getKey().equals("username")) {
                     PlayerList.add(new Player((String) input.getValue()));
                 }
+                if (input.getKey().equals("Start Game")) {
+                    
+                }
             }
         } catch (UnknownHostException e) {
             System.err.println("Host unkown: " + hostName);
@@ -185,7 +193,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     e1.printStackTrace();
                 }
             }
-            if (usernameButton.getText().equals("Enter")) {
+            if (usernameButton.getText().equals("Start Game")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                 } catch (IOException e1) {
@@ -225,7 +233,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
                 }
             });
             t.start();
