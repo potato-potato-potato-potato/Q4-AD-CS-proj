@@ -20,7 +20,6 @@ public class ManagerThread implements Runnable {
         pHeight = 50;//player height
     }
 
-    @SuppressWarnings("unchecked")
     public void run() {
         while (running){
             //each player
