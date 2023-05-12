@@ -98,8 +98,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         startScreen.draw(g);
-        map.draw(g);
-        
+        map.drawMe(g);
+
     }
 
     public void setUsername(String username) {
@@ -136,6 +136,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if (input.getKey().equals("username")) {
                     PlayerList.add(new Player((String) input.getValue()));
                 }
+                if (input.getKey().equals("Start Game")) {
+                    
+                }
             }
         } catch (UnknownHostException e) {
             System.err.println("Host unkown: " + hostName);
@@ -170,7 +173,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     e1.printStackTrace();
                 }
             }
-            if (usernameButton.getText().equals("Enter")) {
+            if (usernameButton.getText().equals("Start Game")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                 } catch (IOException e1) {
