@@ -26,28 +26,32 @@ public class ServerThread implements Runnable {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
             in = new ObjectInputStream((clientSocket.getInputStream()));
-
+            if (Thread.currentThread().getName().equals("Thread-0")) {
+                out.writeObject(new Pair<String, Boolean>("isHost", true));
+                isHost = true;
+            } else {
+                out.writeObject(new Pair<String, Boolean>("isHost", false));
+                isHost = false;
+            }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
+                System.out.println("Recevied " + input.getKey());
                 if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();
-                    if (Thread.currentThread().getName().equals("Thread-0")) {
-                        out.writeObject(new Pair<String, Boolean>("isHost", true));
-                        isHost = true;
-                    } else {
-                        out.writeObject(new Pair<String, Boolean>("isHost", false));
-                        isHost = false;
-                    }
-                    broadcast(new Pair<String, Object>("username", input.getValue()));
-                } else if (input.getKey().equals("game")) {
+                }
+                if (input.getKey().equals("game")) {
                     manager.broadcast(input, Thread.currentThread());
-                } else if (input.getKey().equals("StartGame")) {
+                }
+                if (input.getKey().equals("StartGame")) {
                     manager.broadcast(input, Thread.currentThread());
                     manager.start();
-                }else if (input.getKey().equals("Quit")) {//remove this thread if client disconnects, reassign host if nessescary
+
+                }
+                if (input.getKey().equals("Quit")) {//remove this thread if client disconnects, reassign host if nessescary
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
-                }else if (input.getKey().equals("ClientOutput")) {//remove this thread if client disconnects, reassign host if nessescary
+                }
+                if (input.getKey().equals("ClientOutput")) {//remove this thread if client disconnects, reassign host if nessescary
                     manager.updateThread((int[])input.getValue(), Thread.currentThread());
                 }
 

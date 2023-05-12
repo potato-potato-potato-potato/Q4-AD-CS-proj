@@ -158,7 +158,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(1200, 700);
+        return new Dimension(1920, 1080);
     }
 
     @SuppressWarnings("unchecked")
@@ -175,13 +175,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         try {
             out = new ObjectOutputStream(serverSocket.getOutputStream());
             in = new ObjectInputStream(serverSocket.getInputStream());
-
+            input = (Pair<String, Object>) in.readObject();
+            if (input.getKey().equals("isHost")) {
+                isHost = (boolean) input.getValue();
+            }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
-                if (input.getKey().equals("isHost")) {
-                    isHost = (boolean) input.getValue();
-                    System.out.println(username + "isHost: " + isHost);
-                }
                 if (input.getKey().equals("username")) {
                     PlayerList.add(new Player((String) input.getValue()));
                 }
@@ -217,14 +216,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     if (isHost) {
                         usernameButton.setText("Start Game");
                     }
+                    else{
+                        usernameButton.setVisible(false);
+                    }
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
-            if (usernameButton.getText().equals("Start Game")) {
+            else if(usernameButton.getText().equals("Start Game")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
+                    System.out.println("StartButton pressed ");
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -247,7 +250,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         if (!startScreenAnimation) {
             startScreenAnimation = true;
-            System.out.println("Game Started");
+            System.out.println("Animation Started");
             Thread t = new Thread(new Runnable() {
                 public void run() {
                     try {

@@ -26,10 +26,12 @@ public class Manager {
     }
 
     public void start() {//start running the game
-        Thread mThread = new Thread(new ManagerThread(this));
-        mThread.start();
-        threadManager.setThreads(threadList);
         System.out.println("Game Starting");
+        Thread mThread = new Thread(new ManagerThread(this));
+        threadManager.setThreads(threadList);
+        System.out.println("Thread Starting");
+
+        mThread.start();
     }
 
     public Map getMap() {
