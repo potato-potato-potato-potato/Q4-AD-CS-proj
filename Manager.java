@@ -22,7 +22,6 @@ public class Manager {
             if (t[i] != sender) {
                 st.send(s);
             }
-
         }
     }
 
@@ -30,6 +29,7 @@ public class Manager {
         Thread mThread = new Thread(new ManagerThread(this));
         mThread.start();
         threadManager.setThreads(threadList);
+        System.out.println("Game Starting");
     }
 
     public Map getMap() {

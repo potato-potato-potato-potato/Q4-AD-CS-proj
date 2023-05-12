@@ -12,6 +12,6 @@ public class Map implements Serializable {
     }
 
     public void drawMe(Graphics g) {
-
+        
     }
 }
