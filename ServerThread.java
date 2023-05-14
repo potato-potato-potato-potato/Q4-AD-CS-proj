@@ -35,26 +35,27 @@ public class ServerThread implements Runnable {
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
-                if (input.getKey().equals("threadname")) {
+                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
+                    // if nessescary
+                System.out.println("Received keystrokes");
+                manager.updateThread((int[]) input.getValue(), Thread.currentThread());
+                }
+                else if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();
                 }
-                if (input.getKey().equals("game")) {
+                else if (input.getKey().equals("game")) {
                     manager.broadcast(input, Thread.currentThread());
                 }
-                if (input.getKey().equals("StartGame")) {
+                else if (input.getKey().equals("StartGame")) {
                     manager.broadcast(input, Thread.currentThread());
                     manager.start();
                 }
-                if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
+                else if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
                                                     // nessescary
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
-                                                            // if nessescary
-                    System.out.println("Received keystrokes");
-                    manager.updateThread((int[]) input.getValue(), Thread.currentThread());
-                }
+                
 
                 if (close) {
                     break;
@@ -62,6 +63,7 @@ public class ServerThread implements Runnable {
             }
 
             // Clears and close the output stream.
+            System.out.println("Closing");
             out.flush();
             out.close();
             System.out.println(Thread.currentThread().getName() + ": connection closed.");
@@ -81,6 +83,7 @@ public class ServerThread implements Runnable {
     }
 
     public void send(Pair s) {
+        System.out.println("Sending s: " + s.toString());
         try {
             out.writeObject(s);
         } catch (IOException e) {
