@@ -72,6 +72,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             e.printStackTrace();
         }
         drawThread();
+        outputSetup();
 
         this.addKeyListener(this);
         this.addMouseListener(this);

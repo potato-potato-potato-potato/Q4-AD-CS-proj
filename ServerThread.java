@@ -75,10 +75,6 @@ public class ServerThread implements Runnable {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-<<<<<<< HEAD
-
-=======
->>>>>>> 587ebfa479d02a20ffb1aa4325465d0faf82b45a
         }
     }
 
