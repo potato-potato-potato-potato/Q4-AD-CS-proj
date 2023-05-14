@@ -15,8 +15,12 @@ public class Manager {
     public void add(Thread t, ServerThread s) {
         threadList.put(t, s);
         t.start();
+        s.getName();
+        System.out.println(s.getName());
+
     }
 
+    // broadcast to all threads but the sender
     public void broadcast(Pair s, Thread sender) {
         for (int i = 0; i < threadList.size(); i++) {
             Object[] t = threadList.keySet().toArray();
@@ -24,7 +28,17 @@ public class Manager {
             if (t[i] != sender) {
                 st.send(s);
             }
+        }
+    }
 
+    // broadcast to all threads
+    // Game data is sent with this method by ManagerThread
+    public void broadcast(Pair s) {
+        for (int i = 0; i < threadList.size(); i++) {
+            Object[] t = threadList.keySet().toArray();
+            ServerThread st = threadList.get(t[i]);
+            System.out.println("Sending to " + st.getName());
+            st.send(s);
         }
     }
 

@@ -12,6 +12,8 @@ public class ServerThread implements Runnable {
     private Pair<String, Object> input;
     private Map map;
 
+    private boolean checkPoint = false;
+
     public ServerThread(Socket clientSocket, Manager manager) {
         this.clientSocket = clientSocket;
         this.manager = manager;
@@ -27,6 +29,7 @@ public class ServerThread implements Runnable {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
             in = new ObjectInputStream((clientSocket.getInputStream()));
             if (Thread.currentThread().getName().equals("Thread-0")) {
+                System.out.println("thread name:" + Thread.currentThread());
                 out.writeObject(new Pair<String, Boolean>("isHost", true));
                 isHost = true;
             } else {
@@ -42,10 +45,12 @@ public class ServerThread implements Runnable {
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 } else if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();
+                    System.out.println("Received name: " + name);
                 } else if (input.getKey().equals("game")) {
                     manager.broadcast(input, Thread.currentThread());
                 } else if (input.getKey().equals("StartGame")) {
                     System.out.println(Thread.currentThread().getName() + ": Starting Game");
+                    checkPoint = true;
                     // manager.broadcast(input, Thread.currentThread());
                     manager.start();
                 } else if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
