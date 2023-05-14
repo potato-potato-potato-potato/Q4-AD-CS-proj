@@ -20,6 +20,7 @@ public class ManagerThread implements Runnable {
         walls = map.getWalls();
         pWidth = 10;// player width
         pHeight = 50;// player height
+        clients = new MyHashMap<String, Pair<Vector, Integer[]>>();
     }
 
     public void run() {
@@ -61,8 +62,10 @@ public class ManagerThread implements Runnable {
     public void setThreads(MyHashMap<Thread, ServerThread> threadList) {
         this.threadList = threadList;
         for (Thread each : threadList.keySet()) {// setup clients (hashmap)
+            System.out.println("Thread: " + each.getName());
             clients.put(each.getName(), new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] {50, 0, 0, 0, 0, 0, 0, 0, 0 }));
         }
+        System.out.println("Ending loop");
     }
     public void updateThread( int[] keys, Thread thread){
         for(int i=0; i<keys.length; i++){
