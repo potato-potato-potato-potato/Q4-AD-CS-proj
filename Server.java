@@ -4,6 +4,7 @@ import java.util.*;
 import java.awt.*;
 
 public class Server {
+    // test
     public static void main(String[] args) throws IOException {
         int portNumber = 1024;
         ServerSocket serverSocket = new ServerSocket(portNumber);
