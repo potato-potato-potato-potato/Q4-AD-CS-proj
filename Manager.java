@@ -4,12 +4,12 @@ public class Manager {
 
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean start;
-    private ManagerThread threadManager;
+    private ManagerThread managerThread;
 
     public Manager() {
         start = false;
         threadList = new MyHashMap<Thread, ServerThread>();
-        threadManager = new ManagerThread(this);
+        managerThread = new ManagerThread(this);
     }
 
     public void add(Thread t, ServerThread s) {
@@ -31,7 +31,7 @@ public class Manager {
         System.out.println("Game Starting");
         Thread mThread = new Thread(new ManagerThread(this));
         System.out.println("Thread made");
-        threadManager.setThreads(threadList);
+        managerThread.setThreads(threadList);
         System.out.println("Thread Starting");
 
         mThread.start();
@@ -47,7 +47,7 @@ public class Manager {
     }
 
     public void updateThread(int[] keys, Thread sender) {
-        threadManager.updateThread(keys, sender);
+        managerThread.updateThread(keys, sender);
         System.out.println(keys);
     }
 }
