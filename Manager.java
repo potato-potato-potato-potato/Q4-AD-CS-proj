@@ -5,6 +5,7 @@ public class Manager {
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean start;
     private ManagerThread threadManager;
+
     public Manager() {
         start = false;
         threadList = new MyHashMap<Thread, ServerThread>();
@@ -25,7 +26,7 @@ public class Manager {
         }
     }
 
-    public void start() {//start running the game
+    public void start() {// start running the game
         System.out.println("Game Starting");
         Thread mThread = new Thread(new ManagerThread(this));
         threadManager.setThreads(threadList);
@@ -38,14 +39,16 @@ public class Manager {
         return null;
     }
 
-    public void threadQuit(Boolean isHost, Thread sender){//remove a thread if client disconnects, reassign host if nessescary
+    public void threadQuit(Boolean isHost, Thread sender) {// remove a thread if client disconnects, reassign host if
+                                                           // nessescary
         threadList.remove(sender);
-        if(isHost){
+        if (isHost) {
             threadList.get(threadList.keySet().toArray()[0]).setHost();
         }
     }
 
-    public void updateThread(int[] keys, Thread sender){
+    public void updateThread(int[] keys, Thread sender) {
         threadManager.updateThread(keys, sender);
+        System.out.println(keys);
     }
 }

@@ -27,7 +27,10 @@ import java.io.IOException;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class ClientScreen extends JPanel implements ActionListener, MouseListener, MouseMotionListener {
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class ClientScreen extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -70,6 +73,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         drawThread();
 
+        this.addKeyListener(this);
         this.addMouseListener(this);
 
         this.setFocusable(true);
@@ -92,6 +96,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
+    public void sendOutput() {
+        try {
+            out.writeObject(outPut);
+            System.out.println("output send");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
     public void drawThread() {
         Thread t2 = new Thread(new Runnable() {
             public void run() {
@@ -111,14 +126,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    public void output() {
-        try {
-            out.writeObject(outPut);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void UsernameInputsetUp() {
         usernameField = new JTextField();
         usernameField.setBounds(10, 10, 200, 50);
@@ -129,11 +136,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         usernameButton = new JButton("Enter");
         usernameButton.setBounds(10, 70, 200, 50);
         usernameButton.addActionListener(this);
+        usernameButton.setFocusable(false);
         this.add(usernameButton);
 
         quit = new JButton("Quit");
         quit.setBounds(1100, 10, 200, 50);
         quit.addActionListener(this);
+        quit.setFocusable(false);
         this.add(quit);
 
         map = new Map();
@@ -215,16 +224,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(new Pair<String, Object>("threadname", username));
                     if (isHost) {
                         usernameButton.setText("Start Game");
-                    }
-                    else{
+                    } else {
                         usernameButton.setVisible(false);
                     }
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
-            }
-            else if(usernameButton.getText().equals("Start Game")) {
+            } else if (usernameButton.getText().equals("Start Game")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                 } catch (IOException e1) {
@@ -270,6 +277,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = e.getX();
         mouseY = e.getY();
         mouseState = 1;
+        sendOutput();
     }
 
     @Override
@@ -277,6 +285,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = e.getX();
         mouseY = e.getY();
         mouseState = 0;
+        sendOutput();
     }
 
     @Override
@@ -295,10 +304,57 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void mouseDragged(java.awt.event.MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
+        sendOutput();
     }
 
     @Override
     public void mouseMoved(java.awt.event.MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        switch (key) {
+            case KeyEvent.VK_W:
+                up = 1;
+                break;
+            case KeyEvent.VK_A:
+                left = 1;
+                break;
+            case KeyEvent.VK_S:
+                down = 1;
+                break;
+            case KeyEvent.VK_D:
+                right = 1;
+                break;
+        }
+        sendOutput();
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        switch (key) {
+            case KeyEvent.VK_W:
+                up = 0;
+                break;
+            case KeyEvent.VK_A:
+                left = 0;
+                break;
+            case KeyEvent.VK_S:
+                down = 0;
+                break;
+            case KeyEvent.VK_D:
+                right = 0;
+                break;
+        }
+        sendOutput();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
 
     }
 
