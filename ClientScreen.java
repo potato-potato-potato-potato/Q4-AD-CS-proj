@@ -227,7 +227,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             else if(usernameButton.getText().equals("Start Game")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
-                    System.out.println("StartButton pressed ");
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -250,7 +249,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         if (!startScreenAnimation) {
             startScreenAnimation = true;
-            System.out.println("Animation Started");
             Thread t = new Thread(new Runnable() {
                 public void run() {
                     try {
