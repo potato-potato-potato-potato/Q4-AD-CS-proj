@@ -35,7 +35,6 @@ public class ServerThread implements Runnable {
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
-                System.out.println("Recevied " + input.getKey());
                 if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();
                 }
@@ -52,10 +51,9 @@ public class ServerThread implements Runnable {
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
-                                                            // if nessescary
+                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host if nessescary
+                    System.out.println("Received keystrokes");
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
-
                 }
 
                 if (close) {
@@ -75,10 +73,6 @@ public class ServerThread implements Runnable {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-<<<<<<< HEAD
-
-=======
->>>>>>> 587ebfa479d02a20ffb1aa4325465d0faf82b45a
         }
     }
 
