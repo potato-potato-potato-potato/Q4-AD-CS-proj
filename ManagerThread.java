@@ -16,7 +16,7 @@ public class ManagerThread implements Runnable {
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
-        map = manager.getMap();
+        map = new Map();
         walls = map.getWalls();
         pWidth = 10;// player width
         pHeight = 50;// player height

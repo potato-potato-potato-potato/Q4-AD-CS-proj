@@ -9,6 +9,7 @@ public class Manager {
     public Manager() {
         start = false;
         threadList = new MyHashMap<Thread, ServerThread>();
+        threadManager = new ManagerThread(this);
     }
 
     public void add(Thread t, ServerThread s) {
@@ -35,9 +36,6 @@ public class Manager {
         mThread.start();
     }
 
-    public Map getMap() {
-        return null;
-    }
 
     public void threadQuit(Boolean isHost, Thread sender) {// remove a thread if client disconnects, reassign host if
                                                            // nessescary
