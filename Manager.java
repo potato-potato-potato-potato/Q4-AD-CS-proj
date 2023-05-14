@@ -37,7 +37,6 @@ public class Manager {
         mThread.start();
     }
 
-
     public void threadQuit(Boolean isHost, Thread sender) {// remove a thread if client disconnects, reassign host if
                                                            // nessescary
         threadList.remove(sender);
