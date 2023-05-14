@@ -55,7 +55,9 @@ public class ServerThread implements Runnable {
                 if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
                                                             // if nessescary
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
+
                 }
+
                 if (close) {
                     break;
                 }
@@ -72,6 +74,7 @@ public class ServerThread implements Runnable {
             System.out.println("Error listening for a connection");
             System.out.println(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
 
         }
     }
