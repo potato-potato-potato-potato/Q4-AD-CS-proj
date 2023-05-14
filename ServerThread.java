@@ -44,7 +44,6 @@ public class ServerThread implements Runnable {
                 if (input.getKey().equals("StartGame")) {
                     manager.broadcast(input, Thread.currentThread());
                     manager.start();
-
                 }
                 if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
                                                     // nessescary
