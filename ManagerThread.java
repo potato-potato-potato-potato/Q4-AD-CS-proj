@@ -56,7 +56,7 @@ public class ManagerThread implements Runnable {
                 sendData.put(each,
                         new Integer[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
             }
-            manager.broadcast(new Pair<String, Object>("gameData", sendData), Thread.currentThread());
+            manager.broadcast(new Pair<String, Object>("gameData", sendData));
             try {
                 Thread.sleep(15);
             } catch (Exception e) {

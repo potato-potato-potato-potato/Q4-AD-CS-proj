@@ -4,7 +4,6 @@ import java.util.*;
 import java.awt.*;
 
 public class Server {
-    // test
     public static void main(String[] args) throws IOException {
         int portNumber = 1024;
         ServerSocket serverSocket = new ServerSocket(portNumber);
@@ -19,8 +18,9 @@ public class Server {
             // Wait for a connection.
             Socket clientSocket = serverSocket.accept();
 
-            Thread newThread = new Thread(new ServerThread(clientSocket, manager));
-            manager.add(newThread, new ServerThread(clientSocket, manager));
+            ServerThread serverThread = new ServerThread(clientSocket, manager);
+            Thread newThread = new Thread(serverThread);
+            manager.add(newThread, serverThread);
             n++;
 
         }
