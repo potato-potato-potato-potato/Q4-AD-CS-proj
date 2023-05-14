@@ -24,6 +24,7 @@ public class ManagerThread implements Runnable {
 
     public void run() {
         while (running) {
+            System.out.println("Running");
             // each player
             for (String each : clients.keySet()) {
                 Pair<Vector, Integer[]> pair = clients.get(each);

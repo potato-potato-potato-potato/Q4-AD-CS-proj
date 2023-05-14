@@ -56,7 +56,6 @@ public class ServerThread implements Runnable {
                                                             // if nessescary
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 }
-
                 if (close) {
                     break;
                 }
