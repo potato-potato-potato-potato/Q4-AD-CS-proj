@@ -5,7 +5,7 @@ public class ServerThread implements Runnable {
     private Socket clientSocket;
 
     private Manager manager;
-    private ObjectOutputStream out;
+    public ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean close, isHost;
     private String name;
