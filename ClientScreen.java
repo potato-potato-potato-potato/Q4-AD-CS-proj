@@ -59,6 +59,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private Pair<String, int[]> outPut;
 
+    private boolean gameStarted = false;
+
     public ClientScreen() {
         this.setLayout(null);
 
@@ -99,8 +101,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void sendOutput() {
         try {
-            out.writeObject(outPut);
-            System.out.println("output send");
+            if (gameStarted == true) {
+                out.writeObject(outPut);
+                System.out.println("output send");
+            } else {
+                System.out.println("did not send because of game not started");
+            }
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -194,7 +201,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 if (input.getKey().equals("username")) {
                     PlayerList.add(new Player((String) input.getValue()));
                 }
-                if (input.getKey().equals("Start Game")) {
+                if (input.getKey().equals("StartGame")) {
+                    gameStarted = true;
+                    System.out.println("game Started");
 
                 }
             }

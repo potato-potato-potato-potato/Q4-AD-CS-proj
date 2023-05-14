@@ -51,7 +51,8 @@ public class ServerThread implements Runnable {
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host if nessescary
+                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
+                                                            // if nessescary
                     System.out.println("Received keystrokes");
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 }
@@ -85,7 +86,7 @@ public class ServerThread implements Runnable {
             out.writeObject(s);
         } catch (IOException e) {
             System.out.println("Error listening for a connection");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
