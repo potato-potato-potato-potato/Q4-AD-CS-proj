@@ -52,7 +52,7 @@ public class ServerThread implements Runnable {
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-                if (input.getKey().equals("ClientOutput")) {// remove this thread if client disconnects, reassign host
+                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
                                                             // if nessescary
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 }
