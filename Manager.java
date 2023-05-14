@@ -29,7 +29,7 @@ public class Manager {
 
     public void start() {// start running the game
         System.out.println("Game Starting");
-        Thread mThread = new Thread(new ManagerThread(this));
+        Thread mThread = new Thread(managerThread);
         System.out.println("Thread made");
         managerThread.setThreads(threadList);
         System.out.println("Thread Starting");
