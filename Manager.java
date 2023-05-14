@@ -24,6 +24,7 @@ public class Manager {
             if (t[i] != sender) {
                 st.send(s);
             }
+
         }
     }
 

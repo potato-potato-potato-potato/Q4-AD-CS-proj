@@ -35,27 +35,24 @@ public class ServerThread implements Runnable {
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
+                System.out.println("Received: " + input.getKey() + " " + input.getValue());
                 if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
                     // if nessescary
                     System.out.println("Received keystrokes");
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
-                }
-                else if (input.getKey().equals("threadname")) {
+                } else if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();
-                }
-                else if (input.getKey().equals("game")) {
+                } else if (input.getKey().equals("game")) {
                     manager.broadcast(input, Thread.currentThread());
-                }
-                else if (input.getKey().equals("StartGame")) {
-                    manager.broadcast(input, Thread.currentThread());
+                } else if (input.getKey().equals("StartGame")) {
+                    System.out.println(Thread.currentThread().getName() + ": Starting Game");
+                    // manager.broadcast(input, Thread.currentThread());
                     manager.start();
-                }
-                else if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
-                                                    // nessescary
+                } else if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
+                    // nessescary
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-                
 
                 if (close) {
                     break;

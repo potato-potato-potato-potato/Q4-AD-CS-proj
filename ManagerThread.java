@@ -22,8 +22,10 @@ public class ManagerThread implements Runnable {
         pWidth = 10;// player width
         pHeight = 50;// player height
         gameObjects = new MyHashMap<String, Pair<Vector, Integer[]>>();
+        sendData = new MyHashMap<String, Integer[]>();
     }
 
+    // this class is the main game calculations, it will run in a loop and update
     public void run() {
         while (running) {
             // each player
@@ -42,7 +44,7 @@ public class ManagerThread implements Runnable {
                     int wW = (int) r.getWidth();
                     int wH = (int) r.getHeight();
                     if (pY < wY && pY + pHeight > wY + wH && wX > pX && wX < pX + pWidth) {
-                        // touching left edge
+                        // TODO: touching left edge
                     }
                 }
 
@@ -63,6 +65,8 @@ public class ManagerThread implements Runnable {
         }
     }
 
+    // this is needed to pass all the player information to the managerThread
+    // it should only be called once, when the game starts
     public void setThreads(MyHashMap<Thread, ServerThread> threadList) {
         this.threadList = threadList;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
