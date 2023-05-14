@@ -47,12 +47,14 @@ public class ServerThread implements Runnable {
                     manager.start();
 
                 }
-                if (input.getKey().equals("Quit")) {//remove this thread if client disconnects, reassign host if nessescary
+                if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
+                                                    // nessescary
                     close = true;
                     manager.threadQuit(isHost, Thread.currentThread());
                 }
-                if (input.getKey().equals("ClientOutput")) {//remove this thread if client disconnects, reassign host if nessescary
-                    manager.updateThread((int[])input.getValue(), Thread.currentThread());
+                if (input.getKey().equals("ClientOutput")) {// remove this thread if client disconnects, reassign host
+                                                            // if nessescary
+                    manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 }
 
                 if (close) {
@@ -97,10 +99,10 @@ public class ServerThread implements Runnable {
         manager.broadcast(s, Thread.currentThread());
     }
 
-    public void setHost(){
+    public void setHost() {
         isHost = true;
         try {
-        out.writeObject(new Pair<String, Boolean>("isHost", true));
+            out.writeObject(new Pair<String, Boolean>("isHost", true));
         } catch (Exception e) {
             System.out.println(e);
         }
