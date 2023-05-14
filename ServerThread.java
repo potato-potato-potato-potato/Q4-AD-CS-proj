@@ -72,7 +72,7 @@ public class ServerThread implements Runnable {
             System.out.println("Error listening for a connection");
             System.out.println(e.getMessage());
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
