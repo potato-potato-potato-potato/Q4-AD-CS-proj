@@ -69,7 +69,7 @@ public class ManagerThread implements Runnable {
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
 
             gameObjects.put(each.getName(),
-                    new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] { 50, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
+                    new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] { 50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
             System.out.println("each: " + each.getName() + " gameObjects size: " + gameObjects.size());
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
