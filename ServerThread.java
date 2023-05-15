@@ -35,10 +35,8 @@ public class ServerThread implements Runnable {
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
-                System.out.println("Received: " + input.getKey() + " " + input.getValue());
                 if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
                     // if nessescary
-                    System.out.println("Received keystrokes");
                     manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 } else if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();

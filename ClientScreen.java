@@ -99,7 +99,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         outPut = new Pair<String, int[]>("clientoutput",
                 new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
-        // [Name], [up, down, left, right, fire, mouseState,mouseX, mouseY]
+        // [Name], [up, down, left, right, dash, mouseState,mouseX, mouseY]
 
     }
 
@@ -167,12 +167,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(!gameStarted){
-            startScreen.draw(g);
-            map.drawMe(g);
+        if(gameStarted){
+            drawObjects(g);
         }
         else{
-            drawObjects(g);
+            startScreen.draw(g);
+            map.drawMe(g);
         }
 
 
@@ -217,6 +217,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     System.out.println("game Started");
 
                 }
+                repaint();
             }
         } catch (UnknownHostException e) {
             System.err.println("Host unkown: " + hostName);
@@ -271,7 +272,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 e1.printStackTrace();
             }
         }
-
     }
 
     @Override
@@ -381,12 +381,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    public void drawObjects(Graphics g){
+    public void drawObjects(Graphics g){//draws all players or objects given the received gameData
+        System.out.println("Gamedata: " + gameData.keySet());
         for(String each: gameData.keySet()){
             int[] value = gameData.get(each);
             if(each.contains("Thread")){
                 g.fillRect(value[0], value[1], 10, 50);
                 g.drawString(each, value[0], value[1]);
+                System.out.println("Drawing " + each + " at " + value[0] + ", " + value[1] + "");
             }
         }
     }
