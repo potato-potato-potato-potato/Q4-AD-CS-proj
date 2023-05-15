@@ -167,14 +167,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(gameStarted){
+        if (gameStarted) {
             drawObjects(g);
-        }
-        else{
+        } else {
             startScreen.draw(g);
             map.drawMe(g);
         }
-
 
     }
 
@@ -216,8 +214,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     usernameButton.setVisible(true);
                     System.out.println("game Started");
 
-                } else if(input.getKey().equals("gameData")){
-                    gameData = (MyHashMap<String, int[]>)input.getValue();
+                } else if (input.getKey().equals("gameData")) {
+                    gameData = (MyHashMap<String, int[]>) input.getValue();
                 }
                 repaint();
             }
@@ -383,11 +381,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    public void drawObjects(Graphics g){//draws all players or objects given the received gameData
+    public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
         System.out.println("Gamedata: " + gameData.keySet());
-        for(String each: gameData.keySet()){
+        for (String each : gameData.keySet()) {
+            System.out.println(gameData.get(each));
             int[] value = gameData.get(each);
-            if(each.contains("Thread")){
+            if (each.contains("Thread")) {
                 g.fillRect(value[0], value[1], 10, 50);
                 g.drawString(each, value[0], value[1]);
                 System.out.println("Drawing " + each + " at " + value[0] + ", " + value[1] + "");
