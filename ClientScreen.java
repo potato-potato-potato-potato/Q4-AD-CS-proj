@@ -167,10 +167,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(gameStarted){
+        if (gameStarted) {
             drawObjects(g);
-        }
-        else{
+        } else {
             startScreen.draw(g);
             map.drawMe(g);
         }
@@ -383,16 +382,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    public void drawObjects(Graphics g){//draws all players or objects given the received gameData
+    public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
         System.out.println("Gamedata: " + gameData.keySet());
-        for(String each: gameData.keySet()){
+
+        for (String each : gameData.keySet()) {
             System.out.println(gameData.get(each));
             int x = gameData.get(each)[0];
             int y = gameData.get(each)[1];
-            if(each.contains("Thread")){
+            if (each.contains("Thread")) {
                 g.fillRect(x, y, 10, 50);
                 g.drawString(each, x, y);
                 System.out.println("Drawing " + each + " at " + x + ", " + y + "");
+
             }
         }
     }
