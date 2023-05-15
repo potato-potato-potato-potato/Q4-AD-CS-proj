@@ -46,9 +46,14 @@ public class ManagerThread implements Runnable {
                     }
                 }
 
-                v.setYDirection(v.getYDirection() + .1);
-                pair.getValue()[0] += (int) v.getXDirection();
+                v.setYDirection(v.getYDirection() + .05);
+                nums[1] += (int) v.getYDirection();
+                gameObjects.get(each).setKey(v);
+                gameObjects.get(each).setValue(nums);
+                System.out.println("Y pos: " +gameObjects.get(each).getValue()[1]);
+
             }
+
             // send out all information
             for (String each : gameObjects.keySet()) {
                 sendData.put(each, new int[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });

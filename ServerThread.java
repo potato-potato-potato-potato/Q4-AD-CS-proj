@@ -80,6 +80,7 @@ public class ServerThread implements Runnable {
 
     public void send(Pair s) {
         try {
+            System.out.println("Sending s " + s.getKey());
             out.writeObject(s);
         } catch (IOException e) {
             System.out.println("Error listening for a connection");

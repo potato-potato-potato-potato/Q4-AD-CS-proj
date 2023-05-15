@@ -174,8 +174,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             startScreen.draw(g);
             map.drawMe(g);
         }
-
-
     }
 
     public void setUsername(String username) {
@@ -208,6 +206,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
+                System.out.println("Input: " + input.getKey());
                 if (input.getKey().equals("username")) {
                     PlayerList.add(new Player((String) input.getValue()));
                 }
@@ -218,6 +217,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
                 } else if(input.getKey().equals("gameData")){
                     gameData = (MyHashMap<String, int[]>)input.getValue();
+                    System.out.println("client y pos:" + gameData.get("Thread-0")[1]);
                 }
                 repaint();
             }
