@@ -29,7 +29,6 @@ public class ManagerThread implements Runnable {
     public void run() {
         while (running) {
             // each player
-            System.out.println("GameObjects runner:" + gameObjects.keySet());
             for (String each : gameObjects.keySet()) {
                 Pair<Vector, Integer[]> pair = gameObjects.get(each);
                 Vector v = pair.getKey();

@@ -85,7 +85,6 @@ public class ServerThread implements Runnable {
     }
 
     public void send(Pair s) {
-        System.out.println("Sending s: " + s.toString());
         try {
             out.writeObject(s);
         } catch (IOException e) {
