@@ -11,9 +11,6 @@ public class ServerThread implements Runnable {
     private String name;
     private Pair<String, Object> input;
     private Map map;
-
-    private boolean checkPoint = false;
-
     public ServerThread(Socket clientSocket, Manager manager) {
         this.clientSocket = clientSocket;
         this.manager = manager;
@@ -50,8 +47,7 @@ public class ServerThread implements Runnable {
                     manager.broadcast(input, Thread.currentThread());
                 } else if (input.getKey().equals("StartGame")) {
                     System.out.println(Thread.currentThread().getName() + ": Starting Game");
-                    checkPoint = true;
-                    // manager.broadcast(input, Thread.currentThread());
+                    manager.broadcast(input, Thread.currentThread());
                     manager.start();
                 } else if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
                     // nessescary

@@ -30,6 +30,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import HashMap.MyHashMap;
+
 public class ClientScreen extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
     private ObjectOutputStream out;
@@ -58,6 +60,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private int up, down, left, right, dash, mouseState, mouseX, mouseY;
 
     private Pair<String, int[]> outPut;
+    private MyHashMap<String, int[]> gameData;
 
     private boolean gameStarted = false;
 
@@ -69,6 +72,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             startImg = ImageIO.read(new File("assets/dcfldvz-dd1793cb-dde2-447f-803d-5341f2d8cbf3.jpg"));
             startScreen = new PhysicsObjects<BufferedImage>(startImg);
             startScreen.setPosition(new Point(0, 0));
+            gameData = new MyHashMap<String, int[]>();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,8 +167,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        startScreen.draw(g);
-        map.drawMe(g);
+        if(!gameStarted){
+            startScreen.draw(g);
+            map.drawMe(g);
+        }
+        else{
+            drawObjects(g);
+        }
+
 
     }
 
@@ -203,6 +213,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
                 if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
+                    usernameButton.setVisible(true);
                     System.out.println("game Started");
 
                 }
@@ -244,6 +255,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             } else if (usernameButton.getText().equals("Start Game")) {
                 try {
                     out.writeObject(new Pair<String, Object>("StartGame", username));
+                    gameStarted = true;
+                    usernameButton.setVisible(false);
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -366,6 +379,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @Override
     public void keyTyped(KeyEvent e) {
 
+    }
+
+    public void drawObjects(Graphics g){
+        for(String each: gameData.keySet()){
+            int[] value = gameData.get(each);
+            if(each.contains("Thread")){
+                g.fillRect(value[0], value[1], 10, 50);
+                g.drawString(each, value[0], value[1]);
+            }
+        }
     }
 
 }

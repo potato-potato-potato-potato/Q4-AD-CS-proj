@@ -37,7 +37,6 @@ public class Manager {
         for (int i = 0; i < threadList.size(); i++) {
             Object[] t = threadList.keySet().toArray();
             ServerThread st = threadList.get(t[i]);
-            System.out.println("Sending to " + st.getName());
             st.send(s);
         }
     }
