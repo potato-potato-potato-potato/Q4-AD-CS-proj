@@ -383,15 +383,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
         System.out.println("Gamedata: " + gameData.keySet());
+
         for (String each : gameData.keySet()) {
             System.out.println(gameData.get(each));
-            int[] value = gameData.get(each);
+            int x = gameData.get(each)[0];
+            int y = gameData.get(each)[1];
             if (each.contains("Thread")) {
-                g.fillRect(value[0], value[1], 10, 50);
-                g.drawString(each, value[0], value[1]);
-                System.out.println("Drawing " + each + " at " + value[0] + ", " + value[1] + "");
+                g.fillRect(x, y, 10, 50);
+                g.drawString(each, x, y);
+                System.out.println("Drawing " + each + " at " + x + ", " + y + "");
+
             }
         }
     }
-
 }

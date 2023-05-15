@@ -9,7 +9,7 @@ public class ManagerThread implements Runnable {
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
     private MyHashMap<String, Pair<Vector, Integer[]>> gameObjects;// [Name], {Vector, [Xpos, Ypos, up, down, left, right, dash, mouseState, mouseX, mouseY]}
-    private MyHashMap<String, Integer[]> sendData;
+    private MyHashMap<String, int[]> sendData;
     private Map map;
     private Rectangle[] walls;
     private int pWidth, pHeight;
@@ -21,7 +21,7 @@ public class ManagerThread implements Runnable {
         pWidth = 10;// player width
         pHeight = 50;// player height
         gameObjects = new MyHashMap<String, Pair<Vector, Integer[]>>();
-        sendData = new MyHashMap<String, Integer[]>();
+        sendData = new MyHashMap<String, int[]>();
     }
 
     // this class is the main game calculations, it will run in a loop and update
@@ -51,7 +51,7 @@ public class ManagerThread implements Runnable {
             }
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each, new Integer[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
+                sendData.put(each, new int[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             try {
@@ -69,7 +69,7 @@ public class ManagerThread implements Runnable {
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
 
             gameObjects.put(each.getName(),
-                    new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] { 50, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
+                    new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] { 50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
             System.out.println("each: " + each.getName() + " gameObjects size: " + gameObjects.size());
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
@@ -82,7 +82,7 @@ public class ManagerThread implements Runnable {
         // test
         for (String each : gameObjects.keySet()) {
             sendData.put(each,
-                    new Integer[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
+                    new int[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
         }
         manager.broadcast(new Pair<String, Object>("Test", sendData), Thread.currentThread());
     }
