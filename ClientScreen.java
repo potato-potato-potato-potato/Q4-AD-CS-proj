@@ -216,6 +216,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     usernameButton.setVisible(true);
                     System.out.println("game Started");
 
+                } else if(input.getKey().equals("gameData")){
+                    gameData = (MyHashMap<String, int[]>)input.getValue();
                 }
                 repaint();
             }
