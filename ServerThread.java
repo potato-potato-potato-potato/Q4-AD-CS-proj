@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import HashMap.MyHashMap;
 
 public class ServerThread implements Runnable {
     private Socket clientSocket;
@@ -11,6 +12,7 @@ public class ServerThread implements Runnable {
     private String name;
     private Pair<String, Object> input;
     private Map map;
+    
     public ServerThread(Socket clientSocket, Manager manager) {
         this.clientSocket = clientSocket;
         this.manager = manager;
@@ -80,7 +82,10 @@ public class ServerThread implements Runnable {
 
     public void send(Pair s) {
         try {
-            System.out.println("Sending s " + s.getKey());
+            if(s.getKey().equals("gameData")){
+                for(String each: ((MyHashMap<String, int[]>)s.getValue()).keySet()){
+                }
+            }
             out.writeObject(s);
         } catch (IOException e) {
             System.out.println("Error listening for a connection");

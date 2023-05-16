@@ -32,11 +32,15 @@ public class ManagerThread implements Runnable {
                 Pair<Vector, Integer[]> pair = gameObjects.get(each);
                 Vector v = pair.getKey();
                 Integer[] nums = pair.getValue();
+                int pX = nums[0];
+                int pY = nums[1];
+                for(int i = 0; i < nums.length; i++){
+                    System.out.println(i + " : " + nums[i]);
+                }
                 // check if touching hitbox
                 for (Rectangle r : walls) {
                     // if touching side, xDirection = 0, x pos subtract or add
-                    int pX = nums[0];
-                    int pY = nums[1];
+                    
                     int wX = (int) r.getX();
                     int wY = (int) r.getY();
                     int wW = (int) r.getWidth();
@@ -45,12 +49,33 @@ public class ManagerThread implements Runnable {
                         // TODO: touching left edge
                     }
                 }
+                if(pY>600){
+                    v.setYDirection(v.getYDirection()+.1);
+                }
+                if(nums[2]==1){//up
+                    v.setYDirection(-5);
+                }
+                if(nums[3]==1){//down
 
-                v.setYDirection(v.getYDirection() + .05);
+                }
+                if(nums[4]==1){//left
+                    v.setXDirection(v.getXDirection()-1);
+                }
+                if(nums[5]==1){//right
+                    v.setXDirection(v.getXDirection()+1);
+                }
+                if(nums[6]==1){//dash
+
+                }
+                if(nums[7]==1){//fire
+                    System.out.println("Firing");
+                }
+        
+
+                v.setYDirection(v.getYDirection() + .1);
                 nums[1] += (int) v.getYDirection();
                 gameObjects.get(each).setKey(v);
                 gameObjects.get(each).setValue(nums);
-                System.out.println("Y pos: " +gameObjects.get(each).getValue()[1]);
 
             }
 
@@ -59,6 +84,7 @@ public class ManagerThread implements Runnable {
                 sendData.put(each, new int[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
+            sendData = new MyHashMap<String, int[]>();//reset sendData
             try {
                 Thread.sleep(15);
             } catch (Exception e) {
@@ -71,11 +97,10 @@ public class ManagerThread implements Runnable {
     // it should only be called once, when the game starts
     public void setThreads(MyHashMap<Thread, ServerThread> threadList) {
         this.threadList = threadList;
+        int num = 1;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
-
-            gameObjects.put(each.getName(),
-                    new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] { 50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
-            System.out.println("each: " + each.getName() + " gameObjects size: " + gameObjects.size());
+            num++;
+            gameObjects.put(each.getName(), new Pair<Vector, Integer[]>(new Vector(0, 0), new Integer[] { num*50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
     }
