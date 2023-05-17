@@ -43,7 +43,7 @@ public class ManagerThread implements Runnable {
                     int wY = (int) r.getY();
                     int wW = (int) r.getWidth();
                     int wH = (int) r.getHeight();
-                    if (pY < wY+wH && pY + pHeight > wY && wX > pX && wX < pX + pWidth) {
+                    if (pY < wY+wH && pY + pHeight > wY+1 && wX > pX && wX < pX + pWidth) {
                         // TODO: touching left edge
                         nums[0] = wX-pWidth;
                         v.setXDirection(0);
