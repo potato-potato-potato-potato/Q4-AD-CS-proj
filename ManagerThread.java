@@ -8,7 +8,7 @@ public class ManagerThread implements Runnable {
     private Manager manager;
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
-    private MyHashMap<String, Pair<Vector, int[]>> gameObjects;// [Name], {Vector, [Xpos, Ypos, up, down, left, right, dash, mouseState, mouseX, mouseY]}
+    private MyHashMap<String, Pair<Vector, double[]>> gameObjects;// [Name], {Vector, [Xpos, Ypos, up, down, left, right, dash, mouseState, mouseX, mouseY]}
     private MyHashMap<String, int[]> sendData;
     private Map map;
     private Rectangle[] walls;
@@ -20,7 +20,7 @@ public class ManagerThread implements Runnable {
         walls = map.getWalls();
         pWidth = 10;// player width
         pHeight = 50;// player height
-        gameObjects = new MyHashMap<String, Pair<Vector, int[]>>();
+        gameObjects = new MyHashMap<String, Pair<Vector, double[]>>();
         sendData = new MyHashMap<String, int[]>();
     }
 
@@ -29,11 +29,11 @@ public class ManagerThread implements Runnable {
         while (running) {
             // each player
             for (String each : gameObjects.keySet()) {
-                Pair<Vector, int[]> pair = gameObjects.get(each);
+                Pair<Vector, double[]> pair = gameObjects.get(each);
                 Vector v = pair.getKey();
-                int[] nums = pair.getValue();
-                int pX = nums[0];
-                int pY = nums[1];
+                double[] nums = pair.getValue();
+                double pX = nums[0];
+                double pY = nums[1];
                 for(int i = 0; i < 5; i++){
                     System.out.println(i + " : " + nums[i]);
                 }
@@ -51,10 +51,11 @@ public class ManagerThread implements Runnable {
                     }
                 }
                 if(pY>600){
-                    v.setYDirection(0);
+                    v.setYDirection(-5);
                 }
                 if(nums[2]==1){//up
                     v.setYDirection(v.getYDirection()-.2);
+                    System.out.println("Up pressed");
                 }
                 if(nums[3]==1){//down
 
@@ -93,7 +94,7 @@ public class ManagerThread implements Runnable {
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each, new int[] { gameObjects.get(each).getValue()[0], gameObjects.get(each).getValue()[1] });
+                sendData.put(each, new int[] { (int)gameObjects.get(each).getValue()[0], (int)gameObjects.get(each).getValue()[1] });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();//reset sendData
@@ -112,7 +113,7 @@ public class ManagerThread implements Runnable {
         int num = 1;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
             num++;
-            gameObjects.put(each.getName(), new Pair<Vector, int[]>(new Vector(0, 0), new int[] { num*50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
+            gameObjects.put(each.getName(), new Pair<Vector, double[]>(new Vector(0, 0), new double[] { num*50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
     }
