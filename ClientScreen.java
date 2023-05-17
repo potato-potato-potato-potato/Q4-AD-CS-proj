@@ -97,8 +97,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = 0;
         mouseY = 0;
 
-        outPut = new Pair<String, int[]>("clientoutput",
-                new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
+        outPut = new Pair<String, int[]>("clientoutput", new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
         // [Name], [up, down, left, right, dash, mouseState,mouseX, mouseY]
 
     }
@@ -107,11 +106,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         try {
             if (gameStarted == true) {
                 outPut.setValue(new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
+                out.reset();
                 out.writeObject(outPut);
                 System.out.println("output send: ");
-                for(int i = 0; i < outPut.getValue().length; i++){
-                    System.out.println(i + " : " + outPut.getValue()[i]);
-                }
+                System.out.println("up: " + outPut.getValue()[0]);
+                System.out.println("down: " + outPut.getValue()[1]);
+                System.out.println("left: " + outPut.getValue()[2]);
+                System.out.println("right: " + outPut.getValue()[3]);
+                System.out.println("dash: " + outPut.getValue()[4]);
+                System.out.println("mouseState: " + outPut.getValue()[5]);
+                System.out.println("mouseX: " + outPut.getValue()[6]);
+                System.out.println("mouseY: " + outPut.getValue()[7]);
+
             } else {
                 System.out.println("did not send because of game not started");
             }
@@ -173,9 +179,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         super.paintComponent(g);
         if (gameStarted) {
             drawObjects(g);
+            map.drawMe(g);
         } else {
             startScreen.draw(g);
-            map.drawMe(g);
+            map.drawBackground(g);
         }
     }
 
@@ -246,6 +253,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 usernameField.setVisible(false);
                 usernameButton.setText("Start Game");
                 try {
+                    out.reset();
                     out.writeObject(new Pair<String, Object>("threadname", username));
                     if (isHost) {
                         usernameButton.setText("Start Game");
@@ -258,6 +266,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             } else if (usernameButton.getText().equals("Start Game")) {
                 try {
+                    out.reset();
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                     gameStarted = true;
                     usernameButton.setVisible(false);
@@ -269,6 +278,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         if (e.getSource() == quit) {
             try {
+                out.reset();
                 out.writeObject(new Pair<String, Object>("Quit", username));
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
@@ -341,40 +351,43 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        switch (key) {
-            case KeyEvent.VK_W:
-                up = 1;
-                break;
-            case KeyEvent.VK_A:
-                left = 1;
-                break;
-            case KeyEvent.VK_S:
-                down = 1;
-                break;
-            case KeyEvent.VK_D:
-                right = 1;
-                break;
+        System.out.println(key);
+        if(key==38 || key == 87){//up
+            up = 1;
+        }
+        if(key==37 || key == 65){//left
+            left = 1;
+        }
+        if(key==40 || key == 83){//down
+            down = 1;
+        }
+        if(key==39 || key == 68){//right
+            right = 1;
         }
         sendOutput();
-
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        switch (key) {
-            case KeyEvent.VK_W:
-                up = 0;
-                break;
-            case KeyEvent.VK_A:
-                left = 0;
-                break;
-            case KeyEvent.VK_S:
-                down = 0;
-                break;
-            case KeyEvent.VK_D:
-                right = 0;
-                break;
+        if(key==38 || key == 87){//up
+            up = 0;
+            System.out.println("Up");
+        }
+        if(key==37 || key == 65){//left
+            left = 0;
+            System.out.println("left");
+
+        }
+        if(key==40 || key == 83){//down
+            down = 0;
+            System.out.println("down");
+
+        }
+        if(key==39 || key == 68){//right
+            right = 0;
+            System.out.println("right");
+
         }
         sendOutput();
     }

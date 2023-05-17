@@ -29,9 +29,11 @@ public class ServerThread implements Runnable {
             in = new ObjectInputStream((clientSocket.getInputStream()));
             if (Thread.currentThread().getName().equals("Thread-0")) {
                 System.out.println("thread name:" + Thread.currentThread());
+                out.reset();
                 out.writeObject(new Pair<String, Boolean>("isHost", true));
                 isHost = true;
             } else {
+                out.reset();
                 out.writeObject(new Pair<String, Boolean>("isHost", false));
                 isHost = false;
             }
@@ -80,12 +82,13 @@ public class ServerThread implements Runnable {
         return name;
     }
 
-    public void send(Pair s) {
+    public void send(Pair<String, Object> s) {
         try {
             if(s.getKey().equals("gameData")){
                 for(String each: ((MyHashMap<String, int[]>)s.getValue()).keySet()){
                 }
             }
+            out.reset();
             out.writeObject(s);
         } catch (IOException e) {
             System.out.println("Error listening for a connection");
@@ -97,7 +100,7 @@ public class ServerThread implements Runnable {
         return map;
     }
 
-    public void broadcast(Pair s) {
+    public void broadcast(Pair<String, Object> s) {
         System.out.println(Thread.currentThread().getName() + ": broadcasting " + s);
         manager.broadcast(s, Thread.currentThread());
     }

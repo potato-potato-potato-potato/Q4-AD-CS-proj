@@ -34,11 +34,8 @@ public class ManagerThread implements Runnable {
                 double[] nums = pair.getValue();
                 double pX = nums[0];
                 double pY = nums[1];
-                for(int i = 0; i < 5; i++){
-                    System.out.println(i + " : " + nums[i]);
-                }
-                System.out.println();
-                // check if touching hitbox
+                v.setYDirection(v.getYDirection() + .1);
+
                 for (Rectangle r : walls) {
                     // if touching side, xDirection = 0, x pos subtract or add
                     
@@ -46,16 +43,27 @@ public class ManagerThread implements Runnable {
                     int wY = (int) r.getY();
                     int wW = (int) r.getWidth();
                     int wH = (int) r.getHeight();
-                    if (pY < wY && pY + pHeight > wY + wH && wX > pX && wX < pX + pWidth) {
+                    if (pY < wY+wH && pY + pHeight > wY && wX > pX && wX < pX + pWidth) {
                         // TODO: touching left edge
+                        nums[0] = wX-pWidth;
+                        v.setXDirection(0);
+                    } else if(pY<wY && pY+pHeight>wY && pX+pWidth>wX && pX<wX+wW){
+                        //touching top edge
+                        nums[1] = wY-pHeight;
+                        v.setYDirection(0);
+                    }else if (pY < wY+wH && pY + pHeight > wY && wX+wW > pX && wX+wW < pX + pWidth) {
+                        // TODO: touching left edge
+                        nums[0] = wX+wW;
+                        v.setXDirection(0);
                     }
                 }
-                if(pY>600){
-                    v.setYDirection(-5);
+                if(pY>800){//out of bounds
+                    nums[1] = 50;
+                    v.setYDirection(0);
+                    v.setXDirection(0);
                 }
                 if(nums[2]==1){//up
                     v.setYDirection(v.getYDirection()-.2);
-                    System.out.println("Up pressed");
                 }
                 if(nums[3]==1){//down
 
@@ -70,7 +78,9 @@ public class ManagerThread implements Runnable {
 
                 }
                 if(nums[7]==1){//fire
-                    System.out.println("Firing");
+                }
+                if(v.getXDirection()!=0){
+                    v.setXDirection(v.getXDirection()*.95);
                 }
                 if(v.getYDirection()>15){
                     v.setYDirection(15);
@@ -81,12 +91,10 @@ public class ManagerThread implements Runnable {
                 if(v.getXDirection()<-15){
                     v.setXDirection(-15);
                 }
-        
 
-                v.setYDirection(v.getYDirection() + .1);
-                nums[1] += (int) v.getYDirection();
-                nums[2] += (int) v.getXDirection();
-
+                nums[1] += v.getYDirection();
+                nums[0] += v.getXDirection();
+                
                 gameObjects.get(each).setKey(v);
                 gameObjects.get(each).setValue(nums);
 
@@ -119,10 +127,15 @@ public class ManagerThread implements Runnable {
     }
 
     public void updateThread(int[] keys, Thread thread) {
-        for (int i = 0; i < keys.length; i++) {
-            System.out.println(i + " Updated to : " + keys[i] + " in " + thread.getName());
-        }
-        System.out.println("Updating keys");
+        System.out.println("Up: " + keys[0]);
+        System.out.println("down: " + keys[1]);
+        System.out.println("left: " + keys[2]);
+        System.out.println("right: " + keys[3]);
+        System.out.println("dash: " + keys[4]);
+        System.out.println("mouseState: " + keys[5]);
+        System.out.println("mouseX: " + keys[6]);
+        System.out.println("mouseY: " + keys[7]);
+
         for (int i = 0; i < keys.length; i++) {
             gameObjects.get(thread.getName()).getValue()[i + 2] = keys[i];
         }
