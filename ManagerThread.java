@@ -67,7 +67,7 @@ public class ManagerThread implements Runnable {
                 if(nums[7]==1){//fire
                 }
                 if(v.getXDirection()!=0){
-                    v.setXDirection(v.getXDirection()*.95);
+                    v.setXDirection(v.getXDirection()*.98);
                 }
                 if(v.getYDirection()>15){
                     v.setYDirection(15);
@@ -99,21 +99,18 @@ public class ManagerThread implements Runnable {
                             v.setXDirection(0);
                             nums[0] = wX+wW;
                         }
-                    } else if(pY+pHeight<wY+wH && pY+pHeight>wY && pX+pWidth>wX && pX<wX+wW){
+                    } else if(pY+pHeight<wY+wH && pY+pHeight>=wY-.1 && pX+pWidth>wX && pX<wX+wW){
                         //touching top edge
                         nums[1] = wY-pHeight;
                         nums[10] = 1;
                         if(v.getYDirection()>0){
                             v.setYDirection(0);
                         }
-                        System.out.println("Touching top edge");
                     }
-                    else{
+                    else if(v.getYDirection()!=0){
                         nums[10]=0;
-                        System.out.println("Not touching top edge");
                     }
                 }
-                
 
                 nums[1] += v.getYDirection();
                 nums[0] += v.getXDirection();
