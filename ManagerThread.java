@@ -8,11 +8,13 @@ public class ManagerThread implements Runnable {
     private Manager manager;
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
-    private MyHashMap<String, Pair<Vector, double[]>> gameObjects;// [Name], {Vector, [Xpos, Ypos, up, down, left, right, dash, mouseState, mouseX, mouseY]}
+    private MyHashMap<String, Pair<Vector, double[]>> gameObjects;// [Name], {Vector, [Xpos, Ypos, up, down, left, right, dash, mouseState, mouseX, mouseY, touchingGround]}
     private MyHashMap<String, int[]> sendData;
     private Map map;
     private Rectangle[] walls;
     private int pWidth, pHeight;
+
+    
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
@@ -49,16 +51,24 @@ public class ManagerThread implements Runnable {
                         v.setXDirection(0);
                     }
                     if(nums[2]==1){//up
-                        v.setYDirection(v.getYDirection()-.1);
+                        if(nums[10]==1){//touching top
+                            v.setYDirection(v.getYDirection()-5);
+                        }
                     }
                     if(nums[3]==1){//down
     
                     }
                     if(nums[4]==1){//left
-                        v.setXDirection(v.getXDirection()-.1);
+                        if(nums[10]==1){
+                            v.setXDirection(v.getXDirection()-.15);
+                        }
+                        v.setXDirection(v.getXDirection()-.05);
                     }
                     if(nums[5]==1){//right
-                        v.setXDirection(v.getXDirection()+.1);
+                        if(nums[10]==1){
+                            v.setXDirection(v.getXDirection()+.15);
+                        }
+                        v.setXDirection(v.getXDirection()+.05);
                     }
                     if(nums[6]==1){//dash
     
@@ -66,32 +76,53 @@ public class ManagerThread implements Runnable {
                     if(nums[7]==1){//fire
                     }
                     if(v.getXDirection()!=0){
-                        v.setXDirection(v.getXDirection()*.95);
+                        if(v.getXDirection()>.01){
+                            v.setXDirection(v.getXDirection()-.01);
+                        }else if(v.getXDirection()<-.01){
+                            v.setXDirection(v.getXDirection()+.01);
+                        }else{
+                            v.setXDirection(0);
+                        }
+                       
                     }
                     if(v.getYDirection()>15){
                         v.setYDirection(15);
                     }
-                    if(v.getXDirection()>15){
-                        v.setXDirection(15);
+                    if(v.getXDirection()>5){
+                        v.setXDirection(5);
                     }
-                    if(v.getXDirection()<-15){
-                        v.setXDirection(-15);
+                    if(v.getXDirection()<-5){
+                        v.setXDirection(-5);
                     }
 
                     if (pY < wY+wH && pY + pHeight > wY+1 && wX > pX && wX < pX + pWidth) {
                         // TODO: touching left edge
                         nums[0] = wX-pWidth;
-                        v.setXDirection(0);
+                        if(v.getXDirection()>0){//if moving right, set Y vel to 0
+                            v.setXDirection(0);
+                        }
+                    }else if (pY < wY+wH && pY + pHeight > wY+1 &&  pX<wX+wW &&  pX + pWidth>wX+wW) {
+                        // TODO: touching right edge
+                        nums[0] = wX+wW;
+                        if(v.getXDirection()<0){//if moving left, set Y vel to 0
+                            v.setXDirection(0);
+                        }
                     } else if(pY+pHeight<wY+wH && pY+pHeight>wY && pX+pWidth>wX && pX<wX+wW){
                         //touching top edge
                         nums[1] = wY-pHeight;
-                        if(v.getYDirection()>0){
+                        nums[10] = 1;
+                        if(v.getYDirection()>0){//if moving down, set Y vel to 0
                             v.setYDirection(0);
                         }
-                    }else if (pY < wY+wH && pY + pHeight > wY+1 &&  pX<wX+wW &&  pX + pWidth>wX+wW) {
-                        // TODO: touching left edge
-                        nums[0] = wX+wW;
-                        v.setXDirection(0);
+                    }else if(pY>wY && pY<wY+wH && pX+pWidth>wX && pX<wX+wW){
+                        //touching bottom edge
+                        nums[1] = wY+wH;
+                        if(v.getYDirection()<0){//if moving up, set Y vel to 0
+                            v.setYDirection(0);
+                        }
+                    }
+                    else{
+                        nums[10] = 0;
                     }
                 }
                 
@@ -125,7 +156,7 @@ public class ManagerThread implements Runnable {
         int num = 1;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
             num++;
-            gameObjects.put(each.getName(), new Pair<Vector, double[]>(new Vector(0, 0), new double[] { num*50, 10, 0, 0, 0, 0, 0, 0, 0, 0 }));
+            gameObjects.put(each.getName(), new Pair<Vector, double[]>(new Vector(0, 0), new double[] { num*50, 10, 0, 0, 0, 0, 0, 0, 0, 0 ,0}));
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
     }
