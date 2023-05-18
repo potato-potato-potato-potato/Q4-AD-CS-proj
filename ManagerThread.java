@@ -50,8 +50,10 @@ public class ManagerThread implements Runnable {
                     } else if(pY<wY && pY+pHeight>wY && pX+pWidth>wX && pX<wX+wW){
                         //touching top edge
                         nums[1] = wY-pHeight;
-                        v.setYDirection(0);
-                    }else if (pY < wY+wH && pY + pHeight > wY && wX+wW > pX && wX+wW < pX + pWidth) {
+                        if(v.getYDirection()>0){
+                            v.setYDirection(0);
+                        }
+                    }else if (pY < wY+wH && pY + pHeight > wY+1 && wX+wW > pX && wX+wW > pX + pWidth) {
                         // TODO: touching left edge
                         nums[0] = wX+wW;
                         v.setXDirection(0);
