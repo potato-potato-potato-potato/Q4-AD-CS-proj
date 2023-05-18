@@ -1,6 +1,7 @@
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -64,8 +65,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private boolean gameStarted = false;
 
+    private boolean isUnix = false;
+
     public ClientScreen() {
         this.setLayout(null);
+
+        if (System.getProperty("os.name").equals("Linux")) {
+            isUnix = true;
+        }
 
         UsernameInputsetUp();
         try {
@@ -178,6 +185,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        if (isUnix) {
+            Toolkit.getDefaultToolkit().sync();
+        }
+
         if (gameStarted) {
             drawObjects(g);
 

@@ -9,10 +9,6 @@ public class Client {
 
         JFrame frame = new JFrame("Client");
 
-        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-            Toolkit.getDefaultToolkit().sync();
-        }
-
         ClientScreen sc = new ClientScreen();
         frame.add(sc);
 
