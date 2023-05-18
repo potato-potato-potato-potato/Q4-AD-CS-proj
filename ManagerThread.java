@@ -53,15 +53,15 @@ public class ManagerThread implements Runnable {
                 }
                 if (nums[4] == 1) {// left
                     if (nums[10] == 1) {
-                        v.setXDirection(v.getXDirection() - .1);
+                        v.setXDirection(v.getXDirection() - .2);
                     }
-                    v.setXDirection(v.getXDirection() - .05);
+                    v.setXDirection(v.getXDirection() - .08);
                 }
                 if (nums[5] == 1) {// right
                     if (nums[10] == 1) {
-                        v.setXDirection(v.getXDirection() + .1);
+                        v.setXDirection(v.getXDirection() + .2);
                     }
-                    v.setXDirection(v.getXDirection() + .05);
+                    v.setXDirection(v.getXDirection() + .08);
                 }
                 if (nums[6] == 1) {// dash
 
@@ -69,7 +69,14 @@ public class ManagerThread implements Runnable {
                 if (nums[7] == 1) {// fire
                 }
                 if (v.getXDirection() != 0) {
-                    v.setXDirection(v.getXDirection() * .95);
+                    if (v.getXDirection() > .1) {
+                        v.setXDirection(v.getXDirection() - .05);
+                    } else if (v.getXDirection() < -.1) {
+                        v.setXDirection(v.getXDirection() + .05);
+                    } else {
+                        v.setXDirection(0);
+                    }
+
                 }
                 if (v.getYDirection() > 15) {
                     v.setYDirection(15);
@@ -100,17 +107,15 @@ public class ManagerThread implements Runnable {
                             v.setXDirection(0);
                             nums[0] = wX + wW;
                         }
-                    } else if (pY + pHeight < wY + wH && pY + pHeight > wY && pX + pWidth > wX && pX < wX + wW) {
+                    } else if (pY + pHeight < wY + wH && pY + pHeight >= wY - .1 && pX + pWidth > wX && pX < wX + wW) {
                         // touching top edge
                         nums[1] = wY - pHeight;
                         nums[10] = 1;
                         if (v.getYDirection() > 0) {
                             v.setYDirection(0);
                         }
-                        System.out.println("Touching top edge");
-                    } else {
+                    } else if (v.getYDirection() != 0) {
                         nums[10] = 0;
-                        System.out.println("Not touching top edge");
                     }
                 }
 
