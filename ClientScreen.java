@@ -97,7 +97,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = 0;
         mouseY = 0;
 
-        outPut = new Pair<String, int[]>("clientoutput", new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
+        outPut = new Pair<String, int[]>("clientoutput",
+                new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
         // [Name], [up, down, left, right, dash, mouseState,mouseX, mouseY]
 
     }
@@ -134,10 +135,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             public void run() {
 
                 try {
-                    //while (true) {
-                    //    repaint();
-                    //    Thread.sleep(1);
-                    //}
+                    // while (true) {
+                    // repaint();
+                    // Thread.sleep(1);
+                    // }
                 } catch (Exception e) {
                     // TODO: handle exception
                 }
@@ -179,7 +180,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         super.paintComponent(g);
         if (gameStarted) {
             drawObjects(g);
+
             map.drawMe(g);
+
         } else {
             startScreen.draw(g);
             map.drawBackground(g);
@@ -224,8 +227,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     usernameButton.setVisible(true);
                     System.out.println("game Started");
 
-                } else if(input.getKey().equals("gameData")){
-                    gameData = (MyHashMap<String, int[]>)input.getValue();
+                } else if (input.getKey().equals("gameData")) {
+                    gameData = (MyHashMap<String, int[]>) input.getValue();
                 }
                 repaint();
             }
@@ -352,16 +355,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         System.out.println(key);
-        if(key==38 || key == 87){//up
+        if (key == 38 || key == 87) {// up
             up = 1;
         }
-        if(key==37 || key == 65){//left
+        if (key == 37 || key == 65) {// left
             left = 1;
         }
-        if(key==40 || key == 83){//down
+        if (key == 40 || key == 83) {// down
             down = 1;
         }
-        if(key==39 || key == 68){//right
+        if (key == 39 || key == 68) {// right
             right = 1;
         }
         sendOutput();
@@ -370,21 +373,21 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if(key==38 || key == 87){//up
+        if (key == 38 || key == 87) {// up
             up = 0;
             System.out.println("Up");
         }
-        if(key==37 || key == 65){//left
+        if (key == 37 || key == 65) {// left
             left = 0;
             System.out.println("left");
 
         }
-        if(key==40 || key == 83){//down
+        if (key == 40 || key == 83) {// down
             down = 0;
             System.out.println("down");
 
         }
-        if(key==39 || key == 68){//right
+        if (key == 39 || key == 68) {// right
             right = 0;
             System.out.println("right");
 
