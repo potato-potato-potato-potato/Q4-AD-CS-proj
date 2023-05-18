@@ -109,7 +109,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 outPut.setValue(new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
                 out.writeObject(outPut);
                 System.out.println("output send: ");
-                for(int i = 0; i < outPut.getValue().length; i++){
+                for (int i = 0; i < outPut.getValue().length; i++) {
                     System.out.println(i + " : " + outPut.getValue()[i]);
                 }
             } else {
@@ -128,10 +128,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             public void run() {
 
                 try {
-                    //while (true) {
-                    //    repaint();
-                    //    Thread.sleep(1);
-                    //}
+                    // while (true) {
+                    // repaint();
+                    // Thread.sleep(1);
+                    // }
                 } catch (Exception e) {
                     // TODO: handle exception
                 }
@@ -173,6 +173,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         super.paintComponent(g);
         if (gameStarted) {
             drawObjects(g);
+            g.drawString(, ALLBITS, ABORT);
         } else {
             startScreen.draw(g);
             map.drawMe(g);
@@ -217,8 +218,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     usernameButton.setVisible(true);
                     System.out.println("game Started");
 
-                } else if(input.getKey().equals("gameData")){
-                    gameData = (MyHashMap<String, int[]>)input.getValue();
+                } else if (input.getKey().equals("gameData")) {
+                    gameData = (MyHashMap<String, int[]>) input.getValue();
                 }
                 repaint();
             }

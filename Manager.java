@@ -61,6 +61,6 @@ public class Manager {
 
     public void updateThread(int[] keys, Thread sender) {
         managerThread.updateThread(keys, sender);
-        System.out.println(keys);
+        // System.out.println(keys);
     }
 }
