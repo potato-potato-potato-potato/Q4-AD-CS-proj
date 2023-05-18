@@ -21,7 +21,7 @@ public class Manager {
     }
 
     // broadcast to all threads but the sender
-    public void broadcast(Pair s, Thread sender) {
+    public void broadcast(Pair<String, Object> s, Thread sender) {
         for (int i = 0; i < threadList.size(); i++) {
             Object[] t = threadList.keySet().toArray();
             ServerThread st = threadList.get(t[i]);
@@ -33,7 +33,7 @@ public class Manager {
 
     // broadcast to all threads
     // Game data is sent with this method by ManagerThread
-    public void broadcast(Pair s) {
+    public void broadcast(Pair<String, Object> s) {
         for (int i = 0; i < threadList.size(); i++) {
             Object[] t = threadList.keySet().toArray();
             ServerThread st = threadList.get(t[i]);
@@ -47,7 +47,6 @@ public class Manager {
         System.out.println("Thread made");
         managerThread.setThreads(threadList);
         System.out.println("Thread Starting");
-
         mThread.start();
     }
 
@@ -61,6 +60,5 @@ public class Manager {
 
     public void updateThread(int[] keys, Thread sender) {
         managerThread.updateThread(keys, sender);
-        // System.out.println(keys);
     }
 }
