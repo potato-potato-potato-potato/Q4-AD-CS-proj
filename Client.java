@@ -8,6 +8,7 @@ public class Client {
     public static void main(String args[]) throws IOException {
 
         JFrame frame = new JFrame("Client");
+        System.setProperty("sun.java2d.opengl", "true");
 
         ClientScreen sc = new ClientScreen();
         frame.add(sc);

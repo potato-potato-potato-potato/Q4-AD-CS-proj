@@ -67,6 +67,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private boolean isUnix = false;
 
+    private Thread mainGameLoop;
+
     public ClientScreen() {
         this.setLayout(null);
 
@@ -86,12 +88,33 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         drawThread();
         outputSetup();
+        mainGameLoop();
 
         this.addKeyListener(this);
         this.addMouseListener(this);
 
         this.setFocusable(true);
 
+    }
+
+    // main game loop thread 
+    //it sends a out put every 18 milliseconds to get 60 fps
+    public void mainGameLoop(){
+        mainGameLoop = new Thread(new Runnable(){
+            public void run(){
+                while(true){
+                    try{
+                        Thread.sleep(18);
+                        if(gameStarted){
+                            sendOutput();
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        mainGameLoop.start();
     }
 
     public void outputSetup() {
@@ -328,7 +351,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = e.getX();
         mouseY = e.getY();
         mouseState = 1;
-        sendOutput();
+        
     }
 
     @Override
@@ -336,7 +359,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = e.getX();
         mouseY = e.getY();
         mouseState = 0;
-        sendOutput();
+        
     }
 
     @Override
@@ -355,7 +378,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void mouseDragged(java.awt.event.MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-        sendOutput();
+        
     }
 
     @Override
@@ -379,7 +402,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if (key == 39 || key == 68) {// right
             right = 1;
         }
-        sendOutput();
+        
     }
 
     @Override
@@ -404,7 +427,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             System.out.println("right");
 
         }
-        sendOutput();
+        
     }
 
     @Override
