@@ -43,11 +43,46 @@ public class ManagerThread implements Runnable {
                     int wY = (int) r.getY();
                     int wW = (int) r.getWidth();
                     int wH = (int) r.getHeight();
+                    if(pY>800){//out of bounds
+                        nums[1] = 50;
+                        v.setYDirection(0);
+                        v.setXDirection(0);
+                    }
+                    if(nums[2]==1){//up
+                        v.setYDirection(v.getYDirection()-.1);
+                    }
+                    if(nums[3]==1){//down
+    
+                    }
+                    if(nums[4]==1){//left
+                        v.setXDirection(v.getXDirection()-.1);
+                    }
+                    if(nums[5]==1){//right
+                        v.setXDirection(v.getXDirection()+.1);
+                    }
+                    if(nums[6]==1){//dash
+    
+                    }
+                    if(nums[7]==1){//fire
+                    }
+                    if(v.getXDirection()!=0){
+                        v.setXDirection(v.getXDirection()*.95);
+                    }
+                    if(v.getYDirection()>15){
+                        v.setYDirection(15);
+                    }
+                    if(v.getXDirection()>15){
+                        v.setXDirection(15);
+                    }
+                    if(v.getXDirection()<-15){
+                        v.setXDirection(-15);
+                    }
+
                     if (pY < wY+wH && pY + pHeight > wY+1 && wX > pX && wX < pX + pWidth) {
                         // TODO: touching left edge
                         nums[0] = wX-pWidth;
                         v.setXDirection(0);
-                    } else if(pY<wY && pY+pHeight>wY && pX+pWidth>wX && pX<wX+wW){
+                    } else if(pY+pHeight<wY+wH && pY+pHeight>wY && pX+pWidth>wX && pX<wX+wW){
                         //touching top edge
                         nums[1] = wY-pHeight;
                         if(v.getYDirection()>0){
@@ -59,40 +94,7 @@ public class ManagerThread implements Runnable {
                         v.setXDirection(0);
                     }
                 }
-                if(pY>800){//out of bounds
-                    nums[1] = 50;
-                    v.setYDirection(0);
-                    v.setXDirection(0);
-                }
-                if(nums[2]==1){//up
-                    v.setYDirection(v.getYDirection()-.2);
-                }
-                if(nums[3]==1){//down
-
-                }
-                if(nums[4]==1){//left
-                    v.setXDirection(v.getXDirection()-.1);
-                }
-                if(nums[5]==1){//right
-                    v.setXDirection(v.getXDirection()+.1);
-                }
-                if(nums[6]==1){//dash
-
-                }
-                if(nums[7]==1){//fire
-                }
-                if(v.getXDirection()!=0){
-                    v.setXDirection(v.getXDirection()*.95);
-                }
-                if(v.getYDirection()>15){
-                    v.setYDirection(15);
-                }
-                if(v.getXDirection()>15){
-                    v.setXDirection(15);
-                }
-                if(v.getXDirection()<-15){
-                    v.setXDirection(-15);
-                }
+                
 
                 nums[1] += v.getYDirection();
                 nums[0] += v.getXDirection();
