@@ -5,14 +5,16 @@ import HashMap.MyHashMap;
 import java.io.*;
 
 public class ManagerThread implements Runnable {
-    private static final double GRAVITY = .1; //, , , , , 
-    private static final double JUMPHEIGHT = 5;
+    private static final double GRAVITY = .15; //, , , , , 
+    private static final double JUMPHEIGHT = 3.5;
     private static final double AIRRESISTANCE = .02;
     private static final double FRICTION = .04;
     private static final double GROUNDMOVEMENT = .2;
     private static final double AIRMOVEMENT = .1;
     private static final double MAXVELOCITY = 15;
     private static final double MINXVELOCITY = .05;//MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
+    private static final double SMASH = .1;
+
     private Manager manager;
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
@@ -22,7 +24,7 @@ public class ManagerThread implements Runnable {
     private MyHashMap<String, int[]> sendData;
     private Map map;
     private Rectangle[] walls;
-    private int pWidth, pHeight;
+    private int pWidth, pHeight, timer;
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
@@ -32,6 +34,7 @@ public class ManagerThread implements Runnable {
         pHeight = 50;// player height
         gameObjects = new MyHashMap<String, Pair<Vector, double[]>>();
         sendData = new MyHashMap<String, int[]>();
+        timer = 0;
         
     }
 
@@ -39,6 +42,7 @@ public class ManagerThread implements Runnable {
     public void run() {
         while (running) {
             // each player
+            timer++;
             for (String each : gameObjects.keySet()) {
                 Pair<Vector, double[]> pair = gameObjects.get(each);
                 Vector v = pair.getKey();
@@ -54,20 +58,27 @@ public class ManagerThread implements Runnable {
                 if(nums[2]==1){//up
                     if(nums[10]==1){
                         v.setYDirection(v.getYDirection()-JUMPHEIGHT);
+                        nums[10]=0;
+                    }else{
+                        v.setYDirection(v.getYDirection()-SMASH);
                     }
                 }
                 if (nums[3] == 1) {// down
-
+                    if(nums[10]==0){
+                        v.setYDirection(v.getYDirection()+SMASH);
+                    }
                 }
                 if(nums[4]==1){//left
                     if(nums[10]==1){
                         v.setXDirection(v.getXDirection()-GROUNDMOVEMENT);
+                        
                     }
                     v.setXDirection(v.getXDirection()-AIRMOVEMENT);
                 }
                 if(nums[5]==1){//right
                     if(nums[10]==1){
                         v.setXDirection(v.getXDirection()+GROUNDMOVEMENT);
+                        
                     }
                     v.setXDirection(v.getXDirection()+AIRMOVEMENT); 
                 }
@@ -83,6 +94,9 @@ public class ManagerThread implements Runnable {
                         }
                         else{
                             v.setXDirection(v.getXDirection()-FRICTION);
+                            if(nums[3]==1){//slow down more if down arrow is pressed
+                                v.setXDirection(v.getXDirection()-2*FRICTION);
+                            }
 
                         }
                     } else if(v.getXDirection()<-MINXVELOCITY){
@@ -91,6 +105,9 @@ public class ManagerThread implements Runnable {
                         }
                         else{
                             v.setXDirection(v.getXDirection()+FRICTION);
+                            if(nums[3]==1){//slow down more if down arrow is pressed
+                                v.setXDirection(v.getXDirection()+2*FRICTION);
+                            }
                         }
                     }
                     else{
@@ -109,7 +126,6 @@ public class ManagerThread implements Runnable {
                 }
                 for (Rectangle r : walls) {
                     // if touching side, xDirection = 0, x pos subtract or add
-
                     int wX = (int) r.getX();
                     int wY = (int) r.getY();
                     int wW = (int) r.getWidth();
@@ -131,14 +147,20 @@ public class ManagerThread implements Runnable {
                         // touching top edge
                         nums[1] = wY - pHeight;
                         nums[10] = 1;
+                        if(timer%10==0){
+
+                        }
                         if (v.getYDirection() > 0) {
                             v.setYDirection(0);
                         }
-                    } else if (v.getYDirection() != 0) {
-                        nums[10] = 0;
+                    }else if (pY < wY + wH && pY > wY && pX + pWidth > wX && pX < wX + wW) {
+                        // touching top edge
+                        nums[1] = wY+wH;
+                        if (v.getYDirection() < 0) {
+                            v.setYDirection(0);
+                        }
                     }
                 }
-
                 nums[1] += v.getYDirection();
                 nums[0] += v.getXDirection();
 
@@ -176,14 +198,6 @@ public class ManagerThread implements Runnable {
     }
 
     public void updateThread(int[] keys, Thread thread) {
-        System.out.println("Up: " + keys[0]);
-        System.out.println("down: " + keys[1]);
-        System.out.println("left: " + keys[2]);
-        System.out.println("right: " + keys[3]);
-        System.out.println("dash: " + keys[4]);
-        System.out.println("mouseState: " + keys[5]);
-        System.out.println("mouseX: " + keys[6]);
-        System.out.println("mouseY: " + keys[7]);
 
         for (int i = 0; i < keys.length; i++) {
             gameObjects.get(thread.getName()).getValue()[i + 2] = keys[i];
