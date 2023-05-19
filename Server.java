@@ -17,7 +17,6 @@ public class Server {
 
             // Wait for a connection.
             Socket clientSocket = serverSocket.accept();
-
             ServerThread serverThread = new ServerThread(clientSocket, manager);
             Thread newThread = new Thread(serverThread);
             manager.add(newThread, serverThread);

@@ -16,6 +16,8 @@ public class Map implements Serializable {
         islands[1] = new Rectangle(300, 600, 100, 20);
         islands[2] = new Rectangle(500, 600, 100, 20);
         islands[3] = new Rectangle(700, 600, 100, 20);
+        islands[3] = new Rectangle(350, 300, 20, 100);
+
     }
 
     public void drawMe(Graphics g) {

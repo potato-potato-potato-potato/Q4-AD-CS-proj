@@ -224,7 +224,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        // String hostName = "10.210.74.159";
+        // String hostName = "10.210.102.233";
 
         String hostName = "localhost";
 
@@ -415,8 +415,19 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             int x = gameData.get(each)[0];
             int y = gameData.get(each)[1];
             if (each.contains("Thread")) {
-                g.fillRect(x, y, 10, 50);
-                g.drawString(each, x, y);
+                g.drawRect(x, y, 10, 50);
+                if (each.equals("Thread-0")) {
+                    g.drawString("P1", x, y);
+
+                } else if (each.equals("Thread-1")) {
+                    g.drawString("P2", x, y);
+
+                } else if (each.equals("Thread-2")) {
+                    g.drawString("P3", x, y);
+
+                } else {
+                    g.drawString(each, x, y);
+                }
 
             }
         }
