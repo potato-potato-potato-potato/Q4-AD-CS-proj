@@ -55,7 +55,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private int up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY;
 
-    private Pair<String, int[]> outPut;
+    private int[] outPut;
     private MyHashMap<String, int[]> gameData;
 
     private boolean gameStarted = false;
@@ -115,8 +115,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = 0;
         mouseY = 0;
 
-        outPut = new Pair<String, int[]>("clientoutput",
-                new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
+        outPut = new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY };
         // [Name], [up, down, left, right, dash, leftmouseState,rightmouseState,mouseX,
         // mouseY]
 
@@ -125,19 +124,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void sendOutput() {
         try {
             if (gameStarted == true) {
-                outPut.setValue(
-                        new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
+                outPut = new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY };
                 out.reset();
                 out.writeObject(outPut);
                 System.out.println("output send: ");
-                System.out.println("up: " + outPut.getValue()[0]);
-                System.out.println("down: " + outPut.getValue()[1]);
-                System.out.println("left: " + outPut.getValue()[2]);
-                System.out.println("right: " + outPut.getValue()[3]);
-                System.out.println("dash: " + outPut.getValue()[4]);
-                System.out.println("mouseState: " + outPut.getValue()[5]);
-                System.out.println("mouseX: " + outPut.getValue()[6]);
-                System.out.println("mouseY: " + outPut.getValue()[7]);
+                System.out.println("up: " + outPut[0]);
+                System.out.println("down: " + outPut[1]);
+                System.out.println("left: " + outPut[2]);
+                System.out.println("right: " + outPut[3]);
+                System.out.println("dash: " + outPut[4]);
+                System.out.println("mouseState: " + outPut[5]);
+                System.out.println("mouseX: " + outPut[6]);
+                System.out.println("mouseY: " + outPut[7]);
 
             } else {
                 System.out.println("did not send because of game not started");
@@ -226,7 +224,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        // String hostName = "10.210.102.233";
+        // String hostName = "10.210.74.159";
 
         String hostName = "localhost";
 
