@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import org.w3c.dom.events.MouseEvent;
+import java.awt.event.MouseEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,14 +51,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private Pair<String, Object> input;
 
-    private PhysicsObjects startScreen;
-    private BufferedImage startImg;
-
-    private boolean startScreenAnimation = false;
-
     private Map map;
 
-    private int up, down, left, right, dash, mouseState, mouseX, mouseY;
+    private int up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY;
 
     private Pair<String, int[]> outPut;
     private MyHashMap<String, int[]> gameData;
@@ -77,15 +72,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
 
         UsernameInputsetUp();
-        try {
-            startImg = ImageIO.read(new File("assets/dcfldvz-dd1793cb-dde2-447f-803d-5341f2d8cbf3.jpg"));
-            startScreen = new PhysicsObjects<BufferedImage>(startImg);
-            startScreen.setPosition(new Point(0, 0));
-            gameData = new MyHashMap<String, int[]>();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         drawThread();
         outputSetup();
         mainGameLoop();
@@ -97,18 +84,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    // main game loop thread 
-    //it sends a out put every 18 milliseconds to get 60 fps
-    public void mainGameLoop(){
-        mainGameLoop = new Thread(new Runnable(){
-            public void run(){
-                while(true){
-                    try{
+    // main game loop thread
+    // it sends a out put every 18 milliseconds to get 60 fps
+    public void mainGameLoop() {
+        mainGameLoop = new Thread(new Runnable() {
+            public void run() {
+                while (true) {
+                    try {
                         Thread.sleep(18);
-                        if(gameStarted){
+                        if (gameStarted) {
                             sendOutput();
                         }
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -123,20 +110,23 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         left = 0;
         right = 0;
         dash = 0;
-        mouseState = 0;
+        leftmouseState = 0;
+        rightmouseState = 0;
         mouseX = 0;
         mouseY = 0;
 
         outPut = new Pair<String, int[]>("clientoutput",
-                new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
-        // [Name], [up, down, left, right, dash, mouseState,mouseX, mouseY]
+                new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
+        // [Name], [up, down, left, right, dash, leftmouseState,rightmouseState,mouseX,
+        // mouseY]
 
     }
 
     public void sendOutput() {
         try {
             if (gameStarted == true) {
-                outPut.setValue(new int[] { up, down, left, right, dash, mouseState, mouseX, mouseY });
+                outPut.setValue(
+                        new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
                 out.reset();
                 out.writeObject(outPut);
                 System.out.println("output send: ");
@@ -219,7 +209,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             map.drawMe(g);
 
         } else {
-            startScreen.draw(g);
             map.drawBackground(g);
         }
     }
@@ -327,39 +316,26 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-
-        if (!startScreenAnimation) {
-            startScreenAnimation = true;
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        while (startScreen.getPosition().getY() > -700) {
-                            Vector v = new Vector(0, 0);
-                            v = Vector.addVectors(startScreen.getVector(), new Vector(0, -2));
-                            startScreen.setVector(v);
-                            startScreen.update();
-                            Thread.sleep(16);
-                        }
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            });
-            t.start();
-        }
         mouseX = e.getX();
         mouseY = e.getY();
-        mouseState = 1;
-        
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            leftmouseState = 1;
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
+            rightmouseState = 1;
+        }
+
     }
 
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-        mouseState = 0;
-        
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            leftmouseState = 0;
+        } else if (e.getButton() == MouseEvent.BUTTON3) {
+            rightmouseState = 0;
+        }
+
     }
 
     @Override
@@ -378,7 +354,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void mouseDragged(java.awt.event.MouseEvent e) {
         mouseX = e.getX();
         mouseY = e.getY();
-        
+
     }
 
     @Override
@@ -402,7 +378,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if (key == 39 || key == 68) {// right
             right = 1;
         }
-        
+
     }
 
     @Override
@@ -427,7 +403,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             System.out.println("right");
 
         }
-        
+
     }
 
     @Override

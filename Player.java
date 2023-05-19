@@ -36,7 +36,7 @@ public class Player {
         HITBOX.translate((int) velocity.getXDirection(), (int) velocity.getYDirection());
     }
 
-    public void drawMe(Graphics g) {
+    public void draw(Graphics g) {
         g.setColor(Color.RED);
         g.fillRect(HITBOX.x, HITBOX.y, HITBOX.width, HITBOX.height);
     }
