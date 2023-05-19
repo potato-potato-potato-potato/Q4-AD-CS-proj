@@ -188,6 +188,7 @@ public class ManagerThread implements Runnable {
             gameObjects.put(each.getName(), new GameObjectStatus());
             gameObjects.get(each.getName()).setXpos(num * 50);
             gameObjects.get(each.getName()).setYpos(10);
+            gameObjects.get(each.getName()).setImgStatus(0);
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
     }

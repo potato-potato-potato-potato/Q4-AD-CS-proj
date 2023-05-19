@@ -21,6 +21,7 @@ public class GameObjectStatus implements Serializable {
     private double mouseY;
     private boolean touchingGround;
     private int jumpCount;
+    private int imgStatus;
 
     public GameObjectStatus() {
         vector = new Vector(0, 0);
@@ -182,6 +183,19 @@ public class GameObjectStatus implements Serializable {
 
     public void setJumpCount(int jumpCount) {
         this.jumpCount = jumpCount;
+    }
+
+    public void setImgStatus(int imgStatus) {
+        /*
+        img 00 is idle.png
+
+
+
+        */
+        this.imgStatus = imgStatus;
+    }
+    public int getImgStatus(){
+        return imgStatus;
     }
 
 }

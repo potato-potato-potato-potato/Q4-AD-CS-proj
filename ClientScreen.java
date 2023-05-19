@@ -224,9 +224,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        // String hostName = "10.210.102.233";
+        String hostName = "10.210.102.233";
 
-        String hostName = "localhost";
+        //String hostName = "localhost";
 
         int portNumber = 1024;
         Socket serverSocket = new Socket(hostName, portNumber);
@@ -412,12 +412,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
 
         for (String each : gameData.keySet()) {
-            int x = gameData.get(each)[0];
-            int y = gameData.get(each)[1];
+            int[] nums = gameData.get(each);
+            int x = nums[0];
+            int y = nums[1];
             if (each.contains("Thread")) {
-                g.drawRect(x, y, 10, 50);
+                g.drawRect(x, y, 10, 50);//hitbox
                 if (each.equals("Thread-0")) {
-                    g.drawString("P1", x, y);
+                    g.drawString("P1", x, y);//name
+                    
 
                 } else if (each.equals("Thread-1")) {
                     g.drawString("P2", x, y);
