@@ -55,7 +55,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private int up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY;
 
-    private int[] outPut;
+    private Pair<String, int[]> outPut;
     private MyHashMap<String, int[]> gameData;
 
     private boolean gameStarted = false;
@@ -63,6 +63,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private boolean isUnix = false;
 
     private Thread mainGameLoop;
+    private PlayerImages[] playerImages;
 
     public ClientScreen() {
         this.setLayout(null);
@@ -115,7 +116,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mouseX = 0;
         mouseY = 0;
 
-        outPut = new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY };
+        outPut = new Pair<String, int[]>("clientoutput",
+                new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
         // [Name], [up, down, left, right, dash, leftmouseState,rightmouseState,mouseX,
         // mouseY]
 
@@ -124,18 +126,19 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void sendOutput() {
         try {
             if (gameStarted == true) {
-                outPut = new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY };
+                outPut.setValue(
+                        new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
                 out.reset();
                 out.writeObject(outPut);
                 System.out.println("output send: ");
-                System.out.println("up: " + outPut[0]);
-                System.out.println("down: " + outPut[1]);
-                System.out.println("left: " + outPut[2]);
-                System.out.println("right: " + outPut[3]);
-                System.out.println("dash: " + outPut[4]);
-                System.out.println("mouseState: " + outPut[5]);
-                System.out.println("mouseX: " + outPut[6]);
-                System.out.println("mouseY: " + outPut[7]);
+                System.out.println("up: " + outPut.getValue()[0]);
+                System.out.println("down: " + outPut.getValue()[1]);
+                System.out.println("left: " + outPut.getValue()[2]);
+                System.out.println("right: " + outPut.getValue()[3]);
+                System.out.println("dash: " + outPut.getValue()[4]);
+                System.out.println("mouseState: " + outPut.getValue()[5]);
+                System.out.println("mouseX: " + outPut.getValue()[6]);
+                System.out.println("mouseY: " + outPut.getValue()[7]);
 
             } else {
                 System.out.println("did not send because of game not started");
@@ -242,7 +245,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
                 if (input.getKey().equals("username")) {
-                    PlayerList.add(new Player((String) input.getValue()));
+                    //????
                 }
                 if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
@@ -412,26 +415,22 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
 
         for (String each : gameData.keySet()) {
-            int[] nums = gameData.get(each);
-            int x = nums[0];
-            int y = nums[1];
             if (each.contains("Thread")) {
-                g.drawRect(x, y, 10, 50);//hitbox
                 if (each.equals("Thread-0")) {
-                    g.drawString("P1", x, y);//name
-                    
-
+                    playerImages[0] = new PlayerImages("P1", gameData.get(each));
                 } else if (each.equals("Thread-1")) {
-                    g.drawString("P2", x, y);
+                    playerImages[1] = new PlayerImages("P2", gameData.get(each));
 
                 } else if (each.equals("Thread-2")) {
-                    g.drawString("P3", x, y);
+                    playerImages[2] = new PlayerImages("P3", gameData.get(each));
 
                 } else {
-                    g.drawString(each, x, y);
+                    playerImages[3] = new PlayerImages("ExtraPlayerError", gameData.get(each));
                 }
-
             }
+        }
+        for(int i = 0; i < playerImages.length; i++) {
+            playerImages[i].drawMe(g);
         }
     }
 }

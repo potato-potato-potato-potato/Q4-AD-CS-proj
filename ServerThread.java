@@ -12,8 +12,6 @@ public class ServerThread implements Runnable {
     private String name;
     private Pair<String, Object> input;
     private Map map;
-    private boolean isUserinput;
-    private int[] userInput;
 
     public ServerThread(Socket clientSocket, Manager manager) {
         this.clientSocket = clientSocket;
@@ -40,18 +38,10 @@ public class ServerThread implements Runnable {
                 isHost = false;
             }
             while (true) {
-                isUserinput = false;
-                if (in.readObject() instanceof Pair) {
-                    input = (Pair<String, Object>) in.readObject();
-                } else if (in.readObject() instanceof int[]) {
-                    userInput = (int[]) in.readObject();
-                    isUserinput = true;
-                    System.out.println("User input received");
-                }
-
-                if (isUserinput) {// remove this thread if client disconnects, reassign host
+                input = (Pair<String, Object>) in.readObject();
+                if (input.getKey().equals("clientoutput")) {// remove this thread if client disconnects, reassign host
                     // if nessescary
-                    manager.updateThread(userInput, Thread.currentThread());
+                    manager.updateThread((int[]) input.getValue(), Thread.currentThread());
                 } else if (input.getKey().equals("threadname")) {
                     name = (String) input.getValue();
                     System.out.println("Received name: " + name);
