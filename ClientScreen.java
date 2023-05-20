@@ -63,7 +63,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private boolean isUnix = false;
 
     private Thread mainGameLoop;
-    private PlayerImages[] playerImages;
 
     public ClientScreen() {
         this.setLayout(null);
@@ -74,7 +73,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         UsernameInputsetUp();
 
-        drawThread();
         outputSetup();
         mainGameLoop();
 
@@ -151,25 +149,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
-    public void drawThread() {
-        Thread t2 = new Thread(new Runnable() {
-            public void run() {
-
-                try {
-                    // while (true) {
-                    // repaint();
-                    // Thread.sleep(1);
-                    // }
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }
-
-            }
-        });
-        t2.start();
-
-    }
-
     public void UsernameInputsetUp() {
         usernameField = new JTextField();
         usernameField.setBounds(10, 10, 200, 50);
@@ -229,7 +208,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         // String hostName = "10.210.102.233";
 
-        String hostName = "localhost";
+        String hostName = System.getenv("HOST_NAME");
 
         int portNumber = 1024;
         Socket serverSocket = new Socket(hostName, portNumber);
@@ -415,22 +394,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
 
         for (String each : gameData.keySet()) {
+            int x = gameData.get(each)[0];
+            int y = gameData.get(each)[1];
             if (each.contains("Thread")) {
-                if (each.equals("Thread-0")) {
-                    playerImages[0] = new PlayerImages("P1", gameData.get(each));
-                } else if (each.equals("Thread-1")) {
-                    playerImages[1] = new PlayerImages("P2", gameData.get(each));
+                g.fillRect(x, y, 10, 50);
+                g.drawString(each, x, y);
 
-                } else if (each.equals("Thread-2")) {
-                    playerImages[2] = new PlayerImages("P3", gameData.get(each));
-
-                } else {
-                    playerImages[3] = new PlayerImages("ExtraPlayerError", gameData.get(each));
-                }
             }
-        }
-        for (int i = 0; i < playerImages.length; i++) {
-            playerImages[i].drawMe(g);
         }
     }
 }
