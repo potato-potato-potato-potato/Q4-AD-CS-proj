@@ -227,9 +227,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        String hostName = "10.210.102.233";
+        // String hostName = "10.210.102.233";
 
-        //String hostName = "localhost";
+        String hostName = "localhost";
 
         int portNumber = 1024;
         Socket serverSocket = new Socket(hostName, portNumber);
@@ -245,7 +245,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
                 if (input.getKey().equals("username")) {
-                    //????
+                    // ????
                 }
                 if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
@@ -429,7 +429,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             }
         }
-        for(int i = 0; i < playerImages.length; i++) {
+        for (int i = 0; i < playerImages.length; i++) {
             playerImages[i].drawMe(g);
         }
     }
