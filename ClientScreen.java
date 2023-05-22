@@ -128,16 +128,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
                 out.reset();
                 out.writeObject(outPut);
-                System.out.println("output send: ");
-                System.out.println("up: " + outPut.getValue()[0]);
-                System.out.println("down: " + outPut.getValue()[1]);
-                System.out.println("left: " + outPut.getValue()[2]);
-                System.out.println("right: " + outPut.getValue()[3]);
-                System.out.println("dash: " + outPut.getValue()[4]);
-                System.out.println("mouseState: " + outPut.getValue()[5]);
-                System.out.println("mouseX: " + outPut.getValue()[6]);
-                System.out.println("mouseY: " + outPut.getValue()[7]);
-
+               
             } else {
                 System.out.println("did not send because of game not started");
             }
