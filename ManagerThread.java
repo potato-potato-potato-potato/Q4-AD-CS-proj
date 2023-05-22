@@ -13,7 +13,7 @@ public class ManagerThread implements Runnable {
     public static final double AIRMOVEMENT = .1;
     public static final double MAXVELOCITY = 15;
     public static final double MINXVELOCITY = .05;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
-    public static final double SMASH = .1;
+    public static final double SMASH = .05;
 
     private Manager manager;
     private MyHashMap<Thread, ServerThread> threadList;
