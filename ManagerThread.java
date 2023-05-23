@@ -24,7 +24,7 @@ public class ManagerThread implements Runnable {
     private MyHashMap<String, int[]> sendData;
     private static final Map map = new Map();;
     public static final Rectangle[] walls = map.getWalls();
-    private int pWidth, pHeight, timer;
+    private int pWidth, pHeight, timer, numBalls;
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
@@ -32,7 +32,7 @@ public class ManagerThread implements Runnable {
         gameObjects = new MyHashMap<String, GameObjectStatus>();
         sendData = new MyHashMap<String, int[]>();
         timer = 0;
-
+        numBalls = 0;//number of balls created
     }
 
     // this class is the main game calculations, it will run in a loop and update
@@ -40,18 +40,23 @@ public class ManagerThread implements Runnable {
         while (running) {
             // each player
             timer++;
+            if(timer%1000==0){
+                gameObjects.put("Ball-" + numBalls, new Projectile("Bullet"));
+                numBalls++;
+            }
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Player) {
                     ((Player) data).run();
                 }
-
+                if(data instanceof Projectile) {
+                    ((Projectile) data).run();
+                }
             }
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each,
-                        new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
+                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData

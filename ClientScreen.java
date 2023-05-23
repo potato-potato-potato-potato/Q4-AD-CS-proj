@@ -390,7 +390,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             if (each.contains("Thread")) {
                 g.fillRect(x, y, 10, 50);
                 g.drawString(each, x, y);
-
             }
         }
     }
