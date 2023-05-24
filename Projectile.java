@@ -10,19 +10,18 @@ public class Projectile extends GameObjectStatus {
     private int PLAYER_WIDTH = 20;// player width
     private int PLAYER_HEIGHT = 20;// player height
     private String name;
-    private Vector v;
     private int lifetime;
 
     public Projectile(String name, ManagerThread managerThread) {
         super(managerThread);
         this.name = name;
-        v = super.getVector();
         lifetime = 0;
     }
 
     public void run() {
         double pX = super.getXpos();// projectile X
         double pY = super.getYpos();// projectile Y
+        Vector v = super.getVector();
         lifetime++;
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY / 3);
         if (pY > 800) {// out of bounds
@@ -83,13 +82,15 @@ public class Projectile extends GameObjectStatus {
                 }
             }
         }
-        
+        if(lifetime==2000){
+            super.getManagerThread().deleteBall(name);
+        }
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 
     }
 
     public double getXDirection() {
-        return v.getXDirection();
+        return super.getVector().getXDirection();
     }
 }
