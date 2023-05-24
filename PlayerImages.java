@@ -120,31 +120,31 @@ public class PlayerImages {
     public void updateImg(int number) {
         int action = number;
         if (action / 100 == 0) {// attack1
-            currentBufferedImage = assets[playerNum].get("Attack1");
+            currentBufferedImage = assets[1].get("Attack1");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 1) {// attack2
-            currentBufferedImage = assets[playerNum].get("Attack2");
+            currentBufferedImage = assets[1].get("Attack2");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 2) {// attack3
-            currentBufferedImage = assets[playerNum].get("Attack3");
+            currentBufferedImage = assets[1].get("Attack3");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 3) {// dead
-            currentBufferedImage = assets[playerNum].get("Dead");
+            currentBufferedImage = assets[1].get("Dead");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 4) {// defend
-            currentBufferedImage = assets[playerNum].get("Defend");
+            currentBufferedImage = assets[1].get("Defend");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 5) {// hurt
-            currentBufferedImage = assets[playerNum].get("Hurt");
+            currentBufferedImage = assets[1].get("Hurt");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 6) {// idle
-            currentBufferedImage = assets[playerNum].get("Idle");
+            currentBufferedImage = assets[1].get("Idle");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 7) {// jump
-            currentBufferedImage = assets[playerNum].get("Jump");
+            currentBufferedImage = assets[1].get("Jump");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 8) {// run
-            currentBufferedImage = assets[playerNum].get("Run");
+            currentBufferedImage = assets[1].get("Run");
             updateImg(currentBufferedImage, action % 100);
         } else if (action / 100 == 9) {// run + attack
 
