@@ -6,7 +6,7 @@ import java.io.*;
 
 public class ManagerThread implements Runnable {
     public static final double GRAVITY = .15; // , , , , ,
-    public static final double JUMPHEIGHT = 3.5;
+    public static final double JUMPLAYER_HEIGHT = 3.5;
     public static final double AIRRESISTANCE = .02;
     public static final double FRICTION = .04;
     public static final double GROUNDMOVEMENT = .2;
@@ -18,15 +18,15 @@ public class ManagerThread implements Runnable {
     private Manager manager;
     private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
-    private MyHashMap<String, GameObjectStatus> gameObjects;// [Name], {Vector, [Xpos, Ypos, up, down, left,
+    private MyHashMap<String, GameObjectStatus> gameObjects;
     // right, dash, mouseState, mouseX, mouseY,
     // touchingGround]}
     private MyHashMap<String, int[]> sendData;
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
-    private int pWidth, pHeight, timer;
-
+    private int PLAYER_WIDTH, PLAYER_HEIGHTHEIGHT, timer;
+    private int numBalls;
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
@@ -34,7 +34,7 @@ public class ManagerThread implements Runnable {
         gameObjects = new MyHashMap<String, GameObjectStatus>();
         sendData = new MyHashMap<String, int[]>();
         timer = 0;
-        numBalls = 0;//number of balls created
+        numBalls = 0;// number of balls created
     }
 
     // this class is the main game calculations, it will run in a loop and update
@@ -42,7 +42,7 @@ public class ManagerThread implements Runnable {
         while (running) {
             // each player
             timer++;
-            if(timer%1000==0){
+            if (timer % 1000 == 0) {
                 gameObjects.put("Ball-" + numBalls, new Projectile("Bullet"));
                 numBalls++;
             }
@@ -51,14 +51,15 @@ public class ManagerThread implements Runnable {
                 if (data instanceof Player) {
                     ((Player) data).run();
                 }
-                if(data instanceof Projectile) {
+                if (data instanceof Projectile) {
                     ((Projectile) data).run();
                 }
             }
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
+                sendData.put(each,
+                        new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData

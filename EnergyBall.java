@@ -3,7 +3,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class EnergyBall extends pro{
+public class EnergyBall {
 
     public Point Position;
     public Vector velocity;
@@ -20,7 +20,6 @@ public class EnergyBall extends pro{
         this.hitbox = new Rectangle(Position.x, Position.y, width, height);
     }
 
-    @Override
     public void update() {
         this.Position.x += velocity.getXDirection();
         this.Position.y += velocity.getYDirection();
@@ -28,37 +27,30 @@ public class EnergyBall extends pro{
         this.hitbox.y = Position.y;
     }
 
-    @Override
     public void setPostion(Point p) {
         this.Position = p;
     }
 
-    @Override
     public void setVelocity(Vector v) {
         this.velocity = v;
     }
 
-    @Override
     public void setDamage(int d) {
         this.damage = d;
     }
 
-    @Override
     public void setHitbox(Rectangle r) {
         this.hitbox = r;
     }
 
-    @Override
     public void setSprite(BufferedImage b) {
         this.sprite = b;
     }
 
-    @Override
     public void setID(int i) {
         this.ID = i;
     }
 
-    @Override
     public void draw(Graphics g) {
         if (sprite != null) {
             g.drawImage(sprite, Position.x, Position.y, null);

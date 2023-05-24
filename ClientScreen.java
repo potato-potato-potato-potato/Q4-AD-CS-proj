@@ -43,7 +43,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private boolean isHost;
 
-    private MyArrayList<Player> PlayerList = new MyArrayList<Player>();
+    private MyArrayList<PlayerImages> PlayerList = new MyArrayList<PlayerImages>();
 
     private Thread update;
 
@@ -67,12 +67,14 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public ClientScreen() {
         this.setLayout(null);
 
+        // this is to speed up rendering on linux systems see method paintComponent
         if (System.getProperty("os.name").equals("Linux")) {
             isUnix = true;
         }
 
         UsernameInputsetUp();
 
+        playerSetUp();
         outputSetup();
         mainGameLoop();
 
@@ -103,6 +105,11 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         mainGameLoop.start();
     }
 
+    public void playerSetUp() {
+        PlayerList.add(new PlayerImages("P1"));
+
+    }
+
     public void outputSetup() {
         up = 0;
         down = 0;
@@ -128,7 +135,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                         new int[] { up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY });
                 out.reset();
                 out.writeObject(outPut);
-               
+
             } else {
                 System.out.println("did not send because of game not started");
             }
@@ -167,6 +174,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     }
 
+    // the isUnix it to speed up rendering on linux systems
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
@@ -388,8 +396,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             int x = gameData.get(each)[0];
             int y = gameData.get(each)[1];
             if (each.contains("Thread")) {
-                g.fillRect(x, y, 10, 50);
-                g.drawString(each, x, y);
+                PlayerList.get(0).draw(g, x, y);
+                g.setColor(Color.RED);
+                g.drawRect(x, y, Player.PLAYER_HEIGHT, Player.PLAYER_WIDTH);
             }
         }
     }
