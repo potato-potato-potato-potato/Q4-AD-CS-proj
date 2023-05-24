@@ -399,6 +399,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 PlayerList.get(0).draw(g, x, y);
                 g.setColor(Color.RED);
                 g.drawRect(x, y, Player.PLAYER_HEIGHT, Player.PLAYER_WIDTH);
+            }else if(each.contains("Ball")){
+                g.fillOval(x, y, 20, 20);
             }
         }
     }

@@ -14,6 +14,7 @@ public class ManagerThread implements Runnable {
     public static final double MAXVELOCITY = 15;
     public static final double MINXVELOCITY = .05;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
     public static final double SMASH = .05;
+    public static final double MAXBALLCOUNT = 20;
 
     private Manager manager;
     private MyHashMap<Thread, ServerThread> threadList;
@@ -41,13 +42,6 @@ public class ManagerThread implements Runnable {
     public void run() {
         while (running) {
             // each player
-            timer++;
-            if (timer % 1000 == 0) {//create new ball
-                gameObjects.put("Ball-" + numBalls, new Projectile("Ball"));
-                gameObjects.get("Ball-" + numBalls).setXpos(300);
-                gameObjects.get("Ball-" + numBalls).setYpos(100);
-                numBalls++;
-            }
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Player) {
@@ -80,7 +74,7 @@ public class ManagerThread implements Runnable {
         int num = 1;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
             num++;
-            gameObjects.put(each.getName(), new Player(each.getName()));
+            gameObjects.put(each.getName(), new Player(each.getName(), this));
             gameObjects.get(each.getName()).setXpos(num * 50);
             gameObjects.get(each.getName()).setYpos(10);
             gameObjects.get(each.getName()).setImgStatus(0);
@@ -90,5 +84,14 @@ public class ManagerThread implements Runnable {
 
     public void updateThread(int[] keys, Thread thread) {
         gameObjects.get(thread.getName()).updateKeyStatus(keys);
+    }
+    public void summonFireBall(double x, double y, Vector v) {
+        if(numBalls<MAXBALLCOUNT){
+            gameObjects.put("Ball-" + numBalls, new Projectile("Ball", this));
+            gameObjects.get("Ball-" + numBalls).setXpos(x);
+            gameObjects.get("Ball-" + numBalls).setYpos(y);
+            gameObjects.get("Ball-" + numBalls).setVector(v);
+            numBalls++;
+        }
     }
 }

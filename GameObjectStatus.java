@@ -22,9 +22,11 @@ public class GameObjectStatus implements Serializable {
     private boolean touchingGround;
     private int jumpCount;
     private int imgStatus;
+    private ManagerThread managerThread;
 
-    public GameObjectStatus() {
+    public GameObjectStatus(ManagerThread managerThread) {
         vector = new Vector(0, 0);
+        this.managerThread = managerThread;
     }
 
     // update in this order
@@ -198,5 +200,8 @@ public class GameObjectStatus implements Serializable {
         return imgStatus;
     }
 
+    public ManagerThread getManagerThread() {
+        return managerThread;
+    }
 
 }

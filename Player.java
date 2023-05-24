@@ -3,14 +3,17 @@ import HashMap.MyHashMap;
 public class Player extends GameObjectStatus {
     public static final int PLAYER_WIDTH = 128;// player width
     public static final int PLAYER_HEIGHT = 128;// player height
+    public static final int FIREBALL_SPEED = 10;// player width
     private String name;
     private MyHashMap<String, int[]> projectiles;//projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
-    private int imgNum;
-    public Player(String name) {
-        super();
+    private int imgNum, fireCooldown;
+
+    public Player(String name, ManagerThread managerThread) {
+        super(managerThread);
         this.name = name;
         imgNum = 0;//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
         //000 is first frame of attack one facing right
+        fireCooldown = 0;
     }
 
     public void run() {
@@ -46,21 +49,30 @@ public class Player extends GameObjectStatus {
         if (super.isLeft()) {// left
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() - ManagerThread.GROUNDMOVEMENT);
-
+                imgNum = 800;
             }
             v.setXDirection(v.getXDirection() - ManagerThread.AIRMOVEMENT);
         }
         if (super.isRight()) {// right
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() + ManagerThread.GROUNDMOVEMENT);
-
+                imgNum = 800;
             }
             v.setXDirection(v.getXDirection() + ManagerThread.AIRMOVEMENT);
+            imgNum +=1;
         }
         if (super.isDash()) {// dash
 
         }
+        if(fireCooldown>0){
+            fireCooldown--;
+        }
         if (super.isLeftMouseState()) {// fire
+            System.out.println(fireCooldown);
+            if(fireCooldown<=0){
+                super.getManagerThread().summonFireBall(pX, pY, new Vector(v.getXDirection()+FIREBALL_SPEED, v.getYDirection()));
+                fireCooldown = 100;
+            }
         }
         if (v.getXDirection() != 0) {
             if (v.getXDirection() > ManagerThread.MINXVELOCITY) {
@@ -135,17 +147,6 @@ public class Player extends GameObjectStatus {
                 }
 
             }
-        }
-        if(super.isTouchingGround()){
-            if(Math.abs(v.getXDirection())<.5){//if still, set image to idle
-                imgNum = 600;
-            }
-            else{//if moving, set image to run
-                imgNum = 800;
-            }
-        }
-        if(v.getXDirection()>0){//if player is facing right, imgNum is odd
-            imgNum+=1;
         }
         super.setImgStatus(imgNum);
         super.translateXpos(v.getXDirection());

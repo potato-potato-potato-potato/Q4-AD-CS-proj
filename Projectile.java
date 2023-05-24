@@ -2,25 +2,28 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import HashMap.MyHashMap;
 
 //abstract class for all projectiles
 public class Projectile extends GameObjectStatus {
 
-    private int PLAYER_WIDTH = 10;// player width
-    private int PLAYER_HEIGHT = 50;// player height
+    private int PLAYER_WIDTH = 20;// player width
+    private int PLAYER_HEIGHT = 20;// player height
     private String name;
     private Vector v;
+    private int lifetime;
 
-    public Projectile(String name) {
-        super();
+    public Projectile(String name, ManagerThread managerThread) {
+        super(managerThread);
         this.name = name;
         v = super.getVector();
+        lifetime = 0;
     }
 
     public void run() {
         double pX = super.getXpos();// projectile X
         double pY = super.getYpos();// projectile Y
-
+        lifetime++;
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY / 3);
         if (pY > 800) {// out of bounds
             super.setYpos(50);
@@ -80,6 +83,7 @@ public class Projectile extends GameObjectStatus {
                 }
             }
         }
+        
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 
