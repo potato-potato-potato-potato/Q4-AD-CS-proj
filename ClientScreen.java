@@ -399,6 +399,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     PlayerList.get(2).updateImg(gameData.get(each)[2]);
                     PlayerList.get(2).draw(g, x, y);
                 }
+            }else if(each.contains("Ball")){
+                System.out.println("Drawing ball at " + x + " " + y);
+                g.fillOval(x, y, 20, 20);
             }
         }
     }

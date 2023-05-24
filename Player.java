@@ -3,7 +3,7 @@ import HashMap.MyHashMap;
 public class Player extends GameObjectStatus {
     public static final int PLAYER_WIDTH = 128;// player width
     public static final int PLAYER_HEIGHT = 128;// player height
-    public static final int FIREBALL_SPEED = 10;// player width
+    public static final int FIREBALL_SPEED = 5;// Fireball speed
     private String name;
     private MyHashMap<String, int[]> projectiles;//projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
     private int fireCooldown;
@@ -72,9 +72,16 @@ public class Player extends GameObjectStatus {
             fireCooldown--;
         }
         if (super.isLeftMouseState()) {// fire
-            System.out.println(fireCooldown);
             if(fireCooldown<=0){
-                super.getManagerThread().summonFireBall(pX, pY, new Vector(v.getXDirection()+FIREBALL_SPEED, v.getYDirection()));
+                System.out.println("Summoning fireball");
+                double angle = Math.atan(-(super.getMouseY()-pY)/(super.getMouseX()-pX));
+                System.out.println("delta X: " + (super.getMouseX()-pX));
+                System.out.println("delta Y: " + -(super.getMouseY()-pY));
+                System.out.println("Angle: " + angle*180/3.14);
+                System.out.println("X multiplier: " + Math.cos(angle));
+                System.out.println("Y multiplier: " + Math.sin(angle));
+
+                super.getManagerThread().summonFireBall(pX, pY, new Vector(Math.cos(angle)*FIREBALL_SPEED+v.getXDirection(), Math.sin(angle)*FIREBALL_SPEED+v.getYDirection()));
                 fireCooldown = 100;
             }
         }

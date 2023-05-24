@@ -93,7 +93,13 @@ public class ManagerThread implements Runnable {
             gameObjects.get("Ball-" + numBalls).setXpos(x);
             gameObjects.get("Ball-" + numBalls).setYpos(y);
             gameObjects.get("Ball-" + numBalls).setVector(v);
+            System.out.println("Ball-" + numBalls + " xVel: " +gameObjects.get("Ball-" + numBalls).getVector().getXDirection());
             numBalls++;
         }
+    }
+    public void deleteBall(String name){
+        gameObjects.remove(name);
+        System.out.println("Removing " + name);
+        numBalls--;
     }
 }
