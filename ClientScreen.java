@@ -74,7 +74,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         UsernameInputsetUp();
 
-        playerSetUp();
         outputSetup();
         mainGameLoop();
 
@@ -103,11 +102,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
         });
         mainGameLoop.start();
-    }
-
-    public void playerSetUp() {
-        PlayerList.add(new PlayerImages("P1"));
-
     }
 
     public void outputSetup() {
@@ -205,8 +199,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        // String hostName = "10.210.102.233";
-
         String hostName = System.getenv("HOST_NAME");
 
         int portNumber = 1024;
@@ -222,17 +214,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
-                if (input.getKey().equals("username")) {
-                    // ????
-                }
-                if (input.getKey().equals("StartGame")) {
+                if (input.getKey().equals("gameData")) {
+                    gameData = (MyHashMap<String, int[]>) input.getValue();
+                } else if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
                     usernameButton.setVisible(true);
                     System.out.println("game Started");
 
-                } else if (input.getKey().equals("gameData")) {
-                    gameData = (MyHashMap<String, int[]>) input.getValue();
+                } else if (input.getKey().equals("newPlayer")) {
+                    PlayerList.add(new PlayerImages((int) input.getValue()));
+
                 }
+
                 repaint();
             }
         } catch (UnknownHostException e) {
@@ -396,11 +389,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             int x = gameData.get(each)[0];
             int y = gameData.get(each)[1];
             if (each.contains("Thread")) {
-                PlayerList.get(0).draw(g, x, y);
-                g.setColor(Color.RED);
-                g.drawRect(x, y, Player.PLAYER_HEIGHT, Player.PLAYER_WIDTH);
-            }else if(each.contains("Ball")){
-                g.fillOval(x, y, 20, 20);
+                if (each.contains("Thread-0")) {
+                    PlayerList.get(0).updateImg(gameData.get(each)[2]);
+                    PlayerList.get(0).draw(g, x, y);
+                } else if (each.contains("Thread-1")) {
+                    PlayerList.get(1).updateImg(gameData.get(each)[2]);
+                    PlayerList.get(1).draw(g, x, y);
+                } else if (each.contains("Thread-2")) {
+                    PlayerList.get(2).updateImg(gameData.get(each)[2]);
+                    PlayerList.get(2).draw(g, x, y);
+                }
             }
         }
     }

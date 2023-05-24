@@ -54,7 +54,8 @@ public class ManagerThread implements Runnable {
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos(), (int)gameObjects.get(each).getImgStatus() });
+                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(),
+                        (int) gameObjects.get(each).getYpos(), (int) gameObjects.get(each).getImgStatus() });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData
@@ -78,6 +79,7 @@ public class ManagerThread implements Runnable {
             gameObjects.get(each.getName()).setXpos(num * 50);
             gameObjects.get(each.getName()).setYpos(10);
             gameObjects.get(each.getName()).setImgStatus(0);
+            manager.broadcast(new Pair<String, Object>("newPlayer", num));
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
     }
