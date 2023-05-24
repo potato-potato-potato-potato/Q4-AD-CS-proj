@@ -3,7 +3,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class EnergyBall implements Projectile {
+public class EnergyBall extends pro{
 
     public Point Position;
     public Vector velocity;
