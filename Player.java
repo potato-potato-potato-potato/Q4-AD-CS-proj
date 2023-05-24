@@ -10,6 +10,7 @@ public class Player extends GameObjectStatus {
         super();
         this.name = name;
         imgNum = 0;//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
+        //000 is first frame of attack one facing right
     }
 
     public void run() {
