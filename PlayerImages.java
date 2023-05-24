@@ -84,23 +84,23 @@ public class PlayerImages {
             try {
 
                 assets[i].put("Idle",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Idle.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Idle.png")));
                 assets[i].put("Run",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Run.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1//Run.png")));
                 assets[i].put("Jump",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Jump.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Jump.png")));
                 assets[i].put("Attack1",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Attack1.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Attack1.png")));
                 assets[i].put("Attack2",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Attack2.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Attack2.png")));
                 assets[i].put("Attack3",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Attack3.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Attack3.png")));
                 assets[i].put("Dead",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Dead.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Dead.png")));
                 assets[i].put("Hurt",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Hurt.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Hurt.png")));
                 assets[i].put("Defend",
-                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Defend.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k1/Defend.png")));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -117,7 +117,7 @@ public class PlayerImages {
 
     // future implementation of this updateimage method
 
-    public void updateImg(int number) throws IOException {
+    public void updateImg(int number) {
         int action = number;
         if (action / 100 == 0) {// attack1
             currentBufferedImage = assets[playerNum].get("Attack1");
@@ -153,6 +153,7 @@ public class PlayerImages {
     }
 
     private void updateImg(BufferedImage img, int Frame) {
+        img = assets[0].get("Idle");
         int currentFrame = Frame / 10;
         currentBufferedFramed = img.getSubimage(currentFrame * Player.PLAYER_WIDTH, 0, Player.PLAYER_WIDTH,
                 Player.PLAYER_HEIGHT);

@@ -389,9 +389,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             int x = gameData.get(each)[0];
             int y = gameData.get(each)[1];
             if (each.contains("Thread")) {
-                PlayerList.get(0).draw(g, x, y);
-                g.setColor(Color.RED);
-                g.drawRect(x, y, Player.PLAYER_HEIGHT, Player.PLAYER_WIDTH);
+                if (each.contains("Thread-0")) {
+                    PlayerList.get(0).updateImg(gameData.get(each)[2]);
+                    PlayerList.get(0).draw(g, x, y);
+                } else if (each.contains("Thread-1")) {
+                    PlayerList.get(1).updateImg(gameData.get(each)[2]);
+                    PlayerList.get(1).draw(g, x, y);
+                } else if (each.contains("Thread-2")) {
+                    PlayerList.get(2).updateImg(gameData.get(each)[2]);
+                    PlayerList.get(2).draw(g, x, y);
+                }
             }
         }
     }
