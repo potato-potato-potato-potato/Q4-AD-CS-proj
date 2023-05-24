@@ -9,7 +9,7 @@ public class Player extends GameObjectStatus {
         super();
         this.name = name;
     }
-
+    
     public void run() {
         Vector v = super.getVector();
         double pX = super.getXpos();
