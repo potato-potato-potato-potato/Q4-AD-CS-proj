@@ -222,6 +222,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     System.out.println("game Started");
 
                 } else if (input.getKey().equals("newPlayer")) {
+                    System.out.println("new player" + input.getValue());
                     PlayerList.add(new PlayerImages((int) input.getValue()));
 
                 }
@@ -384,7 +385,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void drawObjects(Graphics g) {// draws all players or objects given the received gameData
-
+        if (gameData == null) {
+            return;
+        }
         for (String each : gameData.keySet()) {
             int x = gameData.get(each)[0];
             int y = gameData.get(each)[1];

@@ -1,19 +1,22 @@
 import java.awt.Rectangle;
 import HashMap.MyHashMap;
+
 public class Player extends GameObjectStatus {
     public static final int PLAYER_WIDTH = 128;// player width
     public static final int PLAYER_HEIGHT = 128;// player height
     public static final int FIREBALL_SPEED = 5;// Fireball speed
     private String name;
-    private MyHashMap<String, int[]> projectiles;//projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
+    private MyHashMap<String, int[]> projectiles;// projectiles stored in hashmap (used for collisions), int[] array
+                                                 // contains [x, y, xVel, yVel]
     private int fireCooldown;
     private int[] imgNum;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
         this.name = name;
-        imgNum = new int[]{0, 0, 0};//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
-        //000 is first frame of attack one facing right
+        imgNum = new int[] { 0, 0, 0 };// hundreds value is file, tens is frame, ones value even is left, ones value
+                                       // odd is right
+        // 000 is first frame of attack one facing right
         fireCooldown = 0;
     }
 
@@ -37,11 +40,10 @@ public class Player extends GameObjectStatus {
             } else {
                 v.setYDirection(v.getYDirection() - ManagerThread.SMASH);
             }
-            if(v.getYDirection()<=0){
-                imgNum[1]=1;
-            }
-            else{
-                imgNum[1]=2;
+            if (v.getYDirection() <= 0) {
+                imgNum[1] = 1;
+            } else {
+                imgNum[1] = 2;
             }
         }
         if (super.isDown()) {// down
@@ -55,7 +57,7 @@ public class Player extends GameObjectStatus {
                 imgNum[0] = 8;
             }
             v.setXDirection(v.getXDirection() - ManagerThread.AIRMOVEMENT);
-            imgNum[2] =0;
+            imgNum[2] = 0;
         }
         if (super.isRight()) {// right
             if (super.isTouchingGround()) {
@@ -63,24 +65,27 @@ public class Player extends GameObjectStatus {
                 imgNum[0] = 8;
             }
             v.setXDirection(v.getXDirection() + ManagerThread.AIRMOVEMENT);
-            imgNum[2] =1;
+            imgNum[2] = 1;
         }
         if (super.isDash()) {// dash
 
         }
-        if(fireCooldown>0){
+        if (fireCooldown > 0) {
             fireCooldown--;
         }
         if (super.isLeftMouseState()) {// fire
-            if(fireCooldown<=0){
+            if (fireCooldown <= 0) {
                 System.out.println("Summoning fireball");
-                double angle = Math.atan(-(super.getMouseY()-pY)/(super.getMouseX()-pX));
-                System.out.println("delta X: " + (super.getMouseX()-pX));
-                System.out.println("delta Y: " + -(super.getMouseY()-pY));
-                System.out.println("Angle: " + angle*180/3.14);
+                double angle = Math.atan(-(super.getMouseY() - pY) / (super.getMouseX() - pX));
+                System.out.println("delta X: " + (super.getMouseX() - pX));
+                System.out.println("delta Y: " + -(super.getMouseY() - pY));
+                System.out.println("Angle: " + angle * 180 / 3.14);
                 System.out.println("X multiplier: " + Math.cos(angle));
                 System.out.println("Y multiplier: " + Math.sin(angle));
-                super.getManagerThread().summonFireBall(pX, pY, new Vector(Math.cos(angle)*FIREBALL_SPEED+v.getXDirection(), Math.sin(angle)*FIREBALL_SPEED+v.getYDirection()));
+
+                super.getManagerThread().summonFireBall(pX, pY,
+                        new Vector(Math.cos(angle) * FIREBALL_SPEED + v.getXDirection(),
+                                Math.sin(angle) * FIREBALL_SPEED + v.getYDirection()));
                 fireCooldown = 100;
             }
         }
@@ -88,7 +93,7 @@ public class Player extends GameObjectStatus {
             if (v.getXDirection() > ManagerThread.MINXVELOCITY) {
                 if (super.isTouchingGround() == false) {
                     v.setXDirection(v.getXDirection() - ManagerThread.AIRRESISTANCE);
-                } else {
+                } else if (!(isLeft() || isRight())) {
                     v.setXDirection(v.getXDirection() - ManagerThread.FRICTION);
                     if (super.isDown()) {// slow down more if down arrow is pressed
                         v.setXDirection(v.getXDirection() - 2 * ManagerThread.FRICTION);
@@ -97,7 +102,7 @@ public class Player extends GameObjectStatus {
             } else if (v.getXDirection() < -ManagerThread.MINXVELOCITY) {
                 if (super.isTouchingGround() == false) {
                     v.setXDirection(v.getXDirection() + ManagerThread.AIRRESISTANCE);
-                } else {
+                } else if (!(isLeft() || isRight())) {
                     v.setXDirection(v.getXDirection() + ManagerThread.FRICTION);
                     if (super.isDown()) {// slow down more if down arrow is pressed
                         v.setXDirection(v.getXDirection() + 2 * ManagerThread.FRICTION);
@@ -117,7 +122,7 @@ public class Player extends GameObjectStatus {
         if (v.getXDirection() < -ManagerThread.MAXVELOCITY) {
             v.setXDirection(-ManagerThread.MAXVELOCITY);
         }
-        for (Platform r : ManagerThread.walls) {//collision with walls
+        for (Platform r : ManagerThread.walls) {// collision with walls
             // if touching side, xDirection = 0, x pos subtract or add
 
             int wX = (int) r.getX();// wall X
@@ -158,7 +163,7 @@ public class Player extends GameObjectStatus {
 
             }
         }
-        super.setImgStatus(imgNum[0]*100+imgNum[1]*10+imgNum[2]);
+        super.setImgStatus(imgNum[0] * 100 + imgNum[1] * 10 + imgNum[2]);
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 

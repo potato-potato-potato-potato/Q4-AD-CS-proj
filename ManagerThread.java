@@ -8,7 +8,7 @@ public class ManagerThread implements Runnable {
     public static final double GRAVITY = .15; // , , , , ,
     public static final double JUMPLAYER_HEIGHT = 3.5;
     public static final double AIRRESISTANCE = .02;
-    public static final double FRICTION = .04;
+    public static final double FRICTION = .25;
     public static final double GROUNDMOVEMENT = .2;
     public static final double AIRMOVEMENT = .1;
     public static final double MAXVELOCITY = 15;
@@ -74,12 +74,14 @@ public class ManagerThread implements Runnable {
         this.threadList = threadList;
         int num = 1;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
+            manager.broadcast(new Pair<String, Object>("newPlayer", num - 1));// -1 is to fit index system in client
+                                                                              // screen
             num++;
             gameObjects.put(each.getName(), new Player(each.getName(), this));
             gameObjects.get(each.getName()).setXpos(num * 50);
             gameObjects.get(each.getName()).setYpos(10);
             gameObjects.get(each.getName()).setImgStatus(0);
-            manager.broadcast(new Pair<String, Object>("newPlayer", num));
+
         }
         System.out.println("GameObjects:" + gameObjects.keySet());
     }
@@ -87,8 +89,9 @@ public class ManagerThread implements Runnable {
     public void updateThread(int[] keys, Thread thread) {
         gameObjects.get(thread.getName()).updateKeyStatus(keys);
     }
+
     public void summonFireBall(double x, double y, Vector v) {
-        if(numBalls<MAXBALLCOUNT){
+        if (numBalls < MAXBALLCOUNT) {
             gameObjects.put("Ball-" + numBalls, new Projectile("Ball", this));
             gameObjects.get("Ball-" + numBalls).setXpos(x);
             gameObjects.get("Ball-" + numBalls).setYpos(y);
