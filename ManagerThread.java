@@ -25,7 +25,7 @@ public class ManagerThread implements Runnable {
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
-    private int PLAYER_WIDTH, PLAYER_HEIGHTHEIGHT, timer;
+    private int timer;
     private int numBalls;
 
     public ManagerThread(Manager manager) {
@@ -58,8 +58,7 @@ public class ManagerThread implements Runnable {
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each,
-                        new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
+                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData

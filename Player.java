@@ -1,9 +1,10 @@
 import java.awt.Rectangle;
-
+import HashMap.MyHashMap;
 public class Player extends GameObjectStatus {
     public static final int PLAYER_WIDTH = 128;// player width
     public static final int PLAYER_HEIGHT = 128;// player height
     private String name;
+    private MyHashMap<String, int[]> projectiles;//projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
 
     public Player(String name) {
         super();
@@ -14,6 +15,7 @@ public class Player extends GameObjectStatus {
         Vector v = super.getVector();
         double pX = super.getXpos();// player X
         double pY = super.getYpos();// player Y
+        projectiles = new MyHashMap<String, int[]>();
 
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY);
         if (pY > 800) {// out of bounds
@@ -86,7 +88,7 @@ public class Player extends GameObjectStatus {
         if (v.getXDirection() < -ManagerThread.MAXVELOCITY) {
             v.setXDirection(-ManagerThread.MAXVELOCITY);
         }
-        for (Platform r : ManagerThread.walls) {
+        for (Platform r : ManagerThread.walls) {//collision with walls
             // if touching side, xDirection = 0, x pos subtract or add
 
             int wX = (int) r.getX();// wall X
@@ -94,20 +96,7 @@ public class Player extends GameObjectStatus {
             int wW = (int) r.getWidth();// wall Width
             int wH = (int) r.getHeight();// wall Height
 
-            if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) {
-                // TODO: touching left edge
-                if (v.getXDirection() >= 0) {
-                    v.setXDirection(0);
-                    super.setXpos(wX - PLAYER_WIDTH);
-                }
-            } else if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW) {
-                // TODO: touching right edge
-                if (v.getXDirection() <= 0) {
-                    v.setXDirection(0);
-                    super.setXpos(wX + wW);
-                }
-
-            } else if (pY + PLAYER_HEIGHT < wY + wH && pY + PLAYER_HEIGHT >= wY - .1 && pX + PLAYER_WIDTH > wX
+            if (pY + PLAYER_HEIGHT < wY + wH && pY + PLAYER_HEIGHT >= wY - .1 && pX + PLAYER_WIDTH > wX
                     && pX < wX + wW) {
                 // touching top edgPLAYER_HEIGHT
                 super.setYpos(wY - PLAYER_HEIGHT);
@@ -125,10 +114,28 @@ public class Player extends GameObjectStatus {
                     }
 
                 }
+            } else if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) {
+                // TODO: touching left edge
+                if (v.getXDirection() >= 0) {
+                    v.setXDirection(0);
+                    super.setXpos(wX - PLAYER_WIDTH);
+                }
+            } else if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW) {
+                // TODO: touching right edge
+                if (v.getXDirection() <= 0) {
+                    v.setXDirection(0);
+                    super.setXpos(wX + wW);
+                }
+
             }
         }
+        
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 
+    }
+
+    public void setProjectiles(MyHashMap<String, int[]> projectiles) {
+        this.projectiles = projectiles;
     }
 }
