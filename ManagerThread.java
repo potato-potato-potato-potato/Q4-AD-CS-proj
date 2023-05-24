@@ -42,10 +42,12 @@ public class ManagerThread implements Runnable {
         while (running) {
             // each player
             timer++;
-            //if (timer % 1000 == 0) {//create new ball
-            //    gameObjects.put("Ball-" + numBalls, new Projectile("Ball"));
-            //    numBalls++;
-            //}
+            if (timer % 1000 == 0) {//create new ball
+                gameObjects.put("Ball-" + numBalls, new Projectile("Ball"));
+                gameObjects.get("Ball-" + numBalls).setXpos(300);
+                gameObjects.get("Ball-" + numBalls).setYpos(100);
+                numBalls++;
+            }
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Player) {
