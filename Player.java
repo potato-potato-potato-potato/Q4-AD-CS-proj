@@ -6,12 +6,13 @@ public class Player extends GameObjectStatus {
     public static final int FIREBALL_SPEED = 10;// player width
     private String name;
     private MyHashMap<String, int[]> projectiles;//projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
-    private int imgNum, fireCooldown;
+    private int fireCooldown;
+    private int[] imgNum;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
         this.name = name;
-        imgNum = 0;//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
+        imgNum = new int[]{0, 0, 0};//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
         //000 is first frame of attack one facing right
         fireCooldown = 0;
     }
@@ -29,6 +30,7 @@ public class Player extends GameObjectStatus {
             v.setXDirection(0);
         }
         if (super.isUp()) {// up
+            imgNum[0] = 7;
             if (super.isTouchingGround() == true) {
                 v.setYDirection(v.getYDirection() - ManagerThread.JUMPLAYER_HEIGHT);
                 super.setTouchingGround(false);
@@ -36,9 +38,10 @@ public class Player extends GameObjectStatus {
                 v.setYDirection(v.getYDirection() - ManagerThread.SMASH);
             }
             if(v.getYDirection()<=0){
-                imgNum = 710;
-            }else{
-                imgNum = 720;
+                imgNum[1]=1;
+            }
+            else{
+                imgNum[1]=2;
             }
         }
         if (super.isDown()) {// down
@@ -49,17 +52,18 @@ public class Player extends GameObjectStatus {
         if (super.isLeft()) {// left
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() - ManagerThread.GROUNDMOVEMENT);
-                imgNum = 800;
+                imgNum[0] = 8;
             }
             v.setXDirection(v.getXDirection() - ManagerThread.AIRMOVEMENT);
+            imgNum[2] =0;
         }
         if (super.isRight()) {// right
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() + ManagerThread.GROUNDMOVEMENT);
-                imgNum = 800;
+                imgNum[0] = 8;
             }
             v.setXDirection(v.getXDirection() + ManagerThread.AIRMOVEMENT);
-            imgNum +=1;
+            imgNum[2] =1;
         }
         if (super.isDash()) {// dash
 
@@ -148,7 +152,7 @@ public class Player extends GameObjectStatus {
 
             }
         }
-        super.setImgStatus(imgNum);
+        super.setImgStatus(imgNum[0]*100+imgNum[1]*10+imgNum[2]);
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 
