@@ -88,5 +88,4 @@ public class Projectile extends GameObjectStatus {
     public double getXDirection() {
         return v.getXDirection();
     }
-
 }

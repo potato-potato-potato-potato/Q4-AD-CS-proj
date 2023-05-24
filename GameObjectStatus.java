@@ -198,4 +198,5 @@ public class GameObjectStatus implements Serializable {
         return imgStatus;
     }
 
+
 }

@@ -42,10 +42,10 @@ public class ManagerThread implements Runnable {
         while (running) {
             // each player
             timer++;
-            if (timer % 1000 == 0) {
-                gameObjects.put("Ball-" + numBalls, new Projectile("Bullet"));
-                numBalls++;
-            }
+            //if (timer % 1000 == 0) {//create new ball
+            //    gameObjects.put("Ball-" + numBalls, new Projectile("Ball"));
+            //    numBalls++;
+            //}
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Player) {
@@ -58,7 +58,7 @@ public class ManagerThread implements Runnable {
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos() });
+                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos(), (int)gameObjects.get(each).getImgStatus() });
             }
             manager.broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData
