@@ -9,7 +9,7 @@ public class Player extends GameObjectStatus {
     public Player(String name) {
         super();
         this.name = name;
-        imgNum = 0;//hundreds value is file, tens is frame, ones is left/right
+        imgNum = 0;//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
     }
 
     public void run() {
