@@ -5,10 +5,12 @@ public class Player extends GameObjectStatus {
     public static final int PLAYER_HEIGHT = 128;// player height
     private String name;
     private MyHashMap<String, int[]> projectiles;//projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
-
+    private int imgNum;
     public Player(String name) {
         super();
         this.name = name;
+        imgNum = 0;//hundreds value is file, tens is frame, ones value even is left, ones value odd is right
+        //000 is first frame of attack one facing right
     }
 
     public void run() {
@@ -29,6 +31,11 @@ public class Player extends GameObjectStatus {
                 super.setTouchingGround(false);
             } else {
                 v.setYDirection(v.getYDirection() - ManagerThread.SMASH);
+            }
+            if(v.getYDirection()<=0){
+                imgNum = 710;
+            }else{
+                imgNum = 720;
             }
         }
         if (super.isDown()) {// down
@@ -129,7 +136,18 @@ public class Player extends GameObjectStatus {
 
             }
         }
-        
+        if(super.isTouchingGround()){
+            if(Math.abs(v.getXDirection())<.5){//if still, set image to idle
+                imgNum = 600;
+            }
+            else{//if moving, set image to run
+                imgNum = 800;
+            }
+        }
+        if(v.getXDirection()>0){//if player is facing right, imgNum is odd
+            imgNum+=1;
+        }
+        super.setImgStatus(imgNum);
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 
