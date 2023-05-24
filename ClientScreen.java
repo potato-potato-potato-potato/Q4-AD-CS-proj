@@ -74,7 +74,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
         UsernameInputsetUp();
 
-        playerSetUp();
         outputSetup();
         mainGameLoop();
 
@@ -103,11 +102,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
         });
         mainGameLoop.start();
-    }
-
-    public void playerSetUp() {
-        PlayerList.add(new PlayerImages("P1"));
-
     }
 
     public void outputSetup() {
@@ -205,8 +199,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        // String hostName = "10.210.102.233";
-
         String hostName = System.getenv("HOST_NAME");
 
         int portNumber = 1024;
@@ -222,17 +214,18 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }
             while (true) {
                 input = (Pair<String, Object>) in.readObject();
-                if (input.getKey().equals("username")) {
-                    // ????
-                }
-                if (input.getKey().equals("StartGame")) {
+                if (input.getKey().equals("gameData")) {
+                    gameData = (MyHashMap<String, int[]>) input.getValue();
+                } else if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
                     usernameButton.setVisible(true);
                     System.out.println("game Started");
 
-                } else if (input.getKey().equals("gameData")) {
-                    gameData = (MyHashMap<String, int[]>) input.getValue();
+                } else if (input.getKey().equals("newPlayer")) {
+                    PlayerList.add(new PlayerImages((int) input.getValue()));
+
                 }
+
                 repaint();
             }
         } catch (UnknownHostException e) {

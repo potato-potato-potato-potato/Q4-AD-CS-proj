@@ -5,7 +5,9 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.Point;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import HashMap.*;
 
@@ -24,6 +26,8 @@ public class PlayerImages {
     private MyHashMap<String, BufferedImage> p3Assets;
     private MyHashMap<String, BufferedImage>[] assets;
     private DrawManipulation drawManipulation;
+    private AffineTransform transform;
+    private AffineTransformOp op;
 
     private Thread clockThread;
 
@@ -38,20 +42,10 @@ public class PlayerImages {
     // private int currentImg;
     private int currentFrame;
 
-    public PlayerImages(String name) {
+    public PlayerImages(int playerNum) {
         imageLoader();
-        this.name = name;
         // this.nums = nums;
-        if (name.equals("P1")) {
-            playerNum = 1;
-        } else if (name.equals("P2")) {
-            playerNum = 2;
-        } else if (name.equals("P3")) {
-            playerNum = 3;
-        } else {
-            playerNum = 1;
-            System.out.println("Invalid player number: " + name);
-        }
+        this.playerNum = playerNum;
         animationClockStart();
 
     }
@@ -81,6 +75,7 @@ public class PlayerImages {
         p2Assets = new MyHashMap<String, BufferedImage>();
         p3Assets = new MyHashMap<String, BufferedImage>();
         assets = new MyHashMap[3];
+
         assets[0] = p1Assets;
         assets[1] = p2Assets;
         assets[2] = p3Assets;
@@ -89,10 +84,23 @@ public class PlayerImages {
             try {
 
                 assets[i].put("Idle",
-                        ImageIO.read(getClass().getResource("/assets/src/player/Knight_1/Idle.png")));
-
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Idle.png")));
                 assets[i].put("Run",
-                        ImageIO.read(getClass().getResource("/assets/src/player/Knight_1/Run.png")));
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Run.png")));
+                assets[i].put("Jump",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Jump.png")));
+                assets[i].put("Attack1",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Attack1.png")));
+                assets[i].put("Attack2",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Attack2.png")));
+                assets[i].put("Attack3",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Attack3.png")));
+                assets[i].put("Dead",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Dead.png")));
+                assets[i].put("Hurt",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Hurt.png")));
+                assets[i].put("Defend",
+                        ImageIO.read(getClass().getResource("/assets/src/player/k" + i + "/Defend.png")));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -108,30 +116,58 @@ public class PlayerImages {
     }
 
     // future implementation of this updateimage method
-    /**
-     * private void updateImg() throws IOException {
-     * int img = nums[3];
-     * if (img / 100 == 0) {// idle
-     * currentBufferedImage = assets[playerNum - 1].get("Idle");
-     * } else if (img / 100 == 1) {// running
-     * 
-     * } else if (img / 100 == 2) {// jumping
-     * 
-     * } else if (img / 100 == 3) {// temp
-     * 
-     * } else if (img / 100 == 4) {// temp
-     * 
-     * } else if (img / 100 == 5) {// temp\
-     * 
-     * }
-     * }
-     **/
+
+    public void updateImg(int number) throws IOException {
+        int action = number;
+        if (action / 100 == 0) {// attack1
+            currentBufferedImage = assets[playerNum].get("Attack1");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 1) {// attack2
+            currentBufferedImage = assets[playerNum].get("Attack2");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 2) {// attack3
+            currentBufferedImage = assets[playerNum].get("Attack3");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 3) {// dead
+            currentBufferedImage = assets[playerNum].get("Dead");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 4) {// defend
+            currentBufferedImage = assets[playerNum].get("Defend");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 5) {// hurt
+            currentBufferedImage = assets[playerNum].get("Hurt");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 6) {// idle
+            currentBufferedImage = assets[playerNum].get("Idle");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 7) {// jump
+            currentBufferedImage = assets[playerNum].get("Jump");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 8) {// run
+            currentBufferedImage = assets[playerNum].get("Run");
+            updateImg(currentBufferedImage, action % 100);
+        } else if (action / 100 == 9) {// run + attack
+
+        }
+
+    }
+
+    private void updateImg(BufferedImage img, int Frame) {
+        int currentFrame = Frame / 10;
+        currentBufferedFramed = img.getSubimage(currentFrame * Player.PLAYER_WIDTH, 0, Player.PLAYER_WIDTH,
+                Player.PLAYER_HEIGHT);
+        int currentDirection = Frame % 10;
+        if (currentDirection == 0) {
+            transform = AffineTransform.getScaleInstance(-1, 1);
+            transform.translate(-currentBufferedFramed.getWidth(null), 0);
+            op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            currentBufferedFramed = op.filter(currentBufferedFramed, null);
+        }
+
+    }
 
     // temp implementation of updateimage method to make sure sprite atlas works
-    private void updateimage(Graphics g, int x, int y) throws IOException {
-        currentBufferedImage = p1Assets.get("Run");
-        currentBufferedFramed = currentBufferedImage.getSubimage(currentFrame * Player.PLAYER_WIDTH, 0,
-                Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT);
+    private void drawImage(Graphics g, int x, int y) throws IOException {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(currentBufferedFramed, x, y, null);
 
@@ -139,7 +175,7 @@ public class PlayerImages {
 
     public void draw(Graphics g, int x, int y) {
         try {
-            updateimage(g, x, y);
+            drawImage(g, x, y);
         } catch (Exception e) {
             e.printStackTrace();
         }
