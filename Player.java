@@ -86,8 +86,9 @@ public class Player extends GameObjectStatus {
         if (v.getXDirection() < -ManagerThread.MAXVELOCITY) {
             v.setXDirection(-ManagerThread.MAXVELOCITY);
         }
-        for (Rectangle r : ManagerThread.walls) {
+        for (Platform r : ManagerThread.walls) {
             // if touching side, xDirection = 0, x pos subtract or add
+
             int wX = (int) r.getX();//wall X
             int wY = (int) r.getY();//wall Y
             int wW = (int) r.getWidth();//wall Width
@@ -105,6 +106,7 @@ public class Player extends GameObjectStatus {
                     v.setXDirection(0);
                     super.setXpos(wX + wW);
                 }
+
             } else if (pY + pHeight < wY + wH && pY + pHeight >= wY - .1 && pX + pWidth > wX && pX < wX + wW) {
                 // touching top edge
                 super.setYpos(wY - pHeight);
@@ -112,11 +114,16 @@ public class Player extends GameObjectStatus {
                 if (v.getYDirection() >= 0) {
                     v.setYDirection(0);
                 }
-            } else if (pY < wY + wH && pY > wY && pX + pWidth > wX && pX < wX + wW) {
-                // touching top edge
-                super.setYpos(wY + wH);
-                if (v.getYDirection() <= 0) {
-                    v.setYDirection(0);
+
+            } 
+            else if (pY < wY + wH && pY > wY && pX + pWidth > wX && pX < wX + wW) {
+                // touching bottom edge
+                if (r.hasCeiling()) {
+                    super.setYpos(wY + wH);
+                    if (v.getYDirection() < 0) {
+                        v.setYDirection(0);
+                    }
+
                 }
             }
         }

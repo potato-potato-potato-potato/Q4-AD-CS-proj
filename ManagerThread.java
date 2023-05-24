@@ -23,8 +23,10 @@ public class ManagerThread implements Runnable {
     // touchingGround]}
     private MyHashMap<String, int[]> sendData;
     private static final Map map = new Map();;
-    public static final Rectangle[] walls = map.getWalls();
-    private int pWidth, pHeight, timer, numBalls;
+
+    public static final Platform[] walls = map.getIslands();
+    private int pWidth, pHeight, timer;
+
 
     public ManagerThread(Manager manager) {
         this.manager = manager;

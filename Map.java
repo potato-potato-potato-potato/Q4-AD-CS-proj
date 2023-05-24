@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 public class Map implements Serializable {
     public Rectangle[] walls = new Rectangle[4];
-    public Rectangle[] islands = new Rectangle[4];
+    public Platform[] islands = new Platform[4];
 
 
     public Map() {
@@ -12,11 +12,11 @@ public class Map implements Serializable {
         walls[2] = new Rectangle(0, 678, 1232, 32);
         walls[3] = new Rectangle(1200, 0, 32, 678);
 
-        islands[0] = new Rectangle(100, 600, 100, 20);
-        islands[1] = new Rectangle(300, 600, 100, 20);
-        islands[2] = new Rectangle(500, 600, 100, 20);
-        islands[3] = new Rectangle(700, 600, 100, 20);
-        islands[3] = new Rectangle(350, 300, 20, 100);
+        islands[0] = new Platform(100, 600, 100, 20, true);
+        islands[1] = new Platform(300, 600, 100, 20, true);
+        islands[2] = new Platform(500, 600, 100, 20, true);
+        islands[3] = new Platform(700, 600, 100, 20, false);
+        islands[3] = new Platform(350, 300, 20, 100, true);
 
     }
 
@@ -43,7 +43,8 @@ public class Map implements Serializable {
         }
     }
 
-    public Rectangle[] getWalls(){//return all hitboxes
+    public Platform[] getIslands(){//return all hitboxes
         return islands;
     }
+
 }
