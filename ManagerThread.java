@@ -23,6 +23,7 @@ public class ManagerThread implements Runnable {
     // right, dash, mouseState, mouseX, mouseY,
     // touchingGround]}
     private MyHashMap<String, int[]> sendData;
+    public static MyHashMap<String, double[]> balls;
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
@@ -34,6 +35,7 @@ public class ManagerThread implements Runnable {
 
         gameObjects = new MyHashMap<String, GameObjectStatus>();
         sendData = new MyHashMap<String, int[]>();
+        balls = new MyHashMap<String, double[]>();
         timer = 0;
         numBalls = 0;// number of balls created
     }
@@ -42,6 +44,13 @@ public class ManagerThread implements Runnable {
     public void run() {
         while (running) {
             // each player
+            balls.clear();
+            for (String each : gameObjects.keySet()) {
+                GameObjectStatus data = gameObjects.get(each);
+                if (data instanceof Projectile) {
+                    balls.put(each, new double[]{data.getXpos(), data.getYpos(), data.getVector().getXDirection(), data.getVector().getYDirection(), ((Projectile)data).getLifetime()});
+                }
+            }
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Player) {
@@ -96,13 +105,14 @@ public class ManagerThread implements Runnable {
             gameObjects.get("Ball-" + numBalls).setXpos(x);
             gameObjects.get("Ball-" + numBalls).setYpos(y);
             gameObjects.get("Ball-" + numBalls).setVector(v);
-            System.out.println("Ball-" + numBalls + " xVel: " +gameObjects.get("Ball-" + numBalls).getVector().getXDirection());
             numBalls++;
         }
     }
     public void deleteBall(String name){
         gameObjects.remove(name);
-        System.out.println("Removing " + name);
         numBalls--;
+    }
+    public MyHashMap<String, double[]> getBalls(){
+        return balls;
     }
 }

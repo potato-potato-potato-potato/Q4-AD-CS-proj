@@ -7,8 +7,9 @@ import HashMap.MyHashMap;
 //abstract class for all projectiles
 public class Projectile extends GameObjectStatus {
 
-    private int PLAYER_WIDTH = 20;// player width
-    private int PLAYER_HEIGHT = 20;// player height
+    public static final int INVINCIBILITY = 5;
+    public static final int PLAYER_WIDTH = 20;// ball width
+    public static final int PLAYER_HEIGHT = 20;// ball height
     private String name;
     private int lifetime;
 
@@ -92,5 +93,8 @@ public class Projectile extends GameObjectStatus {
 
     public double getXDirection() {
         return super.getVector().getXDirection();
+    }
+    public int getLifetime() {
+        return lifetime;
     }
 }

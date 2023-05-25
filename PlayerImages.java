@@ -147,8 +147,8 @@ public class PlayerImages {
     private void updateImg(BufferedImage img, int Frame) {
         img = assets[playerNum].get("Idle");
         int currentFrame = Frame / 10;
-        currentBufferedFramed = img.getSubimage(currentFrame * Player.PLAYER_WIDTH, 0, Player.PLAYER_WIDTH,
-                Player.PLAYER_HEIGHT);
+        currentBufferedFramed = img.getSubimage(currentFrame * Player.PLAYER_IMGWIDTH, 0, Player.PLAYER_IMGWIDTH,
+                Player.PLAYER_IMGHEIGHT);
         int currentDirection = Frame % 10;
         if (currentDirection == 0) {
             transform = AffineTransform.getScaleInstance(-1, 1);
@@ -168,7 +168,7 @@ public class PlayerImages {
 
     public void draw(Graphics g, int x, int y) {
         try {
-            drawImage(g, x, y);
+            drawImage(g, x+Player.IMG_OFFSET, y);
         } catch (Exception e) {
             e.printStackTrace();
         }

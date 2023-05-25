@@ -2,21 +2,21 @@ import java.awt.Rectangle;
 import HashMap.MyHashMap;
 
 public class Player extends GameObjectStatus {
-    public static final int PLAYER_WIDTH = 128;// player width
+    public static final int PLAYER_WIDTH = 60;// player width
     public static final int PLAYER_HEIGHT = 128;// player height
+    public static final int PLAYER_IMGWIDTH = 128;// player width
+    public static final int PLAYER_IMGHEIGHT = 128;// player height
+    public static final int IMG_OFFSET = -30;// player height
     public static final int FIREBALL_SPEED = 5;// Fireball speed
+    public static final double FIREBALL_MULTIPLIER = .3;
     private String name;
-    private MyHashMap<String, int[]> projectiles;// projectiles stored in hashmap (used for collisions), int[] array
-                                                 // contains [x, y, xVel, yVel]
     private int fireCooldown;
     private int[] imgNum;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
         this.name = name;
-        imgNum = new int[] { 0, 0, 0 };// hundreds value is file, tens is frame, ones value even is left, ones value
-                                       // odd is right
-        // 000 is first frame of attack one facing right
+        imgNum = new int[] { 0, 0, 0 };// hundreds value is file, tens is frame, ones value even is left, ones value odd is right 000 is first frame of attack one facing right
         fireCooldown = 0;
     }
 
@@ -24,7 +24,6 @@ public class Player extends GameObjectStatus {
         Vector v = super.getVector();
         double pX = super.getXpos();// player X
         double pY = super.getYpos();// player Y
-        projectiles = new MyHashMap<String, int[]>();
 
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY);
         if (pY > 800) {// out of bounds
@@ -75,17 +74,14 @@ public class Player extends GameObjectStatus {
         }
         if (super.isLeftMouseState()) {// fire
             if (fireCooldown <= 0) {
-                System.out.println("Summoning fireball");
-                double angle = Math.atan(-(super.getMouseY() - pY) / (super.getMouseX() - pX));
-                System.out.println("delta X: " + (super.getMouseX() - pX));
-                System.out.println("delta Y: " + -(super.getMouseY() - pY));
-                System.out.println("Angle: " + angle * 180 / 3.14);
-                System.out.println("X multiplier: " + Math.cos(angle));
-                System.out.println("Y multiplier: " + Math.sin(angle));
-
-                super.getManagerThread().summonFireBall(pX, pY,
-                        new Vector(Math.cos(angle) * FIREBALL_SPEED + v.getXDirection(),
-                                Math.sin(angle) * FIREBALL_SPEED + v.getYDirection()));
+                double deltaX = super.getMouseX()-(pX+PLAYER_WIDTH/2);
+                double deltaY = super.getMouseY()-(pY+PLAYER_WIDTH/4);
+                double distance = Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+                if(deltaX>0){
+                    super.getManagerThread().summonFireBall(pX+PLAYER_WIDTH, pY+PLAYER_HEIGHT/4, new Vector(deltaX/distance*FIREBALL_SPEED + v.getXDirection(), deltaY/distance * FIREBALL_SPEED + v.getYDirection()));
+                }else{//20 is ball width
+                    super.getManagerThread().summonFireBall(pX-20, pY+PLAYER_HEIGHT/4, new Vector(deltaX/distance*FIREBALL_SPEED + v.getXDirection(), deltaY/distance * FIREBALL_SPEED + v.getYDirection()));
+                }
                 fireCooldown = 100;
             }
         }
@@ -163,13 +159,25 @@ public class Player extends GameObjectStatus {
 
             }
         }
+        
+        for(String s : ManagerThread.balls.keySet()){
+            double[] d = ManagerThread.balls.get(s);
+            double wX = d[0];
+            double wY = d[1];
+            double wW = Projectile.PLAYER_WIDTH;
+            double wH = Projectile.PLAYER_HEIGHT;
+            //if touching fireball, add partial velocity, delete fireball
+            if(d[4]>Projectile.INVINCIBILITY){
+                if ((pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) || (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW) ) {
+                    // TODO: touching left edge
+                    v.setXDirection(v.getXDirection()+d[2]*FIREBALL_MULTIPLIER);
+                    super.getManagerThread().deleteBall(s);//remove ball
+                }
+            }
+            }
         super.setImgStatus(imgNum[0] * 100 + imgNum[1] * 10 + imgNum[2]);
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
 
-    }
-
-    public void setProjectiles(MyHashMap<String, int[]> projectiles) {
-        this.projectiles = projectiles;
     }
 }

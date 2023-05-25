@@ -1,5 +1,7 @@
 import java.io.Serializable;
 
+import HashMap.MyHashMap;
+
 public class GameObjectStatus implements Serializable {
     // isPlayer|Identifier|ID|Vector|Xpos|Ypos|up|down|left|right|dash|left mouse
     // State|right mouse state|mouseX|mouseY|touchingGround|
@@ -23,6 +25,8 @@ public class GameObjectStatus implements Serializable {
     private int jumpCount;
     private int imgStatus;
     private ManagerThread managerThread;
+    private MyHashMap<String, double[]> projectiles;// projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
+
 
     public GameObjectStatus(ManagerThread managerThread) {
         vector = new Vector(0, 0);
