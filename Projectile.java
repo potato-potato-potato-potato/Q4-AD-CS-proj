@@ -77,13 +77,10 @@ public class Projectile extends GameObjectStatus {
                 }
             } else if (pY < wY + wH && pY > wY && pX + PLAYER_WIDTH > wX && pX < wX + wW) {
                 // touching top edge
-                super.setYpos(wY + wH);
-                if (v.getYDirection() <= 0) {
-                    v.setYDirection(0);
-                }
+                super.getManagerThread().deleteBall(name);
             }
         }
-        if(lifetime==2000){
+        if(lifetime==500){
             super.getManagerThread().deleteBall(name);
         }
         super.translateXpos(v.getXDirection());
