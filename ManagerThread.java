@@ -66,7 +66,7 @@ public class ManagerThread implements Runnable {
                 sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(),
                         (int) gameObjects.get(each).getYpos(), (int) gameObjects.get(each).getImgStatus() });
             }
-            manager.broadcast(new Pair<String, Object>("gameData", sendData));
+            broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData
             try {
                 Thread.sleep(15);
@@ -83,8 +83,7 @@ public class ManagerThread implements Runnable {
         this.threadList = threadList;
         int num = 1;
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
-            manager.broadcast(new Pair<String, Object>("newPlayer", num - 1));// -1 is to fit index system in client
-                                                                              // screen
+            broadcast(new Pair<String, Object>("newPlayer", num - 1));// -1 is to fit index system in clientscreen
             num++;
             gameObjects.put(each.getName(), new Player(each.getName(), this));
             gameObjects.get(each.getName()).setXpos(num * 50);
@@ -114,5 +113,8 @@ public class ManagerThread implements Runnable {
     }
     public MyHashMap<String, double[]> getBalls(){
         return balls;
+    }
+    public void broadcast(Pair<String, Object> pair){
+        manager.broadcast(pair);
     }
 }
