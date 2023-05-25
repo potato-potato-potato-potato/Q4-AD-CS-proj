@@ -177,7 +177,7 @@ public class Player extends GameObjectStatus {
                 if ((pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) || (pY < wY + wH
                         && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW)) {
                     // TODO: touching left edge
-                    v.setXDirection(v.getXDirection() + d[2] * FIREBALL_MULTIPLIER);
+                    v.setXDirection(v.getXDirection() + (d[2] - v.getXDirection()) * FIREBALL_MULTIPLIER);
                     super.getManagerThread().deleteBall(s);// remove ball
                 }
             }
