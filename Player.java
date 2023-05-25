@@ -8,7 +8,7 @@ public class Player extends GameObjectStatus {
     public static final int PLAYER_IMGHEIGHT = 128;// player height
     public static final int IMG_OFFSET = -30;// player height
     public static final int FIREBALL_SPEED = 5;// Fireball speed
-    public static final double FIREBALL_MULTIPLIER = .3;
+    public static final double FIREBALL_MULTIPLIER = 2;
     private String name;
     private int fireCooldown;
     private int[] imgNum;
@@ -26,10 +26,11 @@ public class Player extends GameObjectStatus {
         double pY = super.getYpos();// player Y
 
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY);
-        if (pY > 800) {// out of bounds
+        if (pY > 800) {// out of bounds and DIED
             super.setYpos(50);
             v.setYDirection(0);
             v.setXDirection(0);
+            super.getManagerThread().broadcast(new Pair<String, Object>("PlayerDies", name));
         }
         if (super.isUp()) {// up
             imgNum[0] = 7;
