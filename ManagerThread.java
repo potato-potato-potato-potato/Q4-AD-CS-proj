@@ -48,7 +48,8 @@ public class ManagerThread implements Runnable {
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Projectile) {
-                    balls.put(each, new double[]{data.getXpos(), data.getYpos(), data.getVector().getXDirection(), data.getVector().getYDirection(), ((Projectile)data).getLifetime()});
+                    balls.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection(),
+                            data.getVector().getYDirection(), ((Projectile) data).getLifetime() });
                 }
             }
             for (String each : gameObjects.keySet()) {
@@ -108,11 +109,13 @@ public class ManagerThread implements Runnable {
             numBalls++;
         }
     }
-    public void deleteBall(String name){
+
+    public void deleteBall(String name) {
         gameObjects.remove(name);
         numBalls--;
     }
-    public MyHashMap<String, double[]> getBalls(){
+
+    public MyHashMap<String, double[]> getBalls() {
         return balls;
     }
 }
