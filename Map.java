@@ -18,10 +18,10 @@ public class Map implements Serializable {
         walls[2] = new Rectangle(0, 678, 1232, 32);
         walls[3] = new Rectangle(1200, 0, 32, 678);
 
-        islands[0] = new Platform(100, 600, 1600, 20, true);
-        islands[1] = new Platform(212, 370, 270, 40, false);
-        islands[2] = new Platform(780, 370, 270, 40, false);
-        islands[3] = new Platform(500, 200, 250, 30, false);
+        islands[0] = new Platform(100, 550, 1600, 20, true);
+        islands[1] = new Platform(212, 380, 270, 30, false);
+        islands[2] = new Platform(780, 380, 270, 30, false);
+        islands[3] = new Platform(505, 225, 250, 30, false);
         // islands[1] = new Platform(300, 600, 100, 20, true);
         // islands[2] = new Platform(500, 600, 100, 20, true);
         // islands[3] = new Platform(350, 300, 20, 100, true);
@@ -42,7 +42,7 @@ public class Map implements Serializable {
 
             // hitBoxes
             g.setColor(Color.BLACK);
-            g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
+            g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
 
         }
 
