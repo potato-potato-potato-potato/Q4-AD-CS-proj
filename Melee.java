@@ -7,9 +7,10 @@ import HashMap.MyHashMap;
 //abstract class for all projectiles
 public class Melee extends GameObjectStatus {
 
-    public static final int PLAYER_WIDTH = 20;// Melee width
-    public static final int PLAYER_HEIGHT = 20;// Melee height
+    public static final int PLAYER_WIDTH = 30;// Melee width
+    public static final int PLAYER_HEIGHT = 50;// Melee height
     public static final int MELEE_TIME = 10;// Melee height
+    public static final int KNOCKBACK = 15;
     private String name;
     private int lifetime;
 
@@ -21,7 +22,7 @@ public class Melee extends GameObjectStatus {
     public void run() {
         lifetime++;
         if(lifetime==MELEE_TIME){
-            super.getManagerThread().deleteBall(name);
+            super.getManagerThread().deleteMelee(name);
         }
     }
     public int getLifetime() {
