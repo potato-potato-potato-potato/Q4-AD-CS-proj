@@ -141,12 +141,11 @@ public class Player extends GameObjectStatus {
             if (meleeCooldown <= 0) {
                 double deltaX = super.getMouseX() - (pX + PLAYER_WIDTH / 2);
                 if (deltaX > 0) {
-                    super.getManagerThread().summonMelee(pX + PLAYER_WIDTH, pY + PLAYER_HEIGHT / 4, new Vector(1, 0));// melee
+                    super.getManagerThread().summonMelee(pX + PLAYER_WIDTH, pY + PLAYER_HEIGHT / 4, new Vector(1, 0), this);// melee
                                                                                                                       // facing
                                                                                                                       // riht
                 } else {// 20 is ball width
-                    super.getManagerThread().summonMelee(pX - 20, pY + PLAYER_HEIGHT / 4,
-                            new Vector(-1, 0));
+                    super.getManagerThread().summonMelee(pX - 20, pY + PLAYER_HEIGHT / 4,new Vector(-1, 0), this);
                 }
                 meleeCooldown = MELEE_COOLDOWN;
             }
@@ -255,11 +254,12 @@ public class Player extends GameObjectStatus {
             double wY = d[1];
             double wW = Projectile.PLAYER_WIDTH;
             double wH = Projectile.PLAYER_HEIGHT;
-            // if touching fireball, add partial velocity, delete fireball
+            // if touching melee, add partial velocity, delete melee
             if ((pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) || (pY < wY + wH
                     && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW)) {
-                v.setXDirection(v.getXDirection() + d[2]);
-                super.getManagerThread().deleteBall(s);// remove ball
+                v.setXDirection(v.getXDirection() + d[2]*Melee.KNOCKBACK);
+                System.out.println("Knocking back " + d[2]);
+                super.getManagerThread().deleteMelee(s);// remove ball
             }
         }
         super.setImgStatus(imgNum[0] * 100 + imgNum[1] * 10 + imgNum[2]);

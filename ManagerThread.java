@@ -56,6 +56,7 @@ public class ManagerThread implements Runnable {
                             data.getVector().getYDirection(), ((Projectile) data).getLifetime() });
                 }
                 if (data instanceof Melee) {
+                    
                     melee.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection() });
                 }
             }
@@ -120,17 +121,12 @@ public class ManagerThread implements Runnable {
         }
     }
 
-    public void summonMelee(double x, double y, Vector v) {
-        System.out.println("Adding melee-" + numMelee);
-
-        /*
-         * gameObjects.put("Melee-" + numMelee, new Projectile("Melee-" + numMelee,
-         * this));
-         * gameObjects.get("Melee-" + numMelee).setXpos(x);
-         * gameObjects.get("Melee-" + numMelee).setYpos(y);
-         * gameObjects.get("Melee-" + numMelee).setVector(v);
-         * numMelee++;
-         */
+    public void summonMelee(double x, double y, Vector v, Player p) {
+        gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee,this));
+        gameObjects.get("M-" + numMelee).setXpos(x);
+        gameObjects.get("M-" + numMelee).setYpos(y);
+        gameObjects.get("M-" + numMelee).setVector(v);
+        numMelee++;
     }
 
     public void deleteBall(String name) {
