@@ -64,8 +64,7 @@ public class ManagerThread implements Runnable {
 
             // send out all information
             for (String each : gameObjects.keySet()) {
-                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(),
-                        (int) gameObjects.get(each).getYpos(), (int) gameObjects.get(each).getImgStatus() });
+                sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(), (int) gameObjects.get(each).getYpos(), (int) gameObjects.get(each).getImgStatus() });
             }
             broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData
