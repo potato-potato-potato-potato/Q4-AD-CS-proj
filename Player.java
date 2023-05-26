@@ -68,13 +68,12 @@ public class Player extends GameObjectStatus {
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() + ManagerThread.GROUNDMOVEMENT);
                 imgNum[0] = 8;
-                
             }
             v.setXDirection(v.getXDirection() + ManagerThread.AIRMOVEMENT);
             imgNum[2] = 1;
         }
         if (super.isDash()) {// dash
-
+            
         }
         if (fireCooldown > 0) {
             fireCooldown--;

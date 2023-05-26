@@ -11,8 +11,8 @@ public class ManagerThread implements Runnable {
     public static final double FRICTION = .25;
     public static final double GROUNDMOVEMENT = .2;
     public static final double AIRMOVEMENT = .1;
-    public static final double MAXVELOCITY = 15;
-    public static final double MINXVELOCITY = .3;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
+    public static final double MAXVELOCITY = 7;
+    public static final double MINXVELOCITY = .09;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
     public static final double SMASH = .05;
     public static final double MAXBALLCOUNT = 20;
 
