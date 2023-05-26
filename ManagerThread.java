@@ -120,11 +120,13 @@ public class ManagerThread implements Runnable {
     }
     public void summonMelee(double x, double y, Vector v) { 
         System.out.println("Adding melee-" + numMelee);
-        gameObjects.put("Melee-" + numMelee, new Projectile("Melee-" + numMelee, this));
+        
+        /*gameObjects.put("Melee-" + numMelee, new Projectile("Melee-" + numMelee, this));
         gameObjects.get("Melee-" + numMelee).setXpos(x);
         gameObjects.get("Melee-" + numMelee).setYpos(y);
         gameObjects.get("Melee-" + numMelee).setVector(v);
         numMelee++;
+        */
     }
 
     public void deleteBall(String name) {
