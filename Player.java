@@ -9,17 +9,22 @@ public class Player extends GameObjectStatus {
     public static final int IMG_OFFSET = -15;// player height
     public static final int FIREBALL_SPEED = 5;// Fireball speed
     public static final double FIREBALL_MULTIPLIER = 2;
+<<<<<<< HEAD
     public int frame = 0;
+=======
+    public static final int ANIMATION_SPEED = 5;//play the next animation step every _ frames
+>>>>>>> 67d7a5d29971bf6794533f39d337e7fb4359addc
     private String name;
     private int fireCooldown;
     private int[] imgNum;
+    private int timer;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
         this.name = name;
-        imgNum = new int[] { 0, 0, 0 };// hundreds value is file, tens is frame, ones value even is left, ones value
-                                       // odd is right 000 is first frame of attack one facing right
+        imgNum = new int[] { 0, 0, 0 };//index 0 is image, 1 is frame, 2 is direction
         fireCooldown = 0;
+        timer = 0;
     }
 
     public void run() {
@@ -27,6 +32,7 @@ public class Player extends GameObjectStatus {
         Vector v = super.getVector();
         double pX = super.getXpos();// player X
         double pY = super.getYpos();// player Y
+        timer++;
 
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY);
         if (pY > 800) {// out of bounds and DIED
@@ -58,6 +64,7 @@ public class Player extends GameObjectStatus {
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() - ManagerThread.GROUNDMOVEMENT);
                 imgNum[0] = 8;
+                
             }
             v.setXDirection(v.getXDirection() - ManagerThread.AIRMOVEMENT);
             imgNum[2] = 0;
@@ -66,6 +73,7 @@ public class Player extends GameObjectStatus {
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() + ManagerThread.GROUNDMOVEMENT);
                 imgNum[0] = 8;
+                
             }
             v.setXDirection(v.getXDirection() + ManagerThread.AIRMOVEMENT);
             imgNum[2] = 1;
