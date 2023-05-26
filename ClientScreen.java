@@ -177,9 +177,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
 
         if (gameStarted) {
-            drawObjects(g);
-
             map.drawMe(g);
+            drawObjects(g);
 
         } else {
             map.drawBackground(g);
@@ -193,7 +192,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension(1920, 1080);
+        return new Dimension(1200, 720);
     }
 
     @SuppressWarnings("unchecked")
@@ -402,7 +401,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     PlayerList.get(2).updateImg(gameData.get(each)[2]);
                     PlayerList.get(2).draw(g, x, y);
                 }
-            }else if(each.contains("Ball")){
+            } else if (each.contains("Ball")) {
                 g.fillOval(x, y, 20, 20);
             }
         }
