@@ -9,20 +9,21 @@ public class Player extends GameObjectStatus {
     public static final int IMG_OFFSET = -15;// player height
     public static final int FIREBALL_SPEED = 5;// Fireball speed
     public static final double FIREBALL_MULTIPLIER = 2;
-<<<<<<< HEAD
-    public int frame = 0;
-=======
-    public static final int ANIMATION_SPEED = 5;//play the next animation step every _ frames
->>>>>>> 67d7a5d29971bf6794533f39d337e7fb4359addc
+    public static final int ANIMATION_SPEED = 10;// play the next animation step every _ frames
+
+    // 0=Attack1,1=Attack2,2=Attack3,3=Dead,4=Defend,5=hurt,6=idle,7=jump,8=run
+    private int currentAnimation;
+    private int frame;
     private String name;
     private int fireCooldown;
+    // 0=Attack1,1=Attack2,2=Attack3,3=Dead,4=Defend,5=hurt,6=idle,7=jump,8=run
     private int[] imgNum;
     private int timer;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
         this.name = name;
-        imgNum = new int[] { 0, 0, 0 };//index 0 is image, 1 is frame, 2 is direction
+        imgNum = new int[] { 0, 0, 0 };// index 0 is image, 1 is frame, 2 is direction
         fireCooldown = 0;
         timer = 0;
     }
@@ -41,8 +42,22 @@ public class Player extends GameObjectStatus {
             v.setXDirection(0);
             super.getManagerThread().broadcast(new Pair<String, Object>("PlayerDies", name));
         }
+        if (isIdle()) {
+            if (super.isTouchingGround() == true) {
+                if (imgNum[0] != 6) {
+                    frame = 0;
+                }
+                if (frame / Player.ANIMATION_SPEED == 3) {
+                    frame = 0;
+                }
+                imgNum[0] = 6;
+                imgNum[1] = frame / Player.ANIMATION_SPEED;
+            }
+
+        }
         if (super.isUp()) {// up
             imgNum[0] = 7;
+            imgNum[1] = 0;
             if (super.isTouchingGround() == true) {
                 v.setYDirection(v.getYDirection() - ManagerThread.JUMPLAYER_HEIGHT);
                 super.setTouchingGround(false);
@@ -50,9 +65,9 @@ public class Player extends GameObjectStatus {
                 v.setYDirection(v.getYDirection() - ManagerThread.SMASH);
             }
             if (v.getYDirection() <= 0) {
-                imgNum[1] = 1;
+                imgNum[2] = 1;
             } else {
-                imgNum[1] = 2;
+                imgNum[2] = 2;
             }
         }
         if (super.isDown()) {// down
@@ -63,8 +78,15 @@ public class Player extends GameObjectStatus {
         if (super.isLeft()) {// left
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() - ManagerThread.GROUNDMOVEMENT);
+                if (imgNum[0] != 8) {
+                    frame = 0;
+                }
+                if (frame / Player.ANIMATION_SPEED == 6) {
+                    frame = 0;
+                }
                 imgNum[0] = 8;
-                
+                imgNum[1] = frame / Player.ANIMATION_SPEED;
+
             }
             v.setXDirection(v.getXDirection() - ManagerThread.AIRMOVEMENT);
             imgNum[2] = 0;
@@ -72,8 +94,15 @@ public class Player extends GameObjectStatus {
         if (super.isRight()) {// right
             if (super.isTouchingGround()) {
                 v.setXDirection(v.getXDirection() + ManagerThread.GROUNDMOVEMENT);
+                if (imgNum[0] != 8) {
+                    frame = 0;
+                }
+                if (frame / Player.ANIMATION_SPEED == 6) {
+                    frame = 0;
+                }
                 imgNum[0] = 8;
-                
+                imgNum[1] = frame / Player.ANIMATION_SPEED;
+
             }
             v.setXDirection(v.getXDirection() + ManagerThread.AIRMOVEMENT);
             imgNum[2] = 1;

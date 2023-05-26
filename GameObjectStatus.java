@@ -25,8 +25,8 @@ public class GameObjectStatus implements Serializable {
     private int jumpCount;
     private int imgStatus;
     private ManagerThread managerThread;
-    private MyHashMap<String, double[]> projectiles;// projectiles stored in hashmap (used for collisions), int[] array contains [x, y, xVel, yVel]
-
+    private MyHashMap<String, double[]> projectiles;// projectiles stored in hashmap (used for collisions), int[] array
+                                                    // contains [x, y, xVel, yVel]
 
     public GameObjectStatus(ManagerThread managerThread) {
         vector = new Vector(0, 0);
@@ -45,6 +45,14 @@ public class GameObjectStatus implements Serializable {
         rightMouseState = keys[6] == 1;
         mouseX = keys[7];
         mouseY = keys[8];
+    }
+
+    public boolean isIdle() {
+        if (isLeft() || isRight() || isUp() || isDown() || isDash()) {
+            return false;
+        }
+        return true;
+
     }
 
     public boolean isPlayer() {
@@ -193,14 +201,15 @@ public class GameObjectStatus implements Serializable {
 
     public void setImgStatus(int imgStatus) {
         /*
-        img 00 is idle.png
-
-
-
-        */
+         * img 00 is idle.png
+         * 
+         * 
+         * 
+         */
         this.imgStatus = imgStatus;
     }
-    public int getImgStatus(){
+
+    public int getImgStatus() {
         return imgStatus;
     }
 
