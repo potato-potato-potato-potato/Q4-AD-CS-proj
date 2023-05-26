@@ -35,14 +35,14 @@ public class Map implements Serializable {
     }
 
     public void drawMe(Graphics g) {
+        g.drawImage(background, 0, 0, null);
 
         for (Rectangle r : islands) {
             // images
-            g.drawImage(background, 0, 0, null);
 
             // hitBoxes
             g.setColor(Color.BLACK);
-            g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
+            g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
 
         }
 

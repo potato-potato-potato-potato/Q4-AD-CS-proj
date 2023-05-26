@@ -9,6 +9,7 @@ public class Player extends GameObjectStatus {
     public static final int IMG_OFFSET = -15;// player height
     public static final int FIREBALL_SPEED = 5;// Fireball speed
     public static final double FIREBALL_MULTIPLIER = 2;
+    public int frame = 0;
     private String name;
     private int fireCooldown;
     private int[] imgNum;
@@ -22,6 +23,7 @@ public class Player extends GameObjectStatus {
     }
 
     public void run() {
+        frame++;
         Vector v = super.getVector();
         double pX = super.getXpos();// player X
         double pY = super.getYpos();// player Y
