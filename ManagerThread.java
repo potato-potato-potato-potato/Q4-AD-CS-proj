@@ -6,13 +6,13 @@ import java.io.*;
 
 public class ManagerThread implements Runnable {
     public static final double GRAVITY = .15; // , , , , ,
-    public static final double JUMPLAYER_HEIGHT = 3.5;
-    public static final double AIRRESISTANCE = .02;
-    public static final double FRICTION = .25;
-    public static final double GROUNDMOVEMENT = .2;
-    public static final double AIRMOVEMENT = .1;
-    public static final double MAXVELOCITY = 15;
-    public static final double MINXVELOCITY = .3;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
+    public static final double JUMPLAYER_HEIGHT = 7;
+    public static final double AIRRESISTANCE = .04;
+    public static final double FRICTION = .8;
+    public static final double GROUNDMOVEMENT = 1;
+    public static final double AIRMOVEMENT = .2;
+    public static final double MAXVELOCITY = 7;
+    public static final double MINXVELOCITY = AIRMOVEMENT - .01;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
     public static final double SMASH = .05;
     public static final double MAXBALLCOUNT = 20;
 
@@ -23,21 +23,24 @@ public class ManagerThread implements Runnable {
     // right, dash, mouseState, mouseX, mouseY,
     // touchingGround]}
     private MyHashMap<String, int[]> sendData;
-    public static MyHashMap<String, double[]> balls;
+    public static MyHashMap<String, double[]> balls, melee;
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
     private int timer;
-    private int numBalls;
+    private int numBalls, numMelee;
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
 
         gameObjects = new MyHashMap<String, GameObjectStatus>();
         sendData = new MyHashMap<String, int[]>();
-        balls = new MyHashMap<String, double[]>();
+        balls = new MyHashMap<String, double[]>();// x, y, xDirection, yDirection, lifetime
+        melee = new MyHashMap<String, double[]>();// x, y, xDirection
         timer = 0;
         numBalls = 0;// number of balls created
+        numMelee = 0;// number of melee attacks created
+
     }
 
     // this class is the main game calculations, it will run in a loop and update
@@ -45,13 +48,18 @@ public class ManagerThread implements Runnable {
         while (running) {
             // each player
             balls.clear();
+            melee.clear();
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Projectile) {
                     balls.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection(),
                             data.getVector().getYDirection(), ((Projectile) data).getLifetime() });
                 }
+                if (data instanceof Melee) {
+                    melee.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection() });
+                }
             }
+
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Player) {
@@ -59,6 +67,9 @@ public class ManagerThread implements Runnable {
                 }
                 if (data instanceof Projectile) {
                     ((Projectile) data).run();
+                }
+                if (data instanceof Melee) {
+                    ((Melee) data).run();
                 }
             }
 
@@ -101,7 +112,7 @@ public class ManagerThread implements Runnable {
 
     public void summonFireBall(double x, double y, Vector v) {
         if (numBalls < MAXBALLCOUNT) {
-            gameObjects.put("Ball-" + numBalls, new Projectile("Ball", this));
+            gameObjects.put("Ball-" + numBalls, new Projectile("Ball-" + numBalls, this));
             gameObjects.get("Ball-" + numBalls).setXpos(x);
             gameObjects.get("Ball-" + numBalls).setYpos(y);
             gameObjects.get("Ball-" + numBalls).setVector(v);
@@ -109,13 +120,35 @@ public class ManagerThread implements Runnable {
         }
     }
 
+    public void summonMelee(double x, double y, Vector v) {
+        System.out.println("Adding melee-" + numMelee);
+
+        /*
+         * gameObjects.put("Melee-" + numMelee, new Projectile("Melee-" + numMelee,
+         * this));
+         * gameObjects.get("Melee-" + numMelee).setXpos(x);
+         * gameObjects.get("Melee-" + numMelee).setYpos(y);
+         * gameObjects.get("Melee-" + numMelee).setVector(v);
+         * numMelee++;
+         */
+    }
+
     public void deleteBall(String name) {
         gameObjects.remove(name);
         numBalls--;
     }
 
+    public void deleteMelee(String name) {
+        gameObjects.remove(name);
+        numMelee--;
+    }
+
     public MyHashMap<String, double[]> getBalls() {
         return balls;
+    }
+
+    public MyHashMap<String, double[]> getMelee() {
+        return melee;
     }
 
     public void broadcast(Pair<String, Object> pair) {

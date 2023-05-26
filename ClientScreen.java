@@ -273,6 +273,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
+            }else if (usernameButton.getText().equals("PlayerDies")) {
+
             }
         }
         if (e.getSource() == quit) {
@@ -402,7 +404,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     PlayerList.get(2).draw(g, x, y);
                 }
             } else if (each.contains("Ball")) {
-                g.fillOval(x, y, 20, 20);
+                g.fillOval(x, y, Projectile.PLAYER_WIDTH, Projectile.PLAYER_HEIGHT);
+            }else if (each.contains("Melee")) {
+                g.drawRect(x, y, Melee.PLAYER_WIDTH, Melee.PLAYER_HEIGHT);
             }
         }
     }
