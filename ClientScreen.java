@@ -21,10 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import java.awt.event.MouseEvent;
-
-import java.io.File;
-import java.io.IOException;
-
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
@@ -44,6 +40,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private boolean isHost;
 
     private MyArrayList<PlayerImages> PlayerList = new MyArrayList<PlayerImages>();
+    private MyHashMap<Integer, EnergyBall> EnergyBallList = new MyHashMap<Integer, EnergyBall>();
 
     private Thread update;
 
@@ -224,8 +221,13 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     System.out.println("new player" + input.getValue());
                     PlayerList.add(new PlayerImages((int) input.getValue()));
 
+                } else if (input.getKey().equals("newBall")) {
+                    System.out.println("new ball" + input.getValue());
+                    EnergyBallList.put((int) input.getValue(), new EnergyBall((int) input.getValue()));
+                } else if (input.getKey().equals("removeBall")) {
+                    System.out.println("remove ball" + input.getValue());
+                    EnergyBallList.remove((int) input.getValue());
                 }
-
                 repaint();
             }
         } catch (UnknownHostException e) {
@@ -273,7 +275,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
-            }else if (usernameButton.getText().equals("PlayerDies")) {
+            } else if (usernameButton.getText().equals("PlayerDies")) {
 
             }
         }
@@ -404,8 +406,16 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     PlayerList.get(2).draw(g, x, y);
                 }
             } else if (each.contains("Ball")) {
-                g.fillOval(x, y, Projectile.PLAYER_WIDTH, Projectile.PLAYER_HEIGHT);
-            }else if (each.contains("M")) {
+                try {
+
+                    int b = Integer.parseInt(each.substring(4));
+                    EnergyBallList.get(b).draw(g, x, y,
+                            new Vector(gameData.get(each)[3] / 1000.0, gameData.get(each)[4] / 1000.0));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else if (each.contains("M")) {
                 g.drawRect(x, y, Melee.PLAYER_WIDTH, Melee.PLAYER_HEIGHT);
             }
         }

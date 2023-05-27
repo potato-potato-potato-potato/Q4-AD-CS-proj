@@ -56,7 +56,7 @@ public class ManagerThread implements Runnable {
                             data.getVector().getYDirection(), ((Projectile) data).getLifetime() });
                 }
                 if (data instanceof Melee) {
-                    
+
                     melee.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection() });
                 }
             }
@@ -75,9 +75,12 @@ public class ManagerThread implements Runnable {
             }
 
             // send out all information
+            // vector is multiplied by 1000 to send it as an int instead of a double
             for (String each : gameObjects.keySet()) {
                 sendData.put(each, new int[] { (int) gameObjects.get(each).getXpos(),
-                        (int) gameObjects.get(each).getYpos(), (int) gameObjects.get(each).getImgStatus() });
+                        (int) gameObjects.get(each).getYpos(), (int) gameObjects.get(each).getImgStatus(),
+                        (int) (gameObjects.get(each).getVector().xDir * 1000),
+                        (int) (gameObjects.get(each).getVector().yDir * 1000) });
             }
             broadcast(new Pair<String, Object>("gameData", sendData));
             sendData = new MyHashMap<String, int[]>();// reset sendData
@@ -113,6 +116,7 @@ public class ManagerThread implements Runnable {
 
     public void summonFireBall(double x, double y, Vector v) {
         if (numBalls < MAXBALLCOUNT) {
+            manager.broadcast(new Pair<String, Object>("newBall", numBalls));
             gameObjects.put("Ball-" + numBalls, new Projectile("Ball-" + numBalls, this));
             gameObjects.get("Ball-" + numBalls).setXpos(x);
             gameObjects.get("Ball-" + numBalls).setYpos(y);
@@ -122,7 +126,7 @@ public class ManagerThread implements Runnable {
     }
 
     public void summonMelee(double x, double y, Vector v, Player p) {
-        gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee,this));
+        gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee, this));
         gameObjects.get("M-" + numMelee).setXpos(x);
         gameObjects.get("M-" + numMelee).setYpos(y);
         gameObjects.get("M-" + numMelee).setVector(v);
@@ -130,6 +134,7 @@ public class ManagerThread implements Runnable {
     }
 
     public void deleteBall(String name) {
+        manager.broadcast(new Pair<String, Object>("deleteBall", numBalls));
         gameObjects.remove(name);
         numBalls--;
     }

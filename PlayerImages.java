@@ -26,7 +26,6 @@ public class PlayerImages {
     private MyHashMap<Integer, BufferedImage> p2Assets;
     private MyHashMap<Integer, BufferedImage> p3Assets;
     private MyHashMap<Integer, BufferedImage>[] assets;
-    private DrawManipulation drawManipulation;
     private AffineTransform transform;
     private AffineTransformOp op;
     private String path;

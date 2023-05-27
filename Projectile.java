@@ -2,6 +2,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
 import HashMap.MyHashMap;
 
 //abstract class for all projectiles
@@ -10,6 +14,8 @@ public class Projectile extends GameObjectStatus {
     public static final int INVINCIBILITY = 5;
     public static final int PLAYER_WIDTH = 20;// ball width
     public static final int PLAYER_HEIGHT = 20;// ball height
+
+    private BufferedImage sprite;
     private String name;
     private int lifetime;
 
@@ -17,6 +23,11 @@ public class Projectile extends GameObjectStatus {
         super(managerThread);
         this.name = name;
         lifetime = 0;
+        try {
+            sprite = ImageIO.read(getClass().getResource("/assets/EnergyBall.gif"));
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
     }
 
     public void run() {
@@ -71,30 +82,33 @@ public class Projectile extends GameObjectStatus {
                     && pX < wX + wW) {
                 // touching top edgPLAYER_HEIGHT
                 super.getManagerThread().deleteBall(name);
-                /* 
-                super.setYpos(wY - PLAYER_HEIGHT);
-                super.setTouchingGround(true);
-                if (v.getYDirection() >= 0) {
-                    v.setYDirection(0);
-                }
-                */
+                /*
+                 * super.setYpos(wY - PLAYER_HEIGHT);
+                 * super.setTouchingGround(true);
+                 * if (v.getYDirection() >= 0) {
+                 * v.setYDirection(0);
+                 * }
+                 */
             } else if (pY < wY + wH && pY > wY && pX + PLAYER_WIDTH > wX && pX < wX + wW) {
                 // touching top edge
                 super.getManagerThread().deleteBall(name);
             }
         }
-        if(lifetime==240){
+        if (lifetime == 240) {
             super.getManagerThread().deleteBall(name);
         }
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
+        System.out.println("x: " + v.getXDirection() + " y: " + v.getYDirection());
 
     }
 
     public double getXDirection() {
         return super.getVector().getXDirection();
     }
+
     public int getLifetime() {
         return lifetime;
     }
+
 }
