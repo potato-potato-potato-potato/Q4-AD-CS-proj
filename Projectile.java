@@ -14,14 +14,19 @@ public class Projectile extends GameObjectStatus {
     public static final int INVINCIBILITY = 5;
     public static final int PLAYER_WIDTH = 20;// ball width
     public static final int PLAYER_HEIGHT = 20;// ball height
+    public static double GRAVITY = 0.15;
+    public static double AIRRESISTANCE = 1;
 
     private BufferedImage sprite;
     private String name;
     private int lifetime;
+    private int id;
 
-    public Projectile(String name, ManagerThread managerThread) {
+    public Projectile(String name, int id, ManagerThread managerThread, double GRAVITY, double AIRRESISTANCE) {
         super(managerThread);
+        this.id = id;
         this.name = name;
+        this.GRAVITY = GRAVITY;
         lifetime = 0;
         try {
             sprite = ImageIO.read(getClass().getResource("/assets/EnergyBall.gif"));
@@ -35,7 +40,7 @@ public class Projectile extends GameObjectStatus {
         double pY = super.getYpos();// projectile Y
         Vector v = super.getVector();
         lifetime++;
-        v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY / 3);
+        v.setYDirection(v.getYDirection() + Projectile.GRAVITY / 3);
         if (pY > 800) {// out of bounds
             super.setYpos(50);
             v.setYDirection(0);
@@ -45,13 +50,13 @@ public class Projectile extends GameObjectStatus {
         if (v.getXDirection() != 0) {
             if (v.getXDirection() > ManagerThread.MINXVELOCITY) {
                 if (super.isTouchingGround() == false) {
-                    v.setXDirection(v.getXDirection() - ManagerThread.AIRRESISTANCE);
+                    v.setXDirection(v.getXDirection());
                 } else {
                     v.setXDirection(v.getXDirection() - ManagerThread.FRICTION);
                 }
             } else if (v.getXDirection() < -ManagerThread.MINXVELOCITY) {
                 if (super.isTouchingGround() == false) {
-                    v.setXDirection(v.getXDirection() + ManagerThread.AIRRESISTANCE);
+                    v.setXDirection(v.getXDirection());
                 } else {
                     v.setXDirection(v.getXDirection() + ManagerThread.FRICTION);
                 }
@@ -109,6 +114,10 @@ public class Projectile extends GameObjectStatus {
 
     public int getLifetime() {
         return lifetime;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

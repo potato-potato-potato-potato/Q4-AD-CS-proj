@@ -40,7 +40,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private boolean isHost;
 
     private MyArrayList<PlayerImages> PlayerList = new MyArrayList<PlayerImages>();
-    private MyHashMap<Integer, EnergyBall> EnergyBallList = new MyHashMap<Integer, EnergyBall>();
+    private MyHashMap<Integer, EnergyBallDraw> EnergyBallList = new MyHashMap<Integer, EnergyBallDraw>();
 
     private Thread update;
 
@@ -223,10 +223,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
                 } else if (input.getKey().equals("newBall")) {
                     System.out.println("new ball" + input.getValue());
-                    EnergyBallList.put((int) input.getValue(), new EnergyBall((int) input.getValue()));
-                } else if (input.getKey().equals("removeBall")) {
-                    System.out.println("remove ball" + input.getValue());
+                    EnergyBallList.put((int) input.getValue(), new EnergyBallDraw((int) input.getValue()));
+                } else if (input.getKey().equals("deleteBall")) {
+                    System.out.println("deleteBall" + input.getValue());
+                    // EnergyBallList.get((int) input.getValue()).setExploded(true);
                     EnergyBallList.remove((int) input.getValue());
+
                 }
                 repaint();
             }
