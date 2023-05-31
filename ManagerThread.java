@@ -23,7 +23,9 @@ public class ManagerThread implements Runnable {
     // right, dash, mouseState, mouseX, mouseY,
     // touchingGround]}
     private MyHashMap<String, int[]> sendData;
-    public static MyHashMap<String, double[]> balls, melee;
+    public static MyHashMap<String, Melee> melee;
+    public static MyHashMap<String, Projectile> balls;
+
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
@@ -35,8 +37,8 @@ public class ManagerThread implements Runnable {
 
         gameObjects = new MyHashMap<String, GameObjectStatus>();
         sendData = new MyHashMap<String, int[]>();
-        balls = new MyHashMap<String, double[]>();// x, y, xDirection, yDirection, lifetime
-        melee = new MyHashMap<String, double[]>();// x, y, xDirection
+        balls = new MyHashMap<String, Projectile>();// x, y, xDirection, yDirection, lifetime
+        melee = new MyHashMap<String, Melee>();// x, y, xDirection
         timer = 0;
         numBalls = 0;// number of balls created
         numMelee = 0;// number of melee attacks created
@@ -52,12 +54,11 @@ public class ManagerThread implements Runnable {
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Projectile) {
-                    balls.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection(),
-                            data.getVector().getYDirection(), ((Projectile) data).getLifetime() });
+                    balls.put(each, (Projectile)data);
                 }
                 if (data instanceof Melee) {
 
-                    melee.put(each, new double[] { data.getXpos(), data.getYpos(), data.getVector().getXDirection() });
+                    melee.put(each, (Melee)data);
                 }
             }
 
@@ -125,7 +126,7 @@ public class ManagerThread implements Runnable {
     }
 
     public void summonMelee(double x, double y, Vector v, Player p) {
-        gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee, this));
+        gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee, this, p));
         gameObjects.get("M-" + numMelee).setXpos(x);
         gameObjects.get("M-" + numMelee).setYpos(y);
         gameObjects.get("M-" + numMelee).setVector(v);
@@ -144,11 +145,11 @@ public class ManagerThread implements Runnable {
         numMelee--;
     }
 
-    public MyHashMap<String, double[]> getBalls() {
+    public MyHashMap<String, Projectile> getBalls() {
         return balls;
     }
 
-    public MyHashMap<String, double[]> getMelee() {
+    public MyHashMap<String, Melee> getMelee() {
         return melee;
     }
 
