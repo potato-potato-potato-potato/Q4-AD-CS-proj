@@ -12,11 +12,11 @@ public class EnergyBallDraw {
     private BufferedImage energyBallExplosion;
     private boolean exploded = false;
     private boolean ended = false;
-    private int id;
+    private String name;
     private Thread timer;
 
-    public EnergyBallDraw(int id) {
-        this.id = id;
+    public EnergyBallDraw(String name) {
+        this.name = name;
         try {
             sprite = ImageIO.read(getClass().getResource("/assets/EnergyBall.gif"));
             energyBallExplosion = ImageIO.read(getClass().getResource("/assets/EnergyBallExplosion.gif"));
@@ -36,20 +36,13 @@ public class EnergyBallDraw {
     }
 
     public void draw(Graphics g, int x, int y, Vector v) {
-        if (!ended) {
-            if (exploded) {
-                g.drawImage(energyBallExplosion, x, y, null);
-            } else {
-                double deg = Math.toDegrees(Math.atan2(v.getYDirection(), v.getXDirection()));
-                DrawUtils.rotateDrawing((g2) -> {
-                    g2.drawImage(sprite, -Projectile.PLAYER_WIDTH / 2, -Projectile.PLAYER_HEIGHT / 2, null);
-                }, deg, g, new Vector(x + (Projectile.PLAYER_WIDTH / 2), y +
-                        (Projectile.PLAYER_HEIGHT / 2)));
-                System.out.println("deg: " + deg);
-                System.out.println(v.getXDirection() + " " + v.getYDirection());
-            }
-
-        }
+        double deg = Math.toDegrees(Math.atan2(v.getYDirection(), v.getXDirection()));
+        DrawUtils.rotateDrawing((g2) -> {
+            g2.drawImage(sprite, -Projectile.PLAYER_WIDTH / 2, -Projectile.PLAYER_HEIGHT / 2, null);
+        }, deg, g, new Vector(x + (Projectile.PLAYER_WIDTH / 2), y +
+                (Projectile.PLAYER_HEIGHT / 2)));
+        System.out.println("deg: " + deg);
+        System.out.println(v.getXDirection() + " " + v.getYDirection());
 
     }
 

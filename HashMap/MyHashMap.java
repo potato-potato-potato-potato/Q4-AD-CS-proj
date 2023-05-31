@@ -9,7 +9,7 @@ public class MyHashMap<K, V> implements Serializable {
 
     public MyHashMap() {
         size = 0;
-        hashArray = new Object[100];
+        hashArray = new Object[1000];
         keySet = new MyHashSet<K>();
     }
 

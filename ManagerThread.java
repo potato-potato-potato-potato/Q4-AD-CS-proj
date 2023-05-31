@@ -115,7 +115,7 @@ public class ManagerThread implements Runnable {
 
     public void summonFireBall(double x, double y, Vector v) {
         if (numBalls < MAXBALLCOUNT) {
-            manager.broadcast(new Pair<String, Object>("newBall", numBalls));
+            manager.broadcast(new Pair<String, Object>("newBall", "Ball-" + numBalls));
             gameObjects.put("Ball-" + numBalls, new Projectile("Ball-" + numBalls, numBalls, this, 0, 0));
             gameObjects.get("Ball-" + numBalls).setXpos(x);
             gameObjects.get("Ball-" + numBalls).setYpos(y);
@@ -134,14 +134,18 @@ public class ManagerThread implements Runnable {
 
     public void deleteBall(String name) {
         int b = Integer.parseInt(name.substring(4));
-        manager.broadcast(new Pair<String, Object>("deleteBall", b));
         gameObjects.remove(name);
-        numBalls--;
+        manager.broadcast(new Pair<String, Object>("deleteBall", b));
+        if (numBalls > 40) {
+            numBalls = 0;
+        }
     }
 
     public void deleteMelee(String name) {
         gameObjects.remove(name);
-        numMelee--;
+        if (numMelee > 20) {
+            numMelee = 0;
+        }
     }
 
     public MyHashMap<String, double[]> getBalls() {

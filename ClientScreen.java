@@ -222,12 +222,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     PlayerList.add(new PlayerImages((int) input.getValue()));
 
                 } else if (input.getKey().equals("newBall")) {
-                    System.out.println("new ball" + input.getValue());
-                    EnergyBallList.put((int) input.getValue(), new EnergyBallDraw((int) input.getValue()));
+                    String getid = (String) input.getValue();
+                    getid = getid.substring(4);
+                    int index = Integer.parseInt(getid);
+                    System.out.println(index);
+                    EnergyBallList.put(Math.abs(index), new EnergyBallDraw((String) (input.getValue())));
+
                 } else if (input.getKey().equals("deleteBall")) {
                     System.out.println("deleteBall" + input.getValue());
                     // EnergyBallList.get((int) input.getValue()).setExploded(true);
-                    EnergyBallList.remove((int) input.getValue());
+                    System.out.println("deleteBall :" + Math.abs((int) input.getValue()));
+                    EnergyBallList.remove(Math.abs((int) input.getValue()));
 
                 }
                 repaint();
@@ -404,12 +409,15 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
             } else if (each.contains("Ball")) {
                 try {
-
-                    int b = Integer.parseInt(each.substring(4));
-                    EnergyBallList.get(b).draw(g, x, y,
+                    String subString = each.substring(4);
+                    int index = Integer.parseInt(subString);
+                    System.out.println(index);
+                    System.out.println(gameData.get(each));
+                    EnergyBallList.get(Math.abs(index)).draw(g, x, y,
                             new Vector(gameData.get(each)[3] / 1000.0, gameData.get(each)[4] / 1000.0));
                 } catch (Exception e) {
                     e.printStackTrace();
+
                 }
 
             } else if (each.contains("M")) {
