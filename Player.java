@@ -11,6 +11,7 @@ public class Player extends GameObjectStatus {
     public static final int MELEE_COOLDOWN = 10;
     public static final int PROJECTILE_COOLDOWN = 10;
     public static final double FIREBALL_MULTIPLIER = 10;
+    public static final double DASH_SPEED = 5;
 
     public static final int ANIMATION_SPEED = 10;// play the next animation step every _ frames
 
@@ -111,7 +112,14 @@ public class Player extends GameObjectStatus {
             imgNum[2] = 1;
         }
         if (super.isDash()) {// dash
-
+            if(isLeft()){
+                v.setXDirection(DASH_SPEED);
+            }
+            else if(isRight()){
+                v.setXDirection(-DASH_SPEED);
+            }else{
+                v.setYDirection(-DASH_SPEED);
+            }
         }
         if (fireCooldown > 0) {
             fireCooldown--;
