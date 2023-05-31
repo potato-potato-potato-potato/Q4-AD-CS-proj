@@ -9,18 +9,16 @@ public class Player extends GameObjectStatus {
     public static final int IMG_OFFSET = -15;// player height
     public static final int FIREBALL_SPEED = 7;// Fireball speed
     public static final int MELEE_COOLDOWN = 10;
-    public static final double FIREBALL_MULTIPLIER = 2;
+    public static final int PROJECTILE_COOLDOWN = 50;
+    public static final double FIREBALL_MULTIPLIER = 10;
 
     public static final int ANIMATION_SPEED = 10;// play the next animation step every _ frames
 
     // 0=Attack1,1=Attack2,2=Attack3,3=Dead,4=Defend,5=hurt,6=idle,7=jump,8=run
     private int currentAnimation;
     private String name;
-
     public int frame = 0;
-
     private int fireCooldown, meleeCooldown;
-
     private int[] imgNum;
     private int timer;
 
@@ -127,24 +125,26 @@ public class Player extends GameObjectStatus {
                 double deltaY = super.getMouseY() - (pY + PLAYER_WIDTH / 4);
                 double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 if (deltaX > 0) {
+                    imgNum[2] = 1;
                     super.getManagerThread().summonFireBall(pX + PLAYER_WIDTH, pY + PLAYER_HEIGHT / 4,
                             new Vector(deltaX / distance * FIREBALL_SPEED, deltaY / distance * FIREBALL_SPEED));
                 } else {// 20 is ball width
+                    imgNum[2] = 0;
                     super.getManagerThread().summonFireBall(pX - 20, pY + PLAYER_HEIGHT / 4,
                             new Vector(deltaX / distance * FIREBALL_SPEED,
                                     deltaY / distance * FIREBALL_SPEED));
                 }
-                fireCooldown = 100;
+                fireCooldown = PROJECTILE_COOLDOWN;//set fire cooldown
             }
         }
         if (super.isLeftMouseState()) {// Melee (reused code from fireball thats why this is bad)
             if (meleeCooldown <= 0) {
                 double deltaX = super.getMouseX() - (pX + PLAYER_WIDTH / 2);
                 if (deltaX > 0) {
-                    super.getManagerThread().summonMelee(pX + PLAYER_WIDTH, pY + PLAYER_HEIGHT / 4, new Vector(1, 0), this);// melee
-                                                                                                                      // facing
-                                                                                                                      // riht
+                    imgNum[2] = 1;
+                    super.getManagerThread().summonMelee(pX + PLAYER_WIDTH/2, pY + PLAYER_HEIGHT / 4, new Vector(1, 0), this);// melee facing riht
                 } else {// 20 is ball width
+                    imgNum[2] = 0;
                     super.getManagerThread().summonMelee(pX - 20, pY + PLAYER_HEIGHT / 4,new Vector(-1, 0), this);
                 }
                 meleeCooldown = MELEE_COOLDOWN;
@@ -233,33 +233,36 @@ public class Player extends GameObjectStatus {
         }
 
         for (String s : ManagerThread.balls.keySet()) {
-            double[] d = ManagerThread.balls.get(s);
-            double wX = d[0];
-            double wY = d[1];
+            Projectile d = ManagerThread.balls.get(s);
+            double wX = d.getXpos();
+            double wY = d.getYpos();
             double wW = Projectile.PLAYER_WIDTH;
             double wH = Projectile.PLAYER_HEIGHT;
             // if touching fireball, add partial velocity, delete fireball
-            if (d[4] > Projectile.INVINCIBILITY) {
+            if (d.getLifetime() > Projectile.INVINCIBILITY) {
                 if ((pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) || (pY < wY + wH
                         && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW)) {
-                    // TODO: touching left edge
-                    v.setXDirection(v.getXDirection() + (d[2] - v.getXDirection()) * FIREBALL_MULTIPLIER);
+                    v.setXDirection(v.getXDirection() + (d.getXDirection() - v.getXDirection()) * FIREBALL_MULTIPLIER);
+                    v.setYDirection(v.getYDirection() -FIREBALL_MULTIPLIER/6);
+
                     super.getManagerThread().deleteBall(s);// remove ball
                 }
             }
         }
         for (String s : ManagerThread.melee.keySet()) {
-            double[] d = ManagerThread.melee.get(s);
-            double wX = d[0];
-            double wY = d[1];
-            double wW = Projectile.PLAYER_WIDTH;
-            double wH = Projectile.PLAYER_HEIGHT;
-            // if touching melee, add partial velocity, delete melee
-            if ((pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) || (pY < wY + wH
-                    && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW)) {
-                v.setXDirection(v.getXDirection() + d[2]*Melee.KNOCKBACK);
-                System.out.println("Knocking back " + d[2]);
-                super.getManagerThread().deleteMelee(s);// remove ball
+            Melee d = ManagerThread.melee.get(s);
+            if(!d.isPlayer(this)){
+                double wX = d.getXpos();
+                double wY = d.getYpos();
+                double wW = Melee.PLAYER_WIDTH;
+                double wH = Melee.PLAYER_HEIGHT;
+                // if touching melee, add partial velocity, delete melee
+                System.out.println("Player " + name + " checkcking melee at " + wX + " " + wY);
+                if (pY<wY+wH && pY+PLAYER_HEIGHT>wY && pX<wX+wW && pX+PLAYER_WIDTH>wX) {
+                    v.setXDirection(v.getXDirection() + d.getVector().getXDirection()*Melee.KNOCKBACK);
+                    v.setYDirection(v.getYDirection() - Melee.KNOCKBACK/6);
+                    super.getManagerThread().deleteMelee(s);// remove ball
+                }
             }
         }
         super.setImgStatus(imgNum[0] * 100 + imgNum[1] * 10 + imgNum[2]);
