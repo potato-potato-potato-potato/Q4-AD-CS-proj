@@ -136,23 +136,11 @@ public class ManagerThread implements Runnable {
     public void deleteBall(String name) {
         int b = Integer.parseInt(name.substring(4));
         gameObjects.remove(name);
-<<<<<<< HEAD
         manager.broadcast(new Pair<String, Object>("deleteBall", b));
-        if (numBalls > 40) {
-            numBalls = 0;
-        }
-=======
->>>>>>> 0bfe411e19e0d1c05176fa72bfbc3ded81b99bdd
     }
 
     public void deleteMelee(String name) {
-        gameObjects.remove(name);
-<<<<<<< HEAD
-        if (numMelee > 20) {
-            numMelee = 0;
-        }
-=======
->>>>>>> 0bfe411e19e0d1c05176fa72bfbc3ded81b99bdd
+        gameObjects.remove(name);  
     }
 
     public MyHashMap<String, Projectile> getBalls() {
