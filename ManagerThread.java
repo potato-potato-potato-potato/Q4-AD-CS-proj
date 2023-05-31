@@ -137,12 +137,10 @@ public class ManagerThread implements Runnable {
         int b = Integer.parseInt(name.substring(4));
         manager.broadcast(new Pair<String, Object>("deleteBall", b));
         gameObjects.remove(name);
-        numBalls--;
     }
 
     public void deleteMelee(String name) {
         gameObjects.remove(name);
-        numMelee--;
     }
 
     public MyHashMap<String, Projectile> getBalls() {
