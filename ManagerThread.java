@@ -5,12 +5,12 @@ import HashMap.MyHashMap;
 import java.io.*;
 
 public class ManagerThread implements Runnable {
-    public static final double GRAVITY = .15; // , , , , ,
+    public static final double GRAVITY = .3; // , , , , ,
     public static final double JUMPLAYER_HEIGHT = 7;
     public static final double AIRRESISTANCE = .04;
     public static final double FRICTION = .8;
     public static final double GROUNDMOVEMENT = 1;
-    public static final double AIRMOVEMENT = .2;
+    public static final double AIRMOVEMENT = .01;
     public static final double MAXVELOCITY = 7;
     public static final double MINXVELOCITY = AIRMOVEMENT - .01;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
     public static final double SMASH = .05;
@@ -137,24 +137,13 @@ public class ManagerThread implements Runnable {
         int b = Integer.parseInt(name.substring(4));
         gameObjects.remove(name);
         manager.broadcast(new Pair<String, Object>("deleteBall", b));
-<<<<<<< HEAD
         if (numBalls >= 19) {
             numBalls = 0;
         }
     }
 
     public void deleteMelee(String name) {
-        gameObjects.remove(name);
-        if (numMelee > 20) {
-            numMelee = 0;
-
-        }
-=======
-    }
-
-    public void deleteMelee(String name) {
         gameObjects.remove(name);  
->>>>>>> b448dc0087683686119c57110ff375d610b9e80f
     }
 
     public MyHashMap<String, Projectile> getBalls() {
