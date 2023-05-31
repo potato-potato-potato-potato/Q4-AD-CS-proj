@@ -195,7 +195,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        String hostName = "10.210.102.233";
+        String hostName = "localhost";
 
         int portNumber = 1024;
         Socket serverSocket = new Socket(hostName, portNumber);

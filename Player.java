@@ -113,10 +113,10 @@ public class Player extends GameObjectStatus {
         }
         if (super.isDash()) {// dash
             if(isLeft()){
-                v.setXDirection(DASH_SPEED);
+                v.setXDirection(-DASH_SPEED);
             }
             else if(isRight()){
-                v.setXDirection(-DASH_SPEED);
+                v.setXDirection(DASH_SPEED);
             }else{
                 v.setYDirection(-DASH_SPEED);
             }
