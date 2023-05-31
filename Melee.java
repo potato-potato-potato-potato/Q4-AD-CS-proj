@@ -9,7 +9,7 @@ public class Melee extends GameObjectStatus {
 
     public static final int PLAYER_WIDTH = 30;// Melee width
     public static final int PLAYER_HEIGHT = 50;// Melee height
-    public static final int MELEE_TIME = 10;// Melee height
+    public static final int MELEE_TIME = 10;// Duration of melee swing
     public static final int KNOCKBACK = 15;
     private String name;
     private int lifetime;

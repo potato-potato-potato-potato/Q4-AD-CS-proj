@@ -362,22 +362,17 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         int key = e.getKeyCode();
         if (key == 38 || key == 87) {// up
             up = 0;
-            System.out.println("Up");
         }
         if (key == 37 || key == 65) {// left
             left = 0;
-            System.out.println("left");
 
         }
         if (key == 40 || key == 83) {// down
             down = 0;
-            System.out.println("down");
 
         }
         if (key == 39 || key == 68) {// right
             right = 0;
-            System.out.println("right");
-
         }
 
     }

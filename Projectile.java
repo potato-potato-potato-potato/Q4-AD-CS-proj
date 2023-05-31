@@ -99,8 +99,6 @@ public class Projectile extends GameObjectStatus {
         }
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
-        System.out.println("x: " + v.getXDirection() + " y: " + v.getYDirection());
-
     }
 
     public double getXDirection() {

@@ -107,7 +107,6 @@ public class ManagerThread implements Runnable {
             gameObjects.get(each.getName()).setImgStatus(0);
 
         }
-        System.out.println("GameObjects:" + gameObjects.keySet());
     }
 
     public void updateThread(int[] keys, Thread thread) {
