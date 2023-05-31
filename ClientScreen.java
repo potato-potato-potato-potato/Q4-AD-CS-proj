@@ -361,6 +361,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if (key == 39 || key == 68) {// right
             right = 1;
         }
+        if (key == 16)// shift
+        {
+            dash = 1;
+        }
 
     }
 
@@ -380,6 +384,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         }
         if (key == 39 || key == 68) {// right
             right = 0;
+        }
+        if (key == 16)// shift
+        {
+            dash = 0;
         }
 
     }
