@@ -73,27 +73,14 @@ public class Projectile extends GameObjectStatus {
 
             if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) {
                 // TODO: touching left edge
-                if (v.getXDirection() >= 0) {
-                    v.setXDirection(0);
-                    super.setXpos(wX - PLAYER_WIDTH);
-                }
+                super.getManagerThread().deleteBall(name);
             } else if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW) {
                 // TODO: touching right edge
-                if (v.getXDirection() <= 0) {
-                    v.setXDirection(0);
-                    super.setXpos(wX + wW);
-                }
+                super.getManagerThread().deleteBall(name);
             } else if (pY + PLAYER_HEIGHT < wY + wH && pY + PLAYER_HEIGHT >= wY - .1 && pX + PLAYER_WIDTH > wX
                     && pX < wX + wW) {
                 // touching top edgPLAYER_HEIGHT
                 super.getManagerThread().deleteBall(name);
-                /*
-                 * super.setYpos(wY - PLAYER_HEIGHT);
-                 * super.setTouchingGround(true);
-                 * if (v.getYDirection() >= 0) {
-                 * v.setYDirection(0);
-                 * }
-                 */
             } else if (pY < wY + wH && pY > wY && pX + PLAYER_WIDTH > wX && pX < wX + wW) {
                 // touching top edge
                 super.getManagerThread().deleteBall(name);

@@ -137,6 +137,7 @@ public class ManagerThread implements Runnable {
         int b = Integer.parseInt(name.substring(4));
         gameObjects.remove(name);
         manager.broadcast(new Pair<String, Object>("deleteBall", b));
+<<<<<<< HEAD
         if (numBalls >= 19) {
             numBalls = 0;
         }
@@ -148,6 +149,12 @@ public class ManagerThread implements Runnable {
             numMelee = 0;
 
         }
+=======
+    }
+
+    public void deleteMelee(String name) {
+        gameObjects.remove(name);  
+>>>>>>> b448dc0087683686119c57110ff375d610b9e80f
     }
 
     public MyHashMap<String, Projectile> getBalls() {
