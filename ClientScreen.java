@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,11 +32,13 @@ import HashMap.MyHashMap;
 
 public class ClientScreen extends JPanel implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
+    private static final Font SERIF_FONT = new Font("serif", Font.PLAIN, 100);
+
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
     private JTextField usernameField;
-    private JButton usernameButton, quit;
+    private JButton usernameButton;
 
     private boolean isHost;
 
@@ -44,7 +47,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private Thread update;
 
-    private String username;
+    private String username, winningPlayer;
 
     private Pair<String, Object> input;
 
@@ -56,6 +59,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private MyHashMap<String, int[]> gameData;
 
     private boolean gameStarted = false;
+    private boolean gameEnd = false;
+
 
     private boolean isUnix = false;
 
@@ -151,11 +156,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         usernameButton.setFocusable(false);
         this.add(usernameButton);
 
-        quit = new JButton("Quit");
-        quit.setBounds(1100, 10, 200, 50);
-        quit.addActionListener(this);
-        quit.setFocusable(false);
-        this.add(quit);
+       
 
         map = new Map();
 
@@ -172,8 +173,12 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if (isUnix) {
             Toolkit.getDefaultToolkit().sync();
         }
-
-        if (gameStarted) {
+        if(gameEnd){
+            g.setFont(SERIF_FONT);
+            g.setColor(Color.BLACK);
+            g.drawString("You Died!", 300, getHeight()/2);
+        }
+        else if (gameStarted) {
             map.drawMe(g);
             drawObjects(g);
 
@@ -195,7 +200,8 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
-        String hostName = "10.210.102.233";
+        //String hostName = "10.210.102.233";
+        String hostName = "localhost";
 
         int portNumber = 1024;
         Socket serverSocket = new Socket(hostName, portNumber);
@@ -234,6 +240,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     System.out.println("deleteBall :" + Math.abs((int) input.getValue()));
                     EnergyBallList.remove(Math.abs((int) input.getValue()));
 
+                } else if (input.getKey().equals("PlayerDies")) {
+                    System.out.println("Received PlayerDies");
+                    gameEnd = true;
+                    winningPlayer = (String)input.getValue();
                 }
                 repaint();
             }
@@ -282,19 +292,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
-            } else if (usernameButton.getText().equals("PlayerDies")) {
-
             }
         }
-        if (e.getSource() == quit) {
-            try {
-                out.reset();
-                out.writeObject(new Pair<String, Object>("Quit", username));
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        }
+       
     }
 
     @Override

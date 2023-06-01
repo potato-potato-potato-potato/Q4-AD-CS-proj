@@ -3,14 +3,13 @@ import java.awt.*;
 import HashMap.MyHashMap;
 
 import java.io.*;
-
 public class ManagerThread implements Runnable {
     public static final double GRAVITY = .3; // , , , , ,
     public static final double JUMPLAYER_HEIGHT = 7;
     public static final double AIRRESISTANCE = .04;
     public static final double FRICTION = .8;
-    public static final double GROUNDMOVEMENT = 1;
-    public static final double AIRMOVEMENT = .01;
+    public static final double GROUNDMOVEMENT = .2;
+    public static final double AIRMOVEMENT = .15;
     public static final double MAXVELOCITY = 7;
     public static final double MINXVELOCITY = AIRMOVEMENT - .01;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
     public static final double SMASH = .05;
@@ -126,6 +125,7 @@ public class ManagerThread implements Runnable {
     }
 
     public void summonMelee(double x, double y, Vector v, Player p) {
+        manager.broadcast(new Pair<String, Object>("newMelee", "M-" + numMelee));
         gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee, this, p));
         gameObjects.get("M-" + numMelee).setXpos(x);
         gameObjects.get("M-" + numMelee).setYpos(y);
@@ -159,6 +159,10 @@ public class ManagerThread implements Runnable {
     }
 
     public void broadcast(Pair<String, Object> pair) {
+        if(pair.getKey().contains("PlayerDies")){
+            System.out.println("Broadcasting player dies in Mangerthread");
+            
+        }
         manager.broadcast(pair);
     }
 }
