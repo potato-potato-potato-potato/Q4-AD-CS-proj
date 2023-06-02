@@ -421,7 +421,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                             new Vector(gameData.get(each)[3] / 1000.0, gameData.get(each)[4] / 1000.0));
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
 
             } else if (each.contains("M")) {
