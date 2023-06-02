@@ -14,14 +14,19 @@ public class Projectile extends GameObjectStatus {
     public static final int INVINCIBILITY = 5;
     public static final int PLAYER_WIDTH = 20;// ball width
     public static final int PLAYER_HEIGHT = 20;// ball height
+    public static double GRAVITY = 0.15;
+    public static double AIRRESISTANCE = 1;
 
     private BufferedImage sprite;
     private String name;
     private int lifetime;
+    private int id;
 
-    public Projectile(String name, ManagerThread managerThread) {
+    public Projectile(String name, int id, ManagerThread managerThread, double GRAVITY, double AIRRESISTANCE) {
         super(managerThread);
+        this.id = id;
         this.name = name;
+        this.GRAVITY = GRAVITY;
         lifetime = 0;
         try {
             sprite = ImageIO.read(getClass().getResource("/assets/EnergyBall.gif"));
@@ -35,7 +40,7 @@ public class Projectile extends GameObjectStatus {
         double pY = super.getYpos();// projectile Y
         Vector v = super.getVector();
         lifetime++;
-        v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY / 3);
+        v.setYDirection(v.getYDirection() + Projectile.GRAVITY / 3);
         if (pY > 800) {// out of bounds
             super.setYpos(50);
             v.setYDirection(0);
@@ -45,13 +50,13 @@ public class Projectile extends GameObjectStatus {
         if (v.getXDirection() != 0) {
             if (v.getXDirection() > ManagerThread.MINXVELOCITY) {
                 if (super.isTouchingGround() == false) {
-                    v.setXDirection(v.getXDirection() - ManagerThread.AIRRESISTANCE);
+                    v.setXDirection(v.getXDirection());
                 } else {
                     v.setXDirection(v.getXDirection() - ManagerThread.FRICTION);
                 }
             } else if (v.getXDirection() < -ManagerThread.MINXVELOCITY) {
                 if (super.isTouchingGround() == false) {
-                    v.setXDirection(v.getXDirection() + ManagerThread.AIRRESISTANCE);
+                    v.setXDirection(v.getXDirection());
                 } else {
                     v.setXDirection(v.getXDirection() + ManagerThread.FRICTION);
                 }
@@ -68,27 +73,14 @@ public class Projectile extends GameObjectStatus {
 
             if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX && pX + PLAYER_WIDTH > wX) {
                 // TODO: touching left edge
-                if (v.getXDirection() >= 0) {
-                    v.setXDirection(0);
-                    super.setXpos(wX - PLAYER_WIDTH);
-                }
+                super.getManagerThread().deleteBall(name);
             } else if (pY < wY + wH && pY + PLAYER_HEIGHT > wY + 2 && pX < wX + wW && pX + PLAYER_WIDTH > wX + wW) {
                 // TODO: touching right edge
-                if (v.getXDirection() <= 0) {
-                    v.setXDirection(0);
-                    super.setXpos(wX + wW);
-                }
+                super.getManagerThread().deleteBall(name);
             } else if (pY + PLAYER_HEIGHT < wY + wH && pY + PLAYER_HEIGHT >= wY - .1 && pX + PLAYER_WIDTH > wX
                     && pX < wX + wW) {
                 // touching top edgPLAYER_HEIGHT
                 super.getManagerThread().deleteBall(name);
-                /*
-                 * super.setYpos(wY - PLAYER_HEIGHT);
-                 * super.setTouchingGround(true);
-                 * if (v.getYDirection() >= 0) {
-                 * v.setYDirection(0);
-                 * }
-                 */
             } else if (pY < wY + wH && pY > wY && pX + PLAYER_WIDTH > wX && pX < wX + wW) {
                 // touching top edge
                 super.getManagerThread().deleteBall(name);
@@ -99,8 +91,6 @@ public class Projectile extends GameObjectStatus {
         }
         super.translateXpos(v.getXDirection());
         super.translateYpos(v.getYDirection());
-        System.out.println("x: " + v.getXDirection() + " y: " + v.getYDirection());
-
     }
 
     public double getXDirection() {
@@ -109,6 +99,10 @@ public class Projectile extends GameObjectStatus {
 
     public int getLifetime() {
         return lifetime;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

@@ -155,9 +155,11 @@ public class PlayerImages {
     private void updateImg(BufferedImage img, int Frame) {
         // img = assets[playerNum].get(8);
         int currentFrame = Frame / 10;
-        System.out.println("Current Frame: " + currentFrame);
-        currentBufferedFramed = img.getSubimage(currentFrame * Player.PLAYER_IMGWIDTH, 0, Player.PLAYER_IMGWIDTH,
-                Player.PLAYER_IMGHEIGHT);
+        if((currentFrame * Player.PLAYER_IMGWIDTH+Player.PLAYER_IMGWIDTH)>img.getWidth()){
+            System.out.println("Error: x+width greater than img width @PlayerImages-158, replacing currentFrame with 0");
+            currentFrame = 0;
+        }
+        currentBufferedFramed = img.getSubimage(currentFrame * Player.PLAYER_IMGWIDTH, 0, Player.PLAYER_IMGWIDTH,Player.PLAYER_IMGHEIGHT);
         int currentDirection = Frame % 10;
         if (currentDirection == 0) {
             transform = AffineTransform.getScaleInstance(-1, 1);

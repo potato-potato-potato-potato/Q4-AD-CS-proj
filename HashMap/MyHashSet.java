@@ -8,7 +8,7 @@ public class MyHashSet<E> implements Iterable<E>, Serializable {
     private Object[] hashTable;
 
     public MyHashSet() {
-        hashTable = new Object[100];
+        hashTable = new Object[1000];
     }
 
     public boolean add(E obj) {
