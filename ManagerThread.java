@@ -16,7 +16,6 @@ public class ManagerThread implements Runnable {
     public static final double MAXBALLCOUNT = 20;
 
     private Manager manager;
-    private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
     private MyHashMap<String, GameObjectStatus> gameObjects;
     // right, dash, mouseState, mouseX, mouseY,
@@ -29,8 +28,7 @@ public class ManagerThread implements Runnable {
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
-    private int timer;
-    private int numBalls, numMelee, numPlayers;
+    private int numBalls, numMelee;
 
     public ManagerThread(Manager manager) {
         this.manager = manager;
@@ -40,7 +38,6 @@ public class ManagerThread implements Runnable {
         balls = new MyHashMap<String, Projectile>();// x, y, xDirection, yDirection, lifetime
         melee = new MyHashMap<String, Melee>();// x, y, xDirection
         playersAlive = new MyHashMap<String, Player>();
-        timer = 0;
         numBalls = 0;// number of balls created
         numMelee = 0;// number of melee attacks created
 
@@ -109,8 +106,8 @@ public class ManagerThread implements Runnable {
     // this is needed to pass all the player information to the managerThread
     // it should only be called once, when the game starts
     public void setThreads(MyHashMap<Thread, ServerThread> threadList) {
-        this.threadList = threadList;
         int num = 1;
+        gameObjects.clear();
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
             broadcast(new Pair<String, Object>("newPlayer", num - 1));// -1 is to fit index system in clientscreen
             num++;
@@ -120,7 +117,6 @@ public class ManagerThread implements Runnable {
             gameObjects.get(each.getName()).setImgStatus(0);
 
         }
-        numPlayers = num;
     }
 
     public void updateThread(int[] keys, Thread thread) {
@@ -179,12 +175,6 @@ public class ManagerThread implements Runnable {
     public void reset() {
         for (String each : gameObjects.keySet()) {
             GameObjectStatus data = gameObjects.get(each);
-            if (data instanceof Projectile) {
-                gameObjects.remove(each);
-            }
-            if (data instanceof Melee) {
-                gameObjects.remove(each);
-            }
             if (data instanceof Player) {
                 ((Player)data).setXpos(400);
                 ((Player)data).setYpos(10);

@@ -167,17 +167,20 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if (isUnix) {
             Toolkit.getDefaultToolkit().sync();
         }
-        if(gameWon){
-            g.setFont(SERIF_FONT);
-            g.setColor(Color.BLACK);
-            g.drawString("Player " + winningPlayer + " Won!", 300, getHeight()/2);
-        }
-        else if (gameStarted) {
+        
+        if (gameStarted) {
             map.drawMe(g);
             drawObjects(g);
 
         } else {
             map.drawBackground(g);
+        }
+        if(gameWon){
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, getWidth(), getHeight());
+            g.setFont(SERIF_FONT);
+            g.setColor(Color.BLACK);
+            g.drawString("Player " + winningPlayer + " Won!", 300, getHeight()/2);
         }
     }
 
@@ -233,7 +236,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     winningPlayer = (int)input.getValue();
                 }else if (input.getKey().equals("GameReset")) {
                     gameWon = false;
-                    winningPlayer = -1;
                 }
                 repaint();
             }

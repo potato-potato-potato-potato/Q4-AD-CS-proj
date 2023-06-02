@@ -52,6 +52,7 @@ public class ServerThread implements Runnable {
                     manager.broadcast(input, Thread.currentThread());
                     manager.start();
                 }else if (input.getKey().equals("Reset")) {
+                    System.out.println("Received reset");
                     manager.reset();
                 } else if (input.getKey().equals("Quit")) {// remove this thread if client disconnects, reassign host if
                     // nessescary

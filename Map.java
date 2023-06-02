@@ -54,12 +54,11 @@ public class Map implements Serializable {
             g.setColor(Color.BLACK);
             g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
             // images
+            //INSTRUCTIONS
             g.drawString("Instructions:", 100, 100);
             g.drawString("Arrow keys or WASD to move", 100, 140);
             g.drawString("Left click to melee attack, right click to shoot fireballs", 100, 180);
             g.drawString("Press shift while moving to boost in that direction", 100, 220);
-            
-
         }
     }
 
