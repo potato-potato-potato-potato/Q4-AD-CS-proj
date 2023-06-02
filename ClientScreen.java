@@ -37,7 +37,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
-    private JTextField usernameField;
     private JButton usernameButton;
 
     private boolean isHost;
@@ -47,19 +46,19 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     private Thread update;
 
-    private String username, winningPlayer;
+    private String username;
 
     private Pair<String, Object> input;
 
     private Map map;
 
-    private int up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY;
+    private int up, down, left, right, dash, leftmouseState, rightmouseState, mouseX, mouseY, winningPlayer;
 
     private Pair<String, int[]> outPut;
     private MyHashMap<String, int[]> gameData;
 
     private boolean gameStarted = false;
-    private boolean gameEnd = false;
+    private boolean gameWon = false;
 
 
     private boolean isUnix = false;
@@ -144,14 +143,9 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     }
 
     public void UsernameInputsetUp() {
-        usernameField = new JTextField();
-        usernameField.setBounds(10, 10, 200, 50);
-        usernameField.addActionListener(this);
-        usernameField.setText("Username");
-        this.add(usernameField);
 
-        usernameButton = new JButton("Enter");
-        usernameButton.setBounds(10, 70, 200, 50);
+        usernameButton = new JButton("Ready");
+        usernameButton.setBounds(10, 10, 200, 50);
         usernameButton.addActionListener(this);
         usernameButton.setFocusable(false);
         this.add(usernameButton);
@@ -173,10 +167,10 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
         if (isUnix) {
             Toolkit.getDefaultToolkit().sync();
         }
-        if(gameEnd){
+        if(gameWon){
             g.setFont(SERIF_FONT);
             g.setColor(Color.BLACK);
-            g.drawString("You Died!", 300, getHeight()/2);
+            g.drawString("Player " + winningPlayer + " Won!", 300, getHeight()/2);
         }
         else if (gameStarted) {
             map.drawMe(g);
@@ -189,7 +183,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
 
     public void setUsername(String username) {
         this.username = username;
-        usernameField.setText("");
         usernameButton.setEnabled(false);
     }
 
@@ -220,30 +213,27 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     gameData = (MyHashMap<String, int[]>) input.getValue();
                 } else if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
-                    usernameButton.setVisible(true);
-                    System.out.println("game Started");
+                    usernameButton.setVisible(false);
 
                 } else if (input.getKey().equals("newPlayer")) {
-                    System.out.println("new player" + input.getValue());
                     PlayerList.add(new PlayerImages((int) input.getValue()));
 
                 } else if (input.getKey().equals("newBall")) {
                     String getid = (String) input.getValue();
                     getid = getid.substring(4);
                     int index = Integer.parseInt(getid);
-                    System.out.println(index);
                     EnergyBallList.put(Math.abs(index), new EnergyBallDraw((String) (input.getValue())));
 
                 } else if (input.getKey().equals("deleteBall")) {
-                    System.out.println("deleteBall" + input.getValue());
                     // EnergyBallList.get((int) input.getValue()).setExploded(true);
-                    System.out.println("deleteBall :" + Math.abs((int) input.getValue()));
                     EnergyBallList.remove(Math.abs((int) input.getValue()));
 
-                } else if (input.getKey().equals("PlayerDies")) {
-                    System.out.println("Received PlayerDies");
-                    gameEnd = true;
-                    winningPlayer = (String)input.getValue();
+                } else if (input.getKey().equals("PlayerWon")) {
+                    gameWon = true;
+                    winningPlayer = (int)input.getValue();
+                }else if (input.getKey().equals("GameReset")) {
+                    gameWon = false;
+                    winningPlayer = -1;
                 }
                 repaint();
             }
@@ -266,9 +256,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == usernameButton) {
-            if (usernameButton.getText().equals("Enter")) {
-                username = usernameField.getText();
-                usernameField.setVisible(false);
+            if (usernameButton.getText().equals("Ready")) {
                 usernameButton.setText("Start Game");
                 try {
                     out.reset();
@@ -287,7 +275,15 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     out.reset();
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                     gameStarted = true;
-                    usernameButton.setVisible(false);
+                    usernameButton.setText("Reset");
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }else if (usernameButton.getText().equals("Reset")) {
+                try {
+                    out.reset();
+                    out.writeObject(new Pair<String, Object>("Reset", username));
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -348,7 +344,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        System.out.println(key);
+        //System.out.println(key);
         if (key == 38 || key == 87) {// up
             up = 1;
         }
@@ -419,8 +415,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 try {
                     String subString = each.substring(4);
                     int index = Integer.parseInt(subString);
-                    System.out.println(index);
-                    System.out.println(gameData.get(each));
                     EnergyBallList.get(Math.abs(index)).draw(g, x, y,
                             new Vector(gameData.get(each)[3] / 1000.0, gameData.get(each)[4] / 1000.0));
                 } catch (Exception e) {
@@ -429,7 +423,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
 
             } else if (each.contains("M")) {
-                System.out.println("Drawing Melee at " + x + " " + y);
                 g.drawRect(x, y, Melee.PLAYER_WIDTH, Melee.PLAYER_HEIGHT);
             }
         }

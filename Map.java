@@ -18,7 +18,7 @@ public class Map implements Serializable {
         walls[2] = new Rectangle(0, 678, 1232, 32);
         walls[3] = new Rectangle(1200, 0, 32, 678);
 
-        islands[0] = new Platform(100, 550, 1600, 20, true);
+        islands[0] = new Platform(100, 550, 1000, 20, true);
         islands[1] = new Platform(212, 380, 270, 30, false);
         islands[2] = new Platform(780, 380, 270, 30, false);
         islands[3] = new Platform(505, 225, 250, 30, false);
@@ -54,6 +54,11 @@ public class Map implements Serializable {
             g.setColor(Color.BLACK);
             g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
             // images
+            g.drawString("Instructions:", 100, 100);
+            g.drawString("Arrow keys or WASD to move", 100, 140);
+            g.drawString("Left click to melee attack, right click to shoot fireballs", 100, 180);
+            g.drawString("Press shift while moving to boost in that direction", 100, 220);
+            
 
         }
     }

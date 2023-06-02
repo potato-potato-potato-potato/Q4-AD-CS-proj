@@ -61,4 +61,8 @@ public class Manager {
     public void updateThread(int[] keys, Thread sender) {
         managerThread.updateThread(keys, sender);
     }
+
+    public void reset() {
+        managerThread.reset();
+    }
 }

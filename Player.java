@@ -23,6 +23,7 @@ public class Player extends GameObjectStatus {
     private int fireCooldown, meleeCooldown, dashCooldown;
     private int[] imgNum;
     private int timer;
+    private boolean dead = false;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
@@ -32,6 +33,10 @@ public class Player extends GameObjectStatus {
         meleeCooldown = 0;
         dashCooldown = 0;
         timer = 0;
+    }
+
+    public boolean isDead(){
+        return dead;
     }
 
     public void run() {
@@ -51,7 +56,12 @@ public class Player extends GameObjectStatus {
         }
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY);
         if (pY > 800) {// out of bounds and DIED
-            super.getManagerThread().broadcast(new Pair<String, Object>("PlayerDies", name));
+            if(!dead){
+                dead = true;
+            }
+        }
+        else{//if player is reset by managerThread, the y will be 10, and player will be alive again
+            dead = false;
         }
         if (isIdle()) {
             if (super.isTouchingGround() == true) {
@@ -272,7 +282,6 @@ public class Player extends GameObjectStatus {
                 double wW = Melee.PLAYER_WIDTH;
                 double wH = Melee.PLAYER_HEIGHT;
                 // if touching melee, add partial velocity, delete melee
-                System.out.println("Player " + name + " checkcking melee at " + wX + " " + wY);
                 if (pY < wY + wH && pY + PLAYER_HEIGHT > wY && pX < wX + wW && pX + PLAYER_WIDTH > wX) {
                     v.setXDirection(v.getXDirection() + d.getVector().getXDirection() * Melee.KNOCKBACK);
                     v.setYDirection(v.getYDirection() - Melee.KNOCKBACK / 6);
