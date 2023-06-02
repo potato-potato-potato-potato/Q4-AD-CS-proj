@@ -9,7 +9,7 @@ public class Player extends GameObjectStatus {
     public static final int IMG_OFFSET = -15;// player height
     public static final int FIREBALL_SPEED = 7;// Fireball speed
     public static final int MELEE_COOLDOWN = 10;
-    public static final int PROJECTILE_COOLDOWN = 10;
+    public static final int PROJECTILE_COOLDOWN = 20;
     public static final int DASH_COOLDOWN = 50;
     public static final double FIREBALL_MULTIPLIER = 10;
     public static final double DASH_SPEED = 10;

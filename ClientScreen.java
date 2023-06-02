@@ -278,6 +278,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     out.writeObject(new Pair<String, Object>("StartGame", username));
                     gameStarted = true;
                     usernameButton.setText("Reset");
+                    usernameButton.setVisible(false);
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -285,7 +286,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
             }else if (usernameButton.getText().equals("Reset")) {
                 try {
                     out.reset();
-                    out.writeObject(new Pair<String, Object>("Reset", username));
+                    //out.writeObject(new Pair<String, Object>("Reset", username));
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
