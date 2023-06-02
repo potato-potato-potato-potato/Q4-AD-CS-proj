@@ -424,7 +424,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                 }
 
             } else if (each.contains("M")) {
-                g.drawRect(x, y, Melee.PLAYER_WIDTH, Melee.PLAYER_HEIGHT);
+                //g.drawRect(x, y, Melee.PLAYER_WIDTH, Melee.PLAYER_HEIGHT);
             }
         }
     }
