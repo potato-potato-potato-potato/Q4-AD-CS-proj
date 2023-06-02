@@ -226,7 +226,6 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     getid = getid.substring(4);
                     int index = Integer.parseInt(getid);
                     EnergyBallList.put(Math.abs(index), new EnergyBallDraw((String) (input.getValue())));
-
                 } else if (input.getKey().equals("deleteBall")) {
                     // EnergyBallList.get((int) input.getValue()).setExploded(true);
                     EnergyBallList.remove(Math.abs((int) input.getValue()));
