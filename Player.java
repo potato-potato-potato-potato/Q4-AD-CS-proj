@@ -129,7 +129,6 @@ public class Player extends GameObjectStatus {
             imgNum[2] = 1;
         }
         if (super.isDash()) {// dash
-
             if (dashCooldown == 0) {
                 if (isLeft()) {
                     v.setXDirection(v.getXDirection() - DASH_SPEED);
@@ -142,7 +141,6 @@ public class Player extends GameObjectStatus {
                     dashCooldown = DASH_COOLDOWN;
                 }
             }
-
         }
         if (super.isRightMouseState()) {// fire
             if (fireCooldown <= 0) {

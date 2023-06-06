@@ -53,6 +53,10 @@ public class Map implements Serializable {
     public void drawMe(Graphics g) {
         g.drawImage(background, 0, 0, null);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cb7f36a2008179ae7da74af1c64ad0ef26fac669
     }
 
     public void drawBackground(Graphics g) {
@@ -61,7 +65,11 @@ public class Map implements Serializable {
             g.setColor(Color.BLACK);
             g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
             // images
+<<<<<<< HEAD
             // INSTRUCTIONS
+=======
+            //INSTRUCTIONS
+>>>>>>> cb7f36a2008179ae7da74af1c64ad0ef26fac669
             g.drawString("Instructions:", 100, 100);
             g.drawString("Arrow keys or WASD to move", 100, 140);
             g.drawString("Left click to melee attack, right click to shoot fireballs", 100, 180);

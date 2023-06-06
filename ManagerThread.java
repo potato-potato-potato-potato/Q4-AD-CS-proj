@@ -3,7 +3,6 @@ import java.awt.*;
 import HashMap.MyHashMap;
 
 import java.io.*;
-
 public class ManagerThread implements Runnable {
     public static final double GRAVITY = .3; // , , , , ,
     public static final double JUMPLAYER_HEIGHT = 7;
@@ -61,14 +60,24 @@ public class ManagerThread implements Runnable {
                     melee.put(each, (Melee) data);
                 }
                 if (data instanceof Player) {
+<<<<<<< HEAD
                     if (!((Player) data).isDead()) {
+=======
+                    if(!((Player) data).isDead()){
+>>>>>>> cb7f36a2008179ae7da74af1c64ad0ef26fac669
                         playersAlive.put(each, (Player) data);
                     }
                 }
             }
+<<<<<<< HEAD
             if (playersAlive.size() == 1) {
                 for (String each : playersAlive.keySet()) {
                     broadcast(new Pair<String, Object>("PlayerWon", Integer.valueOf(each.substring(7)) + 1));
+=======
+            if(playersAlive.size()==1){
+                for(String each:playersAlive.keySet()){
+                    broadcast(new Pair<String, Object>("PlayerWon", Integer.valueOf(each.substring(7))+1));
+>>>>>>> cb7f36a2008179ae7da74af1c64ad0ef26fac669
                 }
             }
 
@@ -113,7 +122,11 @@ public class ManagerThread implements Runnable {
             broadcast(new Pair<String, Object>("newPlayer", num - 1));// -1 is to fit index system in clientscreen
             num++;
             gameObjects.put(each.getName(), new Player(each.getName(), this));
+<<<<<<< HEAD
             gameObjects.get(each.getName()).setXpos(num * 50 + 400);
+=======
+            gameObjects.get(each.getName()).setXpos(num * 50+400);
+>>>>>>> cb7f36a2008179ae7da74af1c64ad0ef26fac669
             gameObjects.get(each.getName()).setYpos(10);
             gameObjects.get(each.getName()).setImgStatus(0);
 
@@ -177,10 +190,17 @@ public class ManagerThread implements Runnable {
         for (String each : gameObjects.keySet()) {
             GameObjectStatus data = gameObjects.get(each);
             if (data instanceof Player) {
+<<<<<<< HEAD
                 ((Player) data).setXpos(400);
                 ((Player) data).setYpos(10);
                 ((Player) data).setVector(new Vector(0, 0));
                 ((Player) data).setVector(new Vector(0, 0));
+=======
+                ((Player)data).setXpos(400);
+                ((Player)data).setYpos(10);
+                ((Player)data).setVector(new Vector(0, 0));
+                ((Player)data).setVector(new Vector(0, 0));
+>>>>>>> cb7f36a2008179ae7da74af1c64ad0ef26fac669
                 broadcast(new Pair<String, Object>("GameReset", this));
             }
         }

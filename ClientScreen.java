@@ -193,6 +193,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
     @SuppressWarnings("unchecked")
     public void poll() throws IOException {
 
+        // String hostName = "10.210.102.233";
         String hostName = "localhost";
 
         int portNumber = 1024;
@@ -212,9 +213,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     gameData = (MyHashMap<String, int[]>) input.getValue();
                 } else if (input.getKey().equals("StartGame")) {
                     gameStarted = true;
-                    usernameButton.setVisible(true);
-                    System.out.println("game Started");
-                    map.sound().playfromStart();
+                    usernameButton.setVisible(false);
 
                 } else if (input.getKey().equals("newPlayer")) {
                     PlayerList.add(new PlayerImages((int) input.getValue()));
@@ -223,12 +222,7 @@ public class ClientScreen extends JPanel implements ActionListener, MouseListene
                     String getid = (String) input.getValue();
                     getid = getid.substring(4);
                     int index = Integer.parseInt(getid);
-                    EnergyBallClient ball = new EnergyBallClient((String) (input.getValue()));
-                    System.out.println(index);
-                    ball.getFireSound().playfromStart();
-                    EnergyBallList.put(Math.abs(index), ball);
-                    EnergyBallList.get(Math.abs(index)).getFireSound().playfromStart();
-
+                    EnergyBallList.put(Math.abs(index), new EnergyBallClient((String) (input.getValue())));
                 } else if (input.getKey().equals("deleteBall")) {
                     // EnergyBallList.get((int) input.getValue()).setExploded(true);
                     EnergyBallList.remove(Math.abs((int) input.getValue()));
