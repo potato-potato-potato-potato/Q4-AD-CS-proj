@@ -6,19 +6,35 @@ import java.net.URL;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Map implements Serializable {
+    private Sound mainBackgroundMusic;
     public Rectangle[] walls = new Rectangle[4];
     public Platform[] islands = new Platform[4];
     public BufferedImage background;
 
     public Map() {
+        try {
+            mainBackgroundMusic = new Sound(
+                    new File("/home/user/Documents/github/Q4-AD-CS-proj/assets/mainGameBackgroundMusic.wav"));
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         walls[0] = new Rectangle(0, 0, 1200, 32);
         walls[1] = new Rectangle(0, 0, 32, 678);
         walls[2] = new Rectangle(0, 678, 1232, 32);
         walls[3] = new Rectangle(1200, 0, 32, 678);
 
-        islands[0] = new Platform(100, 550, 1600, 20, true);
+        islands[0] = new Platform(100, 550, 1000, 20, true);
         islands[1] = new Platform(212, 380, 270, 30, false);
         islands[2] = new Platform(780, 380, 270, 30, false);
         islands[3] = new Platform(505, 225, 250, 30, false);
@@ -37,15 +53,6 @@ public class Map implements Serializable {
     public void drawMe(Graphics g) {
         g.drawImage(background, 0, 0, null);
 
-        for (Rectangle r : islands) {
-            // images
-
-            // hitBoxes
-            g.setColor(Color.BLACK);
-            g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
-
-        }
-
     }
 
     public void drawBackground(Graphics g) {
@@ -54,12 +61,24 @@ public class Map implements Serializable {
             g.setColor(Color.BLACK);
             g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
             // images
-
+            // INSTRUCTIONS
+            g.drawString("Instructions:", 100, 100);
+            g.drawString("Arrow keys or WASD to move", 100, 140);
+            g.drawString("Left click to melee attack, right click to shoot fireballs", 100, 180);
+            g.drawString("Press shift while moving to boost in that direction", 100, 220);
         }
     }
 
     public Platform[] getIslands() {// return all hitboxes
         return islands;
+    }
+
+    public Sound sound() {
+        return mainBackgroundMusic;
+    }
+
+    public void VolumeControl() {
+
     }
 
 }

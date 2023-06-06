@@ -9,15 +9,14 @@ public class ManagerThread implements Runnable {
     public static final double JUMPLAYER_HEIGHT = 7;
     public static final double AIRRESISTANCE = .04;
     public static final double FRICTION = .8;
-    public static final double GROUNDMOVEMENT = 1;
-    public static final double AIRMOVEMENT = .01;
+    public static final double GROUNDMOVEMENT = .2;
+    public static final double AIRMOVEMENT = .15;
     public static final double MAXVELOCITY = 7;
     public static final double MINXVELOCITY = AIRMOVEMENT - .01;// MUST BE GREATER THAN FRICTION AND AIRRESISTANCE
     public static final double SMASH = .05;
     public static final double MAXBALLCOUNT = 20;
 
     private Manager manager;
-    private MyHashMap<Thread, ServerThread> threadList;
     private boolean running = true;
     private MyHashMap<String, GameObjectStatus> gameObjects;
     // right, dash, mouseState, mouseX, mouseY,
@@ -25,11 +24,11 @@ public class ManagerThread implements Runnable {
     private MyHashMap<String, int[]> sendData;
     public static MyHashMap<String, Melee> melee;
     public static MyHashMap<String, Projectile> balls;
+    public static MyHashMap<String, Player> playersAlive;
 
     private static final Map map = new Map();;
 
     public static final Platform[] walls = map.getIslands();
-    private int timer;
     private int numBalls, numMelee;
 
     public ManagerThread(Manager manager) {
@@ -39,7 +38,7 @@ public class ManagerThread implements Runnable {
         sendData = new MyHashMap<String, int[]>();
         balls = new MyHashMap<String, Projectile>();// x, y, xDirection, yDirection, lifetime
         melee = new MyHashMap<String, Melee>();// x, y, xDirection
-        timer = 0;
+        playersAlive = new MyHashMap<String, Player>();
         numBalls = 0;// number of balls created
         numMelee = 0;// number of melee attacks created
 
@@ -51,6 +50,7 @@ public class ManagerThread implements Runnable {
             // each player
             balls.clear();
             melee.clear();
+            playersAlive.clear();
             for (String each : gameObjects.keySet()) {
                 GameObjectStatus data = gameObjects.get(each);
                 if (data instanceof Projectile) {
@@ -59,6 +59,16 @@ public class ManagerThread implements Runnable {
                 if (data instanceof Melee) {
 
                     melee.put(each, (Melee) data);
+                }
+                if (data instanceof Player) {
+                    if (!((Player) data).isDead()) {
+                        playersAlive.put(each, (Player) data);
+                    }
+                }
+            }
+            if (playersAlive.size() == 1) {
+                for (String each : playersAlive.keySet()) {
+                    broadcast(new Pair<String, Object>("PlayerWon", Integer.valueOf(each.substring(7)) + 1));
                 }
             }
 
@@ -97,13 +107,13 @@ public class ManagerThread implements Runnable {
     // this is needed to pass all the player information to the managerThread
     // it should only be called once, when the game starts
     public void setThreads(MyHashMap<Thread, ServerThread> threadList) {
-        this.threadList = threadList;
         int num = 1;
+        gameObjects.clear();
         for (Thread each : threadList.keySet()) {// setup gameObjects (hashmap)
             broadcast(new Pair<String, Object>("newPlayer", num - 1));// -1 is to fit index system in clientscreen
             num++;
             gameObjects.put(each.getName(), new Player(each.getName(), this));
-            gameObjects.get(each.getName()).setXpos(num * 50);
+            gameObjects.get(each.getName()).setXpos(num * 50 + 400);
             gameObjects.get(each.getName()).setYpos(10);
             gameObjects.get(each.getName()).setImgStatus(0);
 
@@ -126,6 +136,7 @@ public class ManagerThread implements Runnable {
     }
 
     public void summonMelee(double x, double y, Vector v, Player p) {
+        manager.broadcast(new Pair<String, Object>("newMelee", "M-" + numMelee));
         gameObjects.put("M-" + numMelee, new Melee("M-" + numMelee, this, p));
         gameObjects.get("M-" + numMelee).setXpos(x);
         gameObjects.get("M-" + numMelee).setYpos(y);
@@ -160,5 +171,18 @@ public class ManagerThread implements Runnable {
 
     public void broadcast(Pair<String, Object> pair) {
         manager.broadcast(pair);
+    }
+
+    public void reset() {
+        for (String each : gameObjects.keySet()) {
+            GameObjectStatus data = gameObjects.get(each);
+            if (data instanceof Player) {
+                ((Player) data).setXpos(400);
+                ((Player) data).setYpos(10);
+                ((Player) data).setVector(new Vector(0, 0));
+                ((Player) data).setVector(new Vector(0, 0));
+                broadcast(new Pair<String, Object>("GameReset", this));
+            }
+        }
     }
 }

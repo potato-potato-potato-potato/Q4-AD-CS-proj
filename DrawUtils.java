@@ -16,6 +16,11 @@ public class DrawUtils {
         g2d.setTransform(old);
     }
 
+    public static void draw(Graphics g, Drawable toDraw) {
+        Graphics2D g2d = (Graphics2D) g;
+        toDraw.draw(g);
+    }
+
 }
 
 interface Drawable {

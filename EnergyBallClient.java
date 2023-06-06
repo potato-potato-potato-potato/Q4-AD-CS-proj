@@ -2,11 +2,14 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class EnergyBallDraw {
+public class EnergyBallClient {
 
     private BufferedImage sprite;
     private BufferedImage energyBallExplosion;
@@ -14,8 +17,21 @@ public class EnergyBallDraw {
     private boolean ended = false;
     private String name;
     private Thread timer;
+    private Sound fireSound;
 
-    public EnergyBallDraw(String name) {
+    public EnergyBallClient(String name) {
+        try {
+            fireSound = new Sound(new File("/home/user/Documents/github/Q4-AD-CS-proj/assets/EnergyBallSound.wav"));
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.name = name;
         try {
             sprite = ImageIO.read(getClass().getResource("/assets/EnergyBall.gif"));
@@ -51,5 +67,9 @@ public class EnergyBallDraw {
         this.exploded = exploded;
         timer.start();
 
+    }
+
+    public Sound getFireSound() {
+        return fireSound;
     }
 }

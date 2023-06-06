@@ -9,9 +9,10 @@ public class Player extends GameObjectStatus {
     public static final int IMG_OFFSET = -15;// player height
     public static final int FIREBALL_SPEED = 7;// Fireball speed
     public static final int MELEE_COOLDOWN = 10;
-    public static final int PROJECTILE_COOLDOWN = 10;
+    public static final int PROJECTILE_COOLDOWN = 20;
+    public static final int DASH_COOLDOWN = 50;
     public static final double FIREBALL_MULTIPLIER = 10;
-    public static final double DASH_SPEED = 5;
+    public static final double DASH_SPEED = 10;
 
     public static final int ANIMATION_SPEED = 10;// play the next animation step every _ frames
 
@@ -19,9 +20,10 @@ public class Player extends GameObjectStatus {
     private int currentAnimation;
     private String name;
     public int frame = 0;
-    private int fireCooldown, meleeCooldown;
+    private int fireCooldown, meleeCooldown, dashCooldown;
     private int[] imgNum;
     private int timer;
+    private boolean dead = false;
 
     public Player(String name, ManagerThread managerThread) {
         super(managerThread);
@@ -29,7 +31,12 @@ public class Player extends GameObjectStatus {
         imgNum = new int[] { 0, 0, 0 };// index 0 is image, 1 is frame, 2 is direction
         fireCooldown = 0;
         meleeCooldown = 0;
+        dashCooldown = 0;
         timer = 0;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 
     public void run() {
@@ -38,13 +45,23 @@ public class Player extends GameObjectStatus {
         double pX = super.getXpos();// player X
         double pY = super.getYpos();// player Y
         timer++;
-
+        if (fireCooldown > 0) {
+            fireCooldown--;
+        }
+        if (meleeCooldown > 0) {
+            meleeCooldown--;
+        }
+        if (dashCooldown > 0) {
+            dashCooldown--;
+        }
         v.setYDirection(v.getYDirection() + ManagerThread.GRAVITY);
         if (pY > 800) {// out of bounds and DIED
-            super.setYpos(50);
-            v.setYDirection(0);
-            v.setXDirection(0);
-            super.getManagerThread().broadcast(new Pair<String, Object>("PlayerDies", name));
+            if (!dead) {
+                dead = true;
+            }
+        } else {// if player is reset by managerThread, the y will be 10, and player will be
+                // alive again
+            dead = false;
         }
         if (isIdle()) {
             if (super.isTouchingGround() == true) {
@@ -112,20 +129,20 @@ public class Player extends GameObjectStatus {
             imgNum[2] = 1;
         }
         if (super.isDash()) {// dash
-            if(isLeft()){
-                v.setXDirection(DASH_SPEED);
+
+            if (dashCooldown == 0) {
+                if (isLeft()) {
+                    v.setXDirection(v.getXDirection() - DASH_SPEED);
+                    dashCooldown = DASH_COOLDOWN;
+                } else if (isRight()) {
+                    v.setXDirection(v.getXDirection() + DASH_SPEED);
+                    dashCooldown = DASH_COOLDOWN;
+                } else {
+                    v.setYDirection(v.getYDirection() - DASH_SPEED);
+                    dashCooldown = DASH_COOLDOWN;
+                }
             }
-            else if(isRight()){
-                v.setXDirection(-DASH_SPEED);
-            }else{
-                v.setYDirection(-DASH_SPEED);
-            }
-        }
-        if (fireCooldown > 0) {
-            fireCooldown--;
-        }
-        if (meleeCooldown > 0) {
-            meleeCooldown--;
+
         }
         if (super.isRightMouseState()) {// fire
             if (fireCooldown <= 0) {
@@ -266,7 +283,6 @@ public class Player extends GameObjectStatus {
                 double wW = Melee.PLAYER_WIDTH;
                 double wH = Melee.PLAYER_HEIGHT;
                 // if touching melee, add partial velocity, delete melee
-                System.out.println("Player " + name + " checkcking melee at " + wX + " " + wY);
                 if (pY < wY + wH && pY + PLAYER_HEIGHT > wY && pX < wX + wW && pX + PLAYER_WIDTH > wX) {
                     v.setXDirection(v.getXDirection() + d.getVector().getXDirection() * Melee.KNOCKBACK);
                     v.setYDirection(v.getYDirection() - Melee.KNOCKBACK / 6);
